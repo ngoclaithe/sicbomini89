@@ -154,6 +154,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         token={token}
       />
 
+      {/* Top Players Modal */}
+      <TopPlayers
+        isOpen={showTopPlayers}
+        onClose={() => setShowTopPlayers(false)}
+        token={token}
+      />
+
       {/* Countdown Timer - Thu gọn */}
       <Card className="border-2 border-primary/50 bg-gradient-to-br from-gray-900 to-gray-800">
         <CardContent className="p-4">
