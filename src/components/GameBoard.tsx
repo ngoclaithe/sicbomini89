@@ -71,7 +71,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         
         toast({
           title: "🎊 Kết quả đã có!",
-          description: `Hãy kéo bát lên để xem k���t quả!`,
+          description: `Hãy kéo bát lên để xem kết quả!`,
         });
       }, 2000);
     });
@@ -160,23 +160,34 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       {/* Countdown Timer - Thu gọn */}
       <Card className="border-2 border-primary/50 bg-gradient-to-br from-gray-900 to-gray-800">
         <CardContent className="p-4">
-          <div className="flex items-center justify-center gap-3">
-            <Clock className="w-6 h-6 text-primary animate-pulse" />
-            <div className="text-center">
-              <div className="text-xs text-gray-400 mb-1">
-                {phase === 'betting' ? 'Thời gian đặt cược' : 'Xem kết quả'}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 flex-1">
+              <Clock className="w-6 h-6 text-primary animate-pulse" />
+              <div className="text-center flex-1">
+                <div className="text-xs text-gray-400 mb-1">
+                  {phase === 'betting' ? 'Thời gian đặt cược' : 'Xem kết quả'}
+                </div>
+                <motion.div
+                  key={countdown}
+                  initial={{ scale: 1.3, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className={`text-3xl font-bold ${
+                    countdown <= 5 && phase === 'betting' ? 'text-red-500' : 'text-primary'
+                  }`}
+                >
+                  {countdown}s
+                </motion.div>
               </div>
-              <motion.div 
-                key={countdown}
-                initial={{ scale: 1.3, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className={`text-3xl font-bold ${
-                  countdown <= 5 && phase === 'betting' ? 'text-red-500' : 'text-primary'
-                }`}
-              >
-                {countdown}s
-              </motion.div>
             </div>
+            <Button
+              onClick={() => setShowAnalytics(true)}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Thống kê</span>
+            </Button>
           </div>
 
           {hasBet && selectedBet && (
