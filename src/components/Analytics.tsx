@@ -51,6 +51,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
   useEffect(() => {
     if (isOpen) {
       loadAnalytics();
+      setVisibleDice({ dice1: true, dice2: true, dice3: true });
     }
   }, [isOpen]);
 
