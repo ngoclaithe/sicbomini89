@@ -35,9 +35,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const [showTopPlayers, setShowTopPlayers] = useState(false);
   const { toast } = useToast();
 
+  const [bettingStats, setBettingStats] = useState({
+    tai: { count: 0, totalAmount: 0 },
+    xiu: { count: 0, totalAmount: 0 },
+  });
+
   useEffect(() => {
     const socket = getSocket();
-    
+
     socket.on('sessionStart', (data) => {
       setSessionId(data.sessionId);
       setCountdown(data.bettingTime);
@@ -48,11 +53,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       setDiceResults([]);
       setGameResult(null);
       setCanReveal(false);
+      setBettingStats({
+        tai: { count: 0, totalAmount: 0 },
+        xiu: { count: 0, totalAmount: 0 },
+      });
     });
 
     socket.on('countdown', (data) => {
       setCountdown(data.remainingTime);
       setPhase(data.phase);
+      if (data.bettingStats) {
+        setBettingStats(data.bettingStats);
+      }
+    });
+
+    socket.on('bettingStats', (data) => {
+      setBettingStats(data);
     });
 
     socket.on('bettingClosed', () => {
@@ -92,6 +108,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     return () => {
       socket.off('sessionStart');
       socket.off('countdown');
+      socket.off('bettingStats');
       socket.off('bettingClosed');
       socket.off('diceRolled');
       socket.off('betPlaced');
@@ -146,7 +163,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const quickBetAmounts = [10000, 50000, 100000, 500000];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Analytics Modal */}
       <Analytics
         isOpen={showAnalytics}
@@ -217,8 +234,40 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         </CardContent>
       </Card>
 
+      <Card className="bg-gradient-to-br from-gray-900 to-gray-800">
+        <CardHeader>
+          <CardTitle className="text-center">Thống kê cược hiện tại</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
+            <div className="bg-red-900/20 p-3 sm:p-4 rounded-lg border-2 border-red-500/30">
+              <div className="text-center">
+                <div className="text-red-500 font-bold text-xl sm:text-2xl">TÀI</div>
+                <div className="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
+                  {bettingStats.tai.count} người
+                </div>
+                <div className="text-red-400 font-semibold mt-1">
+                  {formatCurrency(bettingStats.tai.totalAmount)}
+                </div>
+              </div>
+            </div>
+            <div className="bg-blue-900/20 p-3 sm:p-4 rounded-lg border-2 border-blue-500/30">
+              <div className="text-center">
+                <div className="text-blue-500 font-bold text-xl sm:text-2xl">XỈU</div>
+                <div className="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
+                  {bettingStats.xiu.count} người
+                </div>
+                <div className="text-blue-400 font-semibold mt-1">
+                  {formatCurrency(bettingStats.xiu.totalAmount)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Main Game Area - DiceRoller LUÔN ở giữa Tài và Xỉu */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 items-stretch">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 items-stretch">
         {/* TÀI - Bên trái */}
         <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all h-full">
           <CardHeader className="pb-2 sm:pb-3">
@@ -281,7 +330,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             type="number"
             value={betAmount}
             onChange={(e) => setBetAmount(e.target.value)}
-            placeholder="Nhập số tiền"
+            placeholder="Nhập số ti���n"
             className="text-lg h-10"
             disabled={hasBet || phase !== 'betting'}
           />
