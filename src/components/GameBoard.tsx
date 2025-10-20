@@ -19,7 +19,7 @@ interface GameBoardProps {
   token?: string;
 }
 
-export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalanceUpdate }) => {
+export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalanceUpdate, token }) => {
   const [countdown, setCountdown] = useState(45);
   const [phase, setPhase] = useState<'betting' | 'revealing'>('betting');
   const [betAmount, setBetAmount] = useState('10000');
@@ -30,6 +30,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const [gameResult, setGameResult] = useState<'tai' | 'xiu' | null>(null);
   const [sessionId, setSessionId] = useState<string>('');
   const [canReveal, setCanReveal] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
