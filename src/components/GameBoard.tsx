@@ -112,7 +112,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     if (phase !== 'betting') {
       toast({
         title: "Cảnh báo",
-        description: "Đã hết thời gian đặt cư��c!",
+        description: "Đã hết thời gian đặt cược!",
         variant: "destructive",
       });
       return;
@@ -205,8 +205,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
         {/* Dice Roller - Ở giữa */}
         <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-visible">
-          <CardContent className="p-4 sm:p-6">
-            <DiceRoller 
+          <CardContent className="p-2 sm:p-6">
+            <DiceRoller
               diceResults={diceResults}
               isRolling={isRolling}
               result={gameResult}
