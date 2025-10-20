@@ -318,37 +318,6 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
               </Card>
             )}
 
-            {/* Top Winners Today */}
-            {topWinners.length > 0 && (
-              <Card className="border-primary/30">
-                <CardHeader>
-                  <CardTitle>🏆 Top người thắng hôm nay</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {topWinners.map((winner, idx) => (
-                      <motion.div
-                        key={winner.userId}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="flex items-center gap-3 bg-gray-800 rounded-lg p-3"
-                      >
-                        <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full text-white font-bold">
-                          {idx + 1}
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-semibold">{winner.username}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-bold text-green-500">{formatCurrency(winner.biggestWin)}</div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
           </motion.div>
         )}
       </DialogContent>
