@@ -122,6 +122,7 @@ export default function Home() {
               userId={user.id}
               balance={balance}
               onBalanceUpdate={() => loadBalance(token)}
+              token={token}
             />
           ) : (
             <GameHistory token={token} />
