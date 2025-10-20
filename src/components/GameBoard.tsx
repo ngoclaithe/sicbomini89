@@ -234,38 +234,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         </CardContent>
       </Card>
 
-      <Card className="bg-gradient-to-br from-gray-900 to-gray-800">
-        <CardHeader>
-          <CardTitle className="text-center">Thống kê cược hiện tại</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="bg-red-900/20 p-3 sm:p-4 rounded-lg border-2 border-red-500/30">
-              <div className="text-center">
-                <div className="text-red-500 font-bold text-xl sm:text-2xl">TÀI</div>
-                <div className="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
-                  {bettingStats.tai.count} người
-                </div>
-                <div className="text-red-400 font-semibold mt-1">
-                  {formatCurrency(bettingStats.tai.totalAmount)}
-                </div>
-              </div>
-            </div>
-            <div className="bg-blue-900/20 p-3 sm:p-4 rounded-lg border-2 border-blue-500/30">
-              <div className="text-center">
-                <div className="text-blue-500 font-bold text-xl sm:text-2xl">XỈU</div>
-                <div className="text-gray-400 text-xs sm:text-sm mt-1 sm:mt-2">
-                  {bettingStats.xiu.count} người
-                </div>
-                <div className="text-blue-400 font-semibold mt-1">
-                  {formatCurrency(bettingStats.xiu.totalAmount)}
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Main Game Area - DiceRoller LUÔN ở giữa Tài và Xỉu */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 items-stretch">
         {/* TÀI - Bên trái */}
@@ -283,6 +251,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             >
               Đặt TÀI
             </Button>
+
+            <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+              <div className="flex items-center justify-center gap-2">
+                <div className="text-gray-400">Người đặt:</div>
+                <div className="font-semibold text-red-400">{bettingStats.tai.count}</div>
+              </div>
+              <div className="mt-1 text-red-400 font-semibold">
+                {formatCurrency(bettingStats.tai.totalAmount)}
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -313,6 +291,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             >
               Đặt XỈU
             </Button>
+
+            <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+              <div className="flex items-center justify-center gap-2">
+                <div className="text-gray-400">Người đặt:</div>
+                <div className="font-semibold text-blue-400">{bettingStats.xiu.count}</div>
+              </div>
+              <div className="mt-1 text-blue-400 font-semibold">
+                {formatCurrency(bettingStats.xiu.totalAmount)}
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
