@@ -297,29 +297,10 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ diceResults, isRolling, 
               animate={{ opacity: [1, 0.8, 1], scale: [1, 1.05, 1] }}
               transition={{ duration: 0.8, repeat: Infinity }}
             >
-              🎲 Đang lắc xúc xắc...
             </motion.div>
           </motion.div>
         )}
       </div>
-
-      {/* Kết quả - Chỉ hiển thị TÀI/XỈU, không hiển thị tổng điểm */}
-      {result && diceResults && isFullyRevealed && (
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-          className="text-center"
-        >
-          <div className={`text-2xl sm:text-4xl font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-2xl shadow-2xl ${
-            result === 'tai' 
-              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' 
-              : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
-          }`}>
-            {result === 'tai' ? '🔴 TÀI' : '🔵 XỈU'}
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 };
