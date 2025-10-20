@@ -10,7 +10,7 @@ import { TopWinnersModal } from './TopWinnersModal';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
-import { Clock, TrendingUp, History, Wallet, BarChart3 } from 'lucide-react';
+import { Clock, TrendingUp, History, Wallet, BarChart3, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GameBoardProps {
@@ -188,15 +188,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 </motion.div>
               </div>
             </div>
-            <Button
-              onClick={() => setShowAnalytics(true)}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <BarChart3 className="w-4 h-4" />
-              <span className="hidden sm:inline">Thống kê</span>
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setShowTopWinners(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <img src="/trophy.png" alt="Trophy" className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setShowAnalytics(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <img src="/analysis.png" alt="Analysis" className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
 
           {hasBet && selectedBet && (
