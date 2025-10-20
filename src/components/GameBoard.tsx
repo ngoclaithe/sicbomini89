@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DiceRoller } from './DiceRoller';
 import { Analytics } from './Analytics';
+import { TopPlayers } from './TopPlayers';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
-import { Clock, TrendingUp, History, Wallet, BarChart3 } from 'lucide-react';
+import { Clock, TrendingUp, History, Wallet, BarChart3, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GameBoardProps {
@@ -31,6 +32,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const [sessionId, setSessionId] = useState<string>('');
   const [canReveal, setCanReveal] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showTopPlayers, setShowTopPlayers] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -68,11 +70,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         setGameResult(data.result);
         setCanReveal(true);
         onBalanceUpdate();
-        
-        toast({
-          title: "🎊 Kết quả đã có!",
-          description: `Hãy kéo bát lên để xem kết quả!`,
-        });
       }, 2000);
     });
 
@@ -157,6 +154,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         token={token}
       />
 
+      {/* Top Players Modal */}
+      <TopPlayers
+        isOpen={showTopPlayers}
+        onClose={() => setShowTopPlayers(false)}
+        token={token}
+      />
+
       {/* Countdown Timer - Thu gọn */}
       <Card className="border-2 border-primary/50 bg-gradient-to-br from-gray-900 to-gray-800">
         <CardContent className="p-4">
@@ -179,14 +183,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 </motion.div>
               </div>
             </div>
-            <Button
-              onClick={() => setShowAnalytics(true)}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <BarChart3 className="w-4 h-4" />
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setShowAnalytics(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <BarChart3 className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setShowTopPlayers(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Trophy className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
 
           {hasBet && selectedBet && (
