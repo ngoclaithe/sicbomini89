@@ -232,21 +232,48 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
             {diceData && (
               <Card className="border-primary/30">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
+                  <CardTitle className="flex items-center gap-3 flex-wrap">
                     <span>🎲 Thống kê xúc xắc (50 lần lắc gần đây)</span>
-                    <div className="flex gap-4 ml-auto text-sm">
-                      <div className="flex items-center gap-2">
+                    <div className="flex gap-4 ml-auto text-sm flex-wrap">
+                      <motion.button
+                        onClick={() => toggleDice('dice1')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${
+                          visibleDice.dice1
+                            ? 'bg-yellow-500/20 border border-yellow-400'
+                            : 'bg-gray-800/50 border border-gray-600 opacity-50'
+                        }`}
+                      >
                         <div className="w-4 h-1 bg-yellow-400 rounded"></div>
-                        <span className="text-gray-400">Xúc xắc 1</span>
-                      </div>
-                      <div className="flex items-center gap-2">
+                        <span className={visibleDice.dice1 ? 'text-yellow-400' : 'text-gray-400'}>Xúc xắc 1</span>
+                      </motion.button>
+                      <motion.button
+                        onClick={() => toggleDice('dice2')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${
+                          visibleDice.dice2
+                            ? 'bg-red-500/20 border border-red-400'
+                            : 'bg-gray-800/50 border border-gray-600 opacity-50'
+                        }`}
+                      >
                         <div className="w-4 h-1 bg-red-500 rounded"></div>
-                        <span className="text-gray-400">Xúc xắc 2</span>
-                      </div>
-                      <div className="flex items-center gap-2">
+                        <span className={visibleDice.dice2 ? 'text-red-400' : 'text-gray-400'}>Xúc xắc 2</span>
+                      </motion.button>
+                      <motion.button
+                        onClick={() => toggleDice('dice3')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${
+                          visibleDice.dice3
+                            ? 'bg-blue-500/20 border border-blue-400'
+                            : 'bg-gray-800/50 border border-gray-600 opacity-50'
+                        }`}
+                      >
                         <div className="w-4 h-1 bg-blue-500 rounded"></div>
-                        <span className="text-gray-400">Xúc xắc 3</span>
-                      </div>
+                        <span className={visibleDice.dice3 ? 'text-blue-400' : 'text-gray-400'}>Xúc xắc 3</span>
+                      </motion.button>
                     </div>
                   </CardTitle>
                 </CardHeader>
