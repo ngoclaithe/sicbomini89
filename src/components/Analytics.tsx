@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { api } from '@/lib/api';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface AnalyticsProps {
   isOpen: boolean;
