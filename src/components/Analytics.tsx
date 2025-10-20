@@ -158,37 +158,53 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
           ))}
 
           {/* Dice 1 - Yellow */}
-          <path
-            d={getPath(diceData.dice1)}
-            stroke="#FBBF24"
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          {visibleDice.dice1 && (
+            <path
+              d={getPath(diceData.dice1)}
+              stroke="#FBBF24"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="1"
+            />
+          )}
 
           {/* Dice 2 - Red */}
-          <path
-            d={getPath(diceData.dice2)}
-            stroke="#EF4444"
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          {visibleDice.dice2 && (
+            <path
+              d={getPath(diceData.dice2)}
+              stroke="#EF4444"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="1"
+            />
+          )}
 
           {/* Dice 3 - Blue */}
-          <path
-            d={getPath(diceData.dice3)}
-            stroke="#3B82F6"
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          {visibleDice.dice3 && (
+            <path
+              d={getPath(diceData.dice3)}
+              stroke="#3B82F6"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="1"
+            />
+          )}
         </svg>
       </div>
     );
+  };
+
+  const toggleDice = (dice: 'dice1' | 'dice2' | 'dice3') => {
+    setVisibleDice(prev => ({
+      ...prev,
+      [dice]: !prev[dice]
+    }));
   };
 
   return (
