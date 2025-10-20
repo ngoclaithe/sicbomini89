@@ -57,15 +57,13 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
   const loadAnalytics = async () => {
     setLoading(true);
     try {
-      const [diceRes, sessionsRes, winnersRes] = await Promise.all([
+      const [diceRes, sessionsRes] = await Promise.all([
         api.get('/history/dice?limit=50', token),
         api.get('/history/sessions?limit=100', token),
-        api.get('/history/top-winners-today?limit=10', token),
       ]);
 
       setDiceData(diceRes);
       setSessions(sessionsRes);
-      setTopWinners(winnersRes);
     } catch (error) {
       toast({
         title: "Lỗi",
