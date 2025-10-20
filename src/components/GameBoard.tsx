@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DiceRoller } from './DiceRoller';
+import { Analytics } from './Analytics';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
-import { Clock, TrendingUp, History, Wallet } from 'lucide-react';
+import { Clock, TrendingUp, History, Wallet, BarChart3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GameBoardProps {
