@@ -186,7 +186,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
               className="gap-2"
             >
               <BarChart3 className="w-4 h-4" />
-              <span className="hidden sm:inline">Thống kê</span>
             </Button>
           </div>
 
