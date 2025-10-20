@@ -45,6 +45,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
   const [sessions, setSessions] = useState<SessionData[]>([]);
   const [topWinners, setTopWinners] = useState<TopWinner[]>([]);
   const [loading, setLoading] = useState(false);
+  const [visibleDice, setVisibleDice] = useState({ dice1: true, dice2: true, dice3: true });
   const { toast } = useToast();
 
   useEffect(() => {
