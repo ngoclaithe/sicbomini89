@@ -212,7 +212,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-900 border-2 border-primary/30">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
-            <span>📊 Thống kê trò chơi</span>
+            <span>📊 Thống kê</span>
           </DialogTitle>
           <DialogClose className="absolute right-4 top-4 p-2" />
         </DialogHeader>
@@ -233,7 +233,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
               <Card className="border-primary/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3 flex-wrap">
-                    <span>🎲 Thống kê xúc xắc (50 lần lắc gần đây)</span>
+                    {/* <span>🎲 Thống kê xúc xắc (50 lần lắc gần đây)</span> */}
                     <div className="flex gap-4 ml-auto text-sm flex-wrap">
                       <motion.button
                         onClick={() => toggleDice('dice1')}
@@ -286,15 +286,15 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
             {/* Recent Sessions Table */}
             {sessions.length > 0 && (
               <Card className="border-primary/30">
-                <CardHeader>
+                {/* <CardHeader>
                   <CardTitle>🎮 Phiên đặt cược gần đây (100 lần)</CardTitle>
-                </CardHeader>
+                </CardHeader> */}
                 <CardContent>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b border-gray-700">
-                          <th className="text-left py-2 px-3 text-gray-400">#</th>
+                          <th className="text-left py-2 px-3 text-gray-400"></th>
                           {[...Array(20)].map((_, idx) => (
                             <th key={idx} className="text-center py-2 px-2 text-gray-400 min-w-max">
                               {idx + 1}
@@ -325,10 +325,6 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         ))}
                       </tbody>
                     </table>
-                    <div className="text-xs text-gray-400 mt-3">
-                      <span className="inline-block bg-red-500/20 text-red-400 px-2 py-1 rounded mr-3">T = TÀI</span>
-                      <span className="inline-block bg-blue-500/20 text-blue-400 px-2 py-1 rounded">X = XỈU</span>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -355,13 +351,9 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         </div>
                         <div className="flex-1">
                           <div className="font-semibold">{winner.username}</div>
-                          <div className="text-xs text-gray-400">
-                            {winner.wins}/{winner.totalGames} ({winner.winRate}%) | Tổng: {formatCurrency(winner.totalWin)}
-                          </div>
                         </div>
                         <div className="text-right">
                           <div className="font-bold text-green-500">{formatCurrency(winner.biggestWin)}</div>
-                          <div className="text-xs text-gray-400">Chiến thắng lớn nhất</div>
                         </div>
                       </motion.div>
                     ))}
