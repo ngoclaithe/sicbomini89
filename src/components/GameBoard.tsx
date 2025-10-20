@@ -112,7 +112,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     if (phase !== 'betting') {
       toast({
         title: "Cảnh báo",
-        description: "Đã hết thời gian đặt cược!",
+        description: "Đã hết thời gian đặt cư��c!",
         variant: "destructive",
       });
       return;
@@ -187,15 +187,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       <div className="grid grid-cols-3 gap-2 sm:gap-4 items-stretch">
         {/* TÀI - Bên trái */}
         <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all h-full">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-2xl text-center text-red-500">TÀI</CardTitle>
-            <p className="text-center text-xs text-gray-400">11 - 17 điểm</p>
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
+            <p className="text-center text-xs text-gray-400">11 - 17</p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 sm:p-6">
             <Button
               onClick={() => handlePlaceBet('tai')}
               disabled={phase !== 'betting' || hasBet || isRolling}
-              className="w-full h-14 text-lg font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
+              className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
               size="lg"
             >
               Đặt TÀI
