@@ -183,14 +183,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 </motion.div>
               </div>
             </div>
-            <Button
-              onClick={() => setShowAnalytics(true)}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <BarChart3 className="w-4 h-4" />
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setShowAnalytics(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <BarChart3 className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setShowTopPlayers(true)}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Trophy className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
 
           {hasBet && selectedBet && (
