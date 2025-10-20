@@ -16,6 +16,7 @@ interface GameBoardProps {
   userId: string;
   balance: number;
   onBalanceUpdate: () => void;
+  token?: string;
 }
 
 export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalanceUpdate }) => {
