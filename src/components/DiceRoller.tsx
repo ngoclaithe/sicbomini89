@@ -34,11 +34,11 @@ const DiceFace = ({ value }: { value: number }) => {
   };
 
   return (
-    <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-white to-gray-200 rounded-xl border-3 border-gray-800 shadow-2xl">
+    <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-br from-white to-gray-200 rounded-xl border-3 border-gray-800 shadow-2xl">
       {getDots(value).map((pos, idx) => (
         <div
           key={idx}
-          className={`absolute w-3 h-3 sm:w-3.5 sm:h-3.5 bg-gray-900 rounded-full ${dotPositions[pos]}`}
+          className={`absolute w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gray-900 rounded-full ${dotPositions[pos]}`}
         />
       ))}
     </div>
@@ -86,11 +86,11 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ diceResults, isRolling, 
   const isFullyRevealed = revealProgress > 0.9;
 
   return (
-    <div className="flex flex-col items-center gap-4 relative">
+    <div className="flex flex-col items-center gap-2 sm:gap-4 relative">
       {/* Đĩa chứa xúc xắc */}
-      <div className="relative w-60 h-60 sm:w-72 sm:h-72 flex items-center justify-center">
+      <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 flex items-center justify-center">
         {/* Đĩa (Plate) */}
-        <div className="absolute w-52 h-52 sm:w-64 sm:h-64 rounded-full bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 shadow-2xl border-8 border-amber-900">
+        <div className="absolute w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 rounded-full bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 shadow-2xl border-8 border-amber-900">
           <div className="absolute inset-4 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 shadow-inner" />
           
           {/* Pattern trang trí trên đĩa */}
@@ -186,7 +186,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ diceResults, isRolling, 
               style={{ x, y }}
             >
               {/* Thân bát - Hình tròn hoàn toàn, không có núm */}
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+              <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56">
                 {/* Base bát - Hình cầu 3D */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-100 via-white to-blue-50 shadow-2xl border-4 border-blue-900/30">
                   
@@ -239,7 +239,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ diceResults, isRolling, 
                 </div>
 
                 {/* Shadow dưới bát */}
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-32 h-3 sm:w-40 sm:h-4 bg-black/30 rounded-full blur-xl" />
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-28 h-3 sm:w-36 sm:h-4 md:w-40 md:h-4 bg-black/30 rounded-full blur-xl" />
               </div>
             </motion.div>
           )}
@@ -278,7 +278,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ diceResults, isRolling, 
               {[...Array(3)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-60 h-60 sm:w-72 sm:h-72 border-2 border-blue-400/40 rounded-full"
+                  className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 border-2 border-blue-400/40 rounded-full"
                   animate={{
                     scale: [1, 1.2, 1],
                     opacity: [0.4, 0, 0.4],
