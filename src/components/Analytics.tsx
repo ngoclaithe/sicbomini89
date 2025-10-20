@@ -238,26 +238,52 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
               </Card>
             )}
 
-            {/* Recent Sessions */}
+            {/* Recent Sessions Table */}
             {sessions.length > 0 && (
               <Card className="border-primary/30">
                 <CardHeader>
                   <CardTitle>🎮 Phiên đặt cược gần đây (100 lần)</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {sessions.map((session, idx) => (
-                      <div key={idx} className="flex items-center justify-between bg-gray-800 rounded-lg p-3">
-                        <div>
-                          <div className={`text-sm font-semibold ${session.result === 'tai' ? 'text-red-500' : 'text-blue-500'}`}>
-                            {session.result === 'tai' ? '🔴 TÀI' : '🔵 XỈU'} - {session.diceResults.join('+')} = {session.totalPoints}
-                          </div>
-                          <div className="text-xs text-gray-400">
-                            {new Date(session.createdAt).toLocaleString('vi-VN')}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-700">
+                          <th className="text-left py-2 px-3 text-gray-400">#</th>
+                          {[...Array(20)].map((_, idx) => (
+                            <th key={idx} className="text-center py-2 px-2 text-gray-400 min-w-max">
+                              {idx + 1}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sessions.slice(0, 5).map((session, rowIdx) => (
+                          <tr key={rowIdx} className="border-b border-gray-700 hover:bg-gray-800/50">
+                            <td className="py-2 px-3 text-gray-400">{rowIdx + 1}</td>
+                            {[...Array(20)].map((_, colIdx) => {
+                              const sessionIndex = rowIdx * 20 + colIdx;
+                              const sess = sessions[sessionIndex];
+                              if (!sess) return <td key={colIdx} className="text-center py-2 px-2"></td>;
+                              return (
+                                <td
+                                  key={colIdx}
+                                  className={`text-center py-2 px-2 font-bold text-xs ${
+                                    sess.result === 'tai' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
+                                  }`}
+                                >
+                                  {sess.result === 'tai' ? 'T' : 'X'}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <div className="text-xs text-gray-400 mt-3">
+                      <span className="inline-block bg-red-500/20 text-red-400 px-2 py-1 rounded mr-3">T = TÀI</span>
+                      <span className="inline-block bg-blue-500/20 text-blue-400 px-2 py-1 rounded">X = XỈU</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
