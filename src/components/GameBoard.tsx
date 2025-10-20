@@ -32,6 +32,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const [sessionId, setSessionId] = useState<string>('');
   const [canReveal, setCanReveal] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showTopPlayers, setShowTopPlayers] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
