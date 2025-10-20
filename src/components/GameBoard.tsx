@@ -184,7 +184,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       </Card>
 
       {/* Main Game Area - DiceRoller LUÔN ở giữa Tài và Xỉu */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 items-stretch">
         {/* TÀI - Bên trái */}
         <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all h-full">
           <CardHeader className="pb-3">
