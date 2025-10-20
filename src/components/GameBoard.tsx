@@ -68,11 +68,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         setGameResult(data.result);
         setCanReveal(true);
         onBalanceUpdate();
-        
-        toast({
-          title: "🎊 Kết quả đã có!",
-          description: `Hãy kéo bát lên để xem kết quả!`,
-        });
       }, 2000);
     });
 
@@ -259,7 +254,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Wallet className="w-4 h-4" />
-            Số tiền cược
+            Số ti��n cược
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
