@@ -71,7 +71,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         
         toast({
           title: "🎊 Kết quả đã có!",
-          description: `Hãy kéo bát lên để xem kết quả!`,
+          description: `Hãy kéo bát lên để xem k���t quả!`,
         });
       }, 2000);
     });
@@ -150,6 +150,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
   return (
     <div className="space-y-4">
+      {/* Analytics Modal */}
+      <Analytics
+        isOpen={showAnalytics}
+        onClose={() => setShowAnalytics(false)}
+        token={token}
+      />
+
       {/* Countdown Timer - Thu gọn */}
       <Card className="border-2 border-primary/50 bg-gradient-to-br from-gray-900 to-gray-800">
         <CardContent className="p-4">
