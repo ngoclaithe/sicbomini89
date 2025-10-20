@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DiceRoller } from './DiceRoller';
 import { Analytics } from './Analytics';
+import { TopWinnersModal } from './TopWinnersModal';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
@@ -31,6 +32,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const [sessionId, setSessionId] = useState<string>('');
   const [canReveal, setCanReveal] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showTopWinners, setShowTopWinners] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -154,6 +156,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       <Analytics
         isOpen={showAnalytics}
         onClose={() => setShowAnalytics(false)}
+        token={token}
+      />
+
+      {/* Top Winners Modal */}
+      <TopWinnersModal
+        isOpen={showTopWinners}
+        onClose={() => setShowTopWinners(false)}
         token={token}
       />
 
