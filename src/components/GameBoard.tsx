@@ -10,7 +10,7 @@ import { TopPlayers } from './TopPlayers';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
-import { Clock, TrendingUp, History, Wallet, BarChart3, Trophy } from 'lucide-react';
+import { Clock, TrendingUp, History, Wallet, BarChart3, Trophy, Coins } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GameBoardProps {
@@ -254,11 +254,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
             <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
               <div className="flex items-center justify-center gap-2">
-                <div className="text-gray-400">Người đặt:</div>
+                <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
                 <div className="font-semibold text-red-400">{bettingStats.tai.count}</div>
               </div>
               <div className="mt-1 text-red-400 font-semibold">
                 {formatCurrency(bettingStats.tai.totalAmount)}
+              </div>
+              <div className="flex justify-center mt-1">
+                <Coins className="w-4 h-4 text-red-400" />
               </div>
             </div>
           </CardContent>
@@ -294,11 +297,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
             <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
               <div className="flex items-center justify-center gap-2">
-                <div className="text-gray-400">Người đặt:</div>
+                <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
                 <div className="font-semibold text-blue-400">{bettingStats.xiu.count}</div>
               </div>
               <div className="mt-1 text-blue-400 font-semibold">
                 {formatCurrency(bettingStats.xiu.totalAmount)}
+              </div>
+              <div className="flex justify-center mt-1">
+                <Coins className="w-4 h-4 text-blue-400" />
               </div>
             </div>
           </CardContent>
@@ -310,7 +316,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Wallet className="w-4 h-4" />
-            Số tiền cược
+            Số tiền cư���c
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
