@@ -87,13 +87,10 @@ export const TopPlayers: React.FC<TopPlayersProps> = ({ isOpen, onClose, token }
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-base truncate">{winner.username}</div>
-                  <div className="text-xs text-gray-400">
-                    {winner.wins} thắng / {winner.totalGames} ván ({winner.winRate})
-                  </div>
+
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-green-500 text-lg">{formatCurrency(winner.biggestWin)}</div>
-                  <div className="text-xs text-gray-400">Thắng lớn nhất</div>
                 </div>
               </motion.div>
             ))}
