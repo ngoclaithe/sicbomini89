@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DiceRoller } from './DiceRoller';
 import { Analytics } from './Analytics';
+import { TopPlayers } from './TopPlayers';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
-import { Clock, TrendingUp, History, Wallet, BarChart3 } from 'lucide-react';
+import { Clock, TrendingUp, History, Wallet, BarChart3, Trophy } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GameBoardProps {
@@ -254,7 +255,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Wallet className="w-4 h-4" />
-            Số ti��n cược
+            Số tiền cược
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
