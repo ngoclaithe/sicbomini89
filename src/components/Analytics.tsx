@@ -210,117 +210,30 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Dice Statistics */}
+            {/* Dice Statistics Chart */}
             {diceData && (
               <Card className="border-primary/30">
                 <CardHeader>
-                  <CardTitle>🎲 Thống kê xúc xắc (50 lần lắc gần đây)</CardTitle>
+                  <CardTitle className="flex items-center gap-3">
+                    <span>🎲 Thống kê xúc xắc (50 lần lắc gần đây)</span>
+                    <div className="flex gap-4 ml-auto text-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-1 bg-yellow-400 rounded"></div>
+                        <span className="text-gray-400">Xúc xắc 1</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-1 bg-red-500 rounded"></div>
+                        <span className="text-gray-400">Xúc xắc 2</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-1 bg-blue-500 rounded"></div>
+                        <span className="text-gray-400">Xúc xắc 3</span>
+                      </div>
+                    </div>
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Dice 1 */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">Xúc xắc 1</h3>
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Trung bình</div>
-                        <div className="text-2xl font-bold text-primary">
-                          {calculateDiceStats(diceData.dice1).avg}
-                        </div>
-                      </div>
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Tối thiểu</div>
-                        <div className="text-2xl font-bold text-blue-500">
-                          {calculateDiceStats(diceData.dice1).min}
-                        </div>
-                      </div>
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Tối đa</div>
-                        <div className="text-2xl font-bold text-red-500">
-                          {calculateDiceStats(diceData.dice1).max}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      {getDiceDistribution(diceData.dice1).map((count, idx) => (
-                        <div key={idx} className="flex-1">
-                          <div className="bg-gradient-to-t from-primary/60 to-primary/30 rounded h-20 flex items-end justify-center p-1">
-                            <div className="text-xs font-bold text-white">{count}</div>
-                          </div>
-                          <div className="text-center text-xs text-gray-400 mt-1">{idx + 1}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Dice 2 */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">Xúc xắc 2</h3>
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Trung bình</div>
-                        <div className="text-2xl font-bold text-primary">
-                          {calculateDiceStats(diceData.dice2).avg}
-                        </div>
-                      </div>
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Tối thiểu</div>
-                        <div className="text-2xl font-bold text-blue-500">
-                          {calculateDiceStats(diceData.dice2).min}
-                        </div>
-                      </div>
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Tối đa</div>
-                        <div className="text-2xl font-bold text-red-500">
-                          {calculateDiceStats(diceData.dice2).max}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      {getDiceDistribution(diceData.dice2).map((count, idx) => (
-                        <div key={idx} className="flex-1">
-                          <div className="bg-gradient-to-t from-primary/60 to-primary/30 rounded h-20 flex items-end justify-center p-1">
-                            <div className="text-xs font-bold text-white">{count}</div>
-                          </div>
-                          <div className="text-center text-xs text-gray-400 mt-1">{idx + 1}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Dice 3 */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">Xúc xắc 3</h3>
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Trung bình</div>
-                        <div className="text-2xl font-bold text-primary">
-                          {calculateDiceStats(diceData.dice3).avg}
-                        </div>
-                      </div>
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Tối thiểu</div>
-                        <div className="text-2xl font-bold text-blue-500">
-                          {calculateDiceStats(diceData.dice3).min}
-                        </div>
-                      </div>
-                      <div className="bg-gray-800 rounded-lg p-4">
-                        <div className="text-xs text-gray-400">Tối đa</div>
-                        <div className="text-2xl font-bold text-red-500">
-                          {calculateDiceStats(diceData.dice3).max}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      {getDiceDistribution(diceData.dice3).map((count, idx) => (
-                        <div key={idx} className="flex-1">
-                          <div className="bg-gradient-to-t from-primary/60 to-primary/30 rounded h-20 flex items-end justify-center p-1">
-                            <div className="text-xs font-bold text-white">{count}</div>
-                          </div>
-                          <div className="text-center text-xs text-gray-400 mt-1">{idx + 1}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                <CardContent>
+                  {renderDiceChart()}
                 </CardContent>
               </Card>
             )}
