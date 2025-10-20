@@ -77,20 +77,116 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
     }
   };
 
-  const calculateDiceStats = (diceValues: number[]) => {
-    if (!diceValues || diceValues.length === 0) return { avg: 0, min: 0, max: 0 };
-    const avg = (diceValues.reduce((a, b) => a + b, 0) / diceValues.length).toFixed(2);
-    const min = Math.min(...diceValues);
-    const max = Math.max(...diceValues);
-    return { avg: parseFloat(avg), min, max };
-  };
+  const renderDiceChart = () => {
+    if (!diceData) return null;
 
-  const getDiceDistribution = (diceValues: number[]) => {
-    const dist = Array(6).fill(0);
-    diceValues.forEach(val => {
-      if (val >= 1 && val <= 6) dist[val - 1]++;
-    });
-    return dist;
+    const maxData = Math.max(
+      diceData.dice1.length,
+      diceData.dice2.length,
+      diceData.dice3.length
+    );
+
+    const chartHeight = 200;
+    const chartWidth = 600;
+    const padding = { top: 20, right: 20, bottom: 30, left: 40 };
+    const graphWidth = chartWidth - padding.left - padding.right;
+    const graphHeight = chartHeight - padding.top - padding.bottom;
+
+    const yScale = graphHeight / 5; // 6 levels (1-6) so 5 intervals
+    const xScale = graphWidth / (maxData - 1 || 1);
+
+    const getPath = (values: number[]) => {
+      const points = values.map((val, idx) => {
+        const x = padding.left + idx * xScale;
+        const y = padding.top + graphHeight - (val - 1) * yScale;
+        return `${x},${y}`;
+      });
+      return `M${points.join('L')}`;
+    };
+
+    return (
+      <div className="overflow-x-auto">
+        <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="min-w-[600px]">
+          {/* Grid lines */}
+          {[1, 2, 3, 4, 5, 6].map((level) => (
+            <line
+              key={`grid-${level}`}
+              x1={padding.left}
+              y1={padding.top + graphHeight - (level - 1) * yScale}
+              x2={chartWidth - padding.right}
+              y2={padding.top + graphHeight - (level - 1) * yScale}
+              stroke="#374151"
+              strokeDasharray="4"
+              strokeWidth="1"
+            />
+          ))}
+
+          {/* Y-axis */}
+          <line
+            x1={padding.left}
+            y1={padding.top}
+            x2={padding.left}
+            y2={padding.top + graphHeight}
+            stroke="#6B7280"
+            strokeWidth="2"
+          />
+
+          {/* X-axis */}
+          <line
+            x1={padding.left}
+            y1={padding.top + graphHeight}
+            x2={chartWidth - padding.right}
+            y2={padding.top + graphHeight}
+            stroke="#6B7280"
+            strokeWidth="2"
+          />
+
+          {/* Y-axis labels */}
+          {[1, 2, 3, 4, 5, 6].map((level) => (
+            <text
+              key={`label-${level}`}
+              x={padding.left - 10}
+              y={padding.top + graphHeight - (level - 1) * yScale + 4}
+              textAnchor="end"
+              fontSize="12"
+              fill="#9CA3AF"
+            >
+              {level}
+            </text>
+          ))}
+
+          {/* Dice 1 - Yellow */}
+          <path
+            d={getPath(diceData.dice1)}
+            stroke="#FBBF24"
+            strokeWidth="3"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {/* Dice 2 - Red */}
+          <path
+            d={getPath(diceData.dice2)}
+            stroke="#EF4444"
+            strokeWidth="3"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {/* Dice 3 - Blue */}
+          <path
+            d={getPath(diceData.dice3)}
+            stroke="#3B82F6"
+            strokeWidth="3"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+    );
   };
 
   return (
