@@ -30,15 +30,6 @@ interface SessionData {
   createdAt: string;
 }
 
-interface TopWinner {
-  userId: string;
-  username: string;
-  totalWin: number;
-  totalGames: number;
-  wins: number;
-  winRate: string;
-  biggestWin: number;
-}
 
 export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) => {
   const [diceData, setDiceData] = useState<DiceData | null>(null);
