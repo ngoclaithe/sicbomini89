@@ -5,19 +5,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DiceRoller } from './DiceRoller';
+import { Analytics } from './Analytics';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
-import { Clock, TrendingUp, History, Wallet } from 'lucide-react';
+import { Clock, TrendingUp, History, Wallet, BarChart3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GameBoardProps {
   userId: string;
   balance: number;
   onBalanceUpdate: () => void;
+  token?: string;
 }
 
-export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalanceUpdate }) => {
+export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalanceUpdate, token }) => {
   const [countdown, setCountdown] = useState(45);
   const [phase, setPhase] = useState<'betting' | 'revealing'>('betting');
   const [betAmount, setBetAmount] = useState('10000');
@@ -28,6 +30,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const [gameResult, setGameResult] = useState<'tai' | 'xiu' | null>(null);
   const [sessionId, setSessionId] = useState<string>('');
   const [canReveal, setCanReveal] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -147,26 +150,44 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
   return (
     <div className="space-y-4">
+      {/* Analytics Modal */}
+      <Analytics
+        isOpen={showAnalytics}
+        onClose={() => setShowAnalytics(false)}
+        token={token}
+      />
+
       {/* Countdown Timer - Thu gọn */}
       <Card className="border-2 border-primary/50 bg-gradient-to-br from-gray-900 to-gray-800">
         <CardContent className="p-4">
-          <div className="flex items-center justify-center gap-3">
-            <Clock className="w-6 h-6 text-primary animate-pulse" />
-            <div className="text-center">
-              <div className="text-xs text-gray-400 mb-1">
-                {phase === 'betting' ? 'Thời gian đặt cược' : 'Xem kết quả'}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 flex-1">
+              <Clock className="w-6 h-6 text-primary animate-pulse" />
+              <div className="text-center flex-1">
+                <div className="text-xs text-gray-400 mb-1">
+                  {phase === 'betting' ? 'Thời gian đặt cược' : 'Xem kết quả'}
+                </div>
+                <motion.div
+                  key={countdown}
+                  initial={{ scale: 1.3, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className={`text-3xl font-bold ${
+                    countdown <= 5 && phase === 'betting' ? 'text-red-500' : 'text-primary'
+                  }`}
+                >
+                  {countdown}s
+                </motion.div>
               </div>
-              <motion.div 
-                key={countdown}
-                initial={{ scale: 1.3, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className={`text-3xl font-bold ${
-                  countdown <= 5 && phase === 'betting' ? 'text-red-500' : 'text-primary'
-                }`}
-              >
-                {countdown}s
-              </motion.div>
             </div>
+            <Button
+              onClick={() => setShowAnalytics(true)}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Thống kê</span>
+            </Button>
           </div>
 
           {hasBet && selectedBet && (
@@ -184,18 +205,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       </Card>
 
       {/* Main Game Area - DiceRoller LUÔN ở giữa Tài và Xỉu */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 items-stretch">
         {/* TÀI - Bên trái */}
         <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all h-full">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-2xl text-center text-red-500">TÀI</CardTitle>
-            <p className="text-center text-xs text-gray-400">11 - 17 điểm</p>
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
+            <p className="text-center text-xs text-gray-400">11 - 17</p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 sm:p-6">
             <Button
               onClick={() => handlePlaceBet('tai')}
               disabled={phase !== 'betting' || hasBet || isRolling}
-              className="w-full h-14 text-lg font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
+              className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
               size="lg"
             >
               Đặt TÀI
@@ -205,8 +226,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
         {/* Dice Roller - Ở giữa */}
         <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-visible">
-          <CardContent className="p-4 sm:p-6">
-            <DiceRoller 
+          <CardContent className="p-2 sm:p-6">
+            <DiceRoller
               diceResults={diceResults}
               isRolling={isRolling}
               result={gameResult}
@@ -217,15 +238,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
         {/* XỈU - Bên phải */}
         <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all h-full">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-2xl text-center text-blue-500">XỈU</CardTitle>
-            <p className="text-center text-xs text-gray-400">4 - 10 điểm</p>
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
+            <p className="text-center text-xs text-gray-400">4 - 10</p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 sm:p-6">
             <Button
               onClick={() => handlePlaceBet('xiu')}
               disabled={phase !== 'betting' || hasBet || isRolling}
-              className="w-full h-14 text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
+              className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
               size="lg"
             >
               Đặt XỈU
