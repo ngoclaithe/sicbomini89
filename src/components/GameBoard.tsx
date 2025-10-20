@@ -217,15 +217,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
 
         {/* XỈU - Bên phải */}
         <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all h-full">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-2xl text-center text-blue-500">XỈU</CardTitle>
-            <p className="text-center text-xs text-gray-400">4 - 10 điểm</p>
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
+            <p className="text-center text-xs text-gray-400">4 - 10</p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 sm:p-6">
             <Button
               onClick={() => handlePlaceBet('xiu')}
               disabled={phase !== 'betting' || hasBet || isRolling}
-              className="w-full h-14 text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
+              className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
               size="lg"
             >
               Đặt XỈU
