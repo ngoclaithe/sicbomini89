@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { api } from '@/lib/api';
+import * as Auth from '@/lib/auth';
 import { useToast } from '@/components/ui/use-toast';
 import { Dices } from 'lucide-react';
 
@@ -25,8 +25,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     setLoading(true);
 
     try {
-      const endpoint = isLogin ? '/auth/login' : '/auth/register';
-      const data = await api.post(endpoint, { username, password });
+      const data = isLogin
+        ? await Auth.login(username, password)
+        : await Auth.register(username, password)
       
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
