@@ -316,7 +316,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Wallet className="w-4 h-4" />
-            Số tiền cư���c
+            Số tiền cược
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -324,7 +324,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             type="number"
             value={betAmount}
             onChange={(e) => setBetAmount(e.target.value)}
-            placeholder="Nhập số ti���n"
+            placeholder="Nhập số tiền"
             className="text-lg h-10"
             disabled={hasBet || phase !== 'betting'}
           />
