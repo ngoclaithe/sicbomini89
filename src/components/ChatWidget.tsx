@@ -25,7 +25,17 @@ export const ChatWidget: React.FC = () => {
     return "Khách";
   }, []);
 
+  const [allowed, setAllowed] = useState<boolean | null>(null);
+
   useEffect(() => {
+    // only enable chat when user is logged in
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+      setAllowed(false);
+      return;
+    }
+    setAllowed(true);
+
     const sock = connectChatSocket();
 
     const onMessage = (payload: any) => {
