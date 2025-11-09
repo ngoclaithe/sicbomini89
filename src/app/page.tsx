@@ -7,16 +7,18 @@ import { GameHistory } from '@/components/GameHistory';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket';
-import { api } from '@/lib/api';
+import * as WalletApi from '@/lib/wallet';
 import { formatCurrency } from '@/lib/utils';
 import { LogOut, User, Wallet, History, Home as HomeIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
   const [balance, setBalance] = useState(0);
   const [activeTab, setActiveTab] = useState<'game' | 'history'>('game');
+  const router = useRouter();
 
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
@@ -32,8 +34,8 @@ export default function Home() {
 
   const loadBalance = async (authToken: string) => {
     try {
-      const data = await api.get('/wallet', authToken);
-      setBalance(Number(data.balance));
+      const bal = await WalletApi.getBalance(authToken);
+      setBalance(bal);
     } catch (error) {
       console.error('Error loading balance:', error);
     }
@@ -67,9 +69,13 @@ export default function Home() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-blue-500 rounded-full flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={() => router.push('/profile')}
+                  className="w-12 h-12 bg-gradient-to-r from-red-500 to-blue-500 rounded-full flex items-center justify-center hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                >
                   <User className="w-6 h-6" />
-                </div>
+                </button>
                 <div>
                   <div className="font-semibold text-lg">{user.username}</div>
                   <div className="text-sm text-gray-400 flex items-center gap-2">
