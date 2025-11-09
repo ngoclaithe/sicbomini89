@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api } from '@/lib/api';
+import * as HistoryApi from '@/lib/history';
 import { formatCurrency } from '@/lib/utils';
 import { History, TrendingUp, TrendingDown } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -22,7 +22,7 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
 
   const loadHistory = async () => {
     try {
-      const data = await api.get('/history?limit=10', token);
+      const data = await HistoryApi.getRecentHistory(10, token);
       setHistory(data);
     } catch (error) {
       console.error('Error loading history:', error);
@@ -31,7 +31,7 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
 
   const loadStats = async () => {
     try {
-      const data = await api.get('/history/statistics', token);
+      const data = await HistoryApi.getStatistics(token);
       setStats(data);
     } catch (error) {
       console.error('Error loading stats:', error);
