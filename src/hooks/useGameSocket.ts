@@ -69,12 +69,12 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     };
 
     const onBetPlaced = (data: any) => {
-      onNotify({ title: "✅ Đặt cược thành công!", description: `${String(data.bet).toUpperCase()} - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.amount)}` });
+      onNotify({ title: "Đặt cược thành công!", description: `${String(data.bet).toUpperCase()} - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.amount)}` });
       onBalanceUpdate();
     };
 
     const onError = (data: any) => {
-      onNotify({ title: "❌ Lỗi", description: data.message, variant: "destructive" });
+      onNotify({ title: "Lỗi", description: data.message, variant: "destructive" });
     };
 
     socket.on("sessionStart", onSessionStart);
