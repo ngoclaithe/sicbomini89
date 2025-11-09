@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api } from '@/lib/api';
+import * as HistoryApi from '@/lib/history';
 import { formatCurrency } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -39,7 +39,7 @@ export const TopPlayers: React.FC<TopPlayersProps> = ({ isOpen, onClose, token }
   const loadTopWinners = async () => {
     setLoading(true);
     try {
-      const winnersRes = await api.get('/history/top-winners-today?limit=10', token);
+      const winnersRes = await HistoryApi.getTopWinnersToday(10, token);
       setTopWinners(winnersRes);
     } catch (error) {
       toast({
