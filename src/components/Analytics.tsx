@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api } from '@/lib/api';
+import * as HistoryApi from '@/lib/history';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -49,8 +49,8 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
     setLoading(true);
     try {
       const [diceRes, sessionsRes] = await Promise.all([
-        api.get('/history/dice?limit=50', token),
-        api.get('/history/sessions?limit=100', token),
+        HistoryApi.getDiceHistory(50, token),
+        HistoryApi.getSessions(100, token),
       ]);
 
       setDiceData(diceRes);
