@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,10 +8,10 @@ import { DiceRoller } from './DiceRoller';
 import { Analytics } from './Analytics';
 import { TopPlayers } from './TopPlayers';
 import { formatCurrency, formatNumber } from '@/lib/utils';
-import { getSocket } from '@/lib/socket';
 import { useToast } from '@/components/ui/use-toast';
-import { Clock, TrendingUp, History, Wallet, BarChart3, Trophy, Coins } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, Wallet, BarChart3, Trophy, Coins } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useGameSocket } from '@/hooks/useGameSocket';
 
 interface GameBoardProps {
   userId: string;
@@ -21,100 +21,20 @@ interface GameBoardProps {
 }
 
 export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalanceUpdate, token }) => {
-  const [countdown, setCountdown] = useState(45);
-  const [phase, setPhase] = useState<'betting' | 'revealing'>('betting');
   const [betAmount, setBetAmount] = useState('10000');
   const [selectedBet, setSelectedBet] = useState<'tai' | 'xiu' | null>(null);
   const [hasBet, setHasBet] = useState(false);
-  const [isRolling, setIsRolling] = useState(false);
-  const [diceResults, setDiceResults] = useState<number[]>([]);
-  const [gameResult, setGameResult] = useState<'tai' | 'xiu' | null>(null);
-  const [sessionId, setSessionId] = useState<string>('');
-  const [canReveal, setCanReveal] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showTopPlayers, setShowTopPlayers] = useState(false);
   const { toast } = useToast();
 
-  const [bettingStats, setBettingStats] = useState({
-    tai: { count: 0, totalAmount: 0 },
-    xiu: { count: 0, totalAmount: 0 },
+  const notify = (args: { title: string; description?: string; variant?: 'destructive' | undefined }) => toast(args as any);
+
+  const { countdown, phase, isRolling, diceResults, gameResult, canReveal, bettingStats, placeBet } = useGameSocket({
+    onNotify: notify,
+    onBalanceUpdate,
   });
 
-  useEffect(() => {
-    const socket = getSocket();
-
-    socket.on('sessionStart', (data) => {
-      setSessionId(data.sessionId);
-      setCountdown(data.bettingTime);
-      setPhase('betting');
-      setHasBet(false);
-      setSelectedBet(null);
-      setIsRolling(false);
-      setDiceResults([]);
-      setGameResult(null);
-      setCanReveal(false);
-      setBettingStats({
-        tai: { count: 0, totalAmount: 0 },
-        xiu: { count: 0, totalAmount: 0 },
-      });
-    });
-
-    socket.on('countdown', (data) => {
-      setCountdown(data.remainingTime);
-      setPhase(data.phase);
-      if (data.bettingStats) {
-        setBettingStats(data.bettingStats);
-      }
-    });
-
-    socket.on('bettingStats', (data) => {
-      setBettingStats(data);
-    });
-
-    socket.on('bettingClosed', () => {
-      setIsRolling(true);
-      toast({
-        title: "🎲 Đóng cửa cược",
-        description: "Đang lắc xúc xắc...",
-      });
-    });
-
-    socket.on('diceRolled', (data) => {
-      setTimeout(() => {
-        setIsRolling(false);
-        setDiceResults(data.diceResults);
-        setGameResult(data.result);
-        setCanReveal(true);
-        onBalanceUpdate();
-      }, 2000);
-    });
-
-    socket.on('betPlaced', (data) => {
-      toast({
-        title: "✅ Đặt cược thành công!",
-        description: `${data.bet.toUpperCase()} - ${formatCurrency(data.amount)}`,
-      });
-      onBalanceUpdate();
-    });
-
-    socket.on('error', (data) => {
-      toast({
-        title: "❌ Lỗi",
-        description: data.message,
-        variant: "destructive",
-      });
-    });
-
-    return () => {
-      socket.off('sessionStart');
-      socket.off('countdown');
-      socket.off('bettingStats');
-      socket.off('bettingClosed');
-      socket.off('diceRolled');
-      socket.off('betPlaced');
-      socket.off('error');
-    };
-  }, [toast, onBalanceUpdate]);
 
   const handlePlaceBet = (bet: 'tai' | 'xiu') => {
     if (hasBet) {
@@ -154,8 +74,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       return;
     }
 
-    const socket = getSocket();
-    socket.emit('placeBet', { userId, bet, amount });
+    placeBet({ userId, bet, amount });
     setSelectedBet(bet);
     setHasBet(true);
   };
