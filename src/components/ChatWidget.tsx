@@ -74,6 +74,8 @@ export const ChatWidget: React.FC = () => {
     setInput("");
   };
 
+  if (allowed === false) return null;
+
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {/* Toggle Button */}
