@@ -235,9 +235,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       </Card>
 
       {/* Main Game Area - DiceRoller LUÔN ở giữa Tài và Xỉu */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 items-stretch">
+      <div className="grid grid-cols-3 gap-2 items-stretch overflow-x-auto">
         {/* TÀI - Bên trái */}
-        <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all h-full">
+        <Card className="min-w-0 bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all h-full">
           <CardHeader className="pb-2 sm:pb-3">
             <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
             <p className="text-center text-xs text-gray-400">11 - 17</p>
@@ -268,7 +268,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         </Card>
 
         {/* Dice Roller - Ở giữa */}
-        <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-visible">
+        <Card className="min-w-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-visible">
           <CardContent className="p-2 sm:p-6">
             <DiceRoller
               diceResults={diceResults}
@@ -280,7 +280,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         </Card>
 
         {/* XỈU - Bên phải */}
-        <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all h-full">
+        <Card className="min-w-0 bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all h-full">
           <CardHeader className="pb-2 sm:pb-3">
             <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
             <p className="text-center text-xs text-gray-400">4 - 10</p>
