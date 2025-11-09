@@ -76,12 +76,6 @@ export const ChatWidget: React.FC = () => {
         Chat ({online})
       </button>
 
-      <div
-        className={`$${""} ${
-          open ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none sm:pointer-events-auto"
-        } transition-all duration-200`}
-      />
-
       {/* Panel */}
       <div
         className={`${
