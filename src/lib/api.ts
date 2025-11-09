@@ -1,5 +1,4 @@
 const BFF_BASE = '/api/bff';
-const API_PREFIX = '/api/v1';
 
 export const api = {
   async post(endpoint: string, data: any, token?: string) {
@@ -11,7 +10,7 @@ export const api = {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${BFF_BASE}${API_PREFIX}${endpoint}`, {
+    const response = await fetch(`${BFF_BASE}${endpoint}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(data),
@@ -37,7 +36,7 @@ export const api = {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${BFF_BASE}${API_PREFIX}${endpoint}`, {
+    const response = await fetch(`${BFF_BASE}${endpoint}`, {
       headers,
       cache: 'no-store',
     });
@@ -63,7 +62,7 @@ export const api = {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${BFF_BASE}${API_PREFIX}${endpoint}`, {
+    const response = await fetch(`${BFF_BASE}${endpoint}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(data),
