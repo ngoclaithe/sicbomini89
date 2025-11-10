@@ -183,19 +183,6 @@ export default function SetGameResultPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Info Card */}
-      <Card className="bg-blue-900/20 border-blue-700/50 max-w-3xl">
-        <CardContent className="p-6">
-          <h3 className="text-blue-300 font-semibold mb-3">⚠️ Lưu ý</h3>
-          <ul className="space-y-2 text-sm text-gray-300">
-            <li>• Chỉ admin mới có thể điều chỉnh kết quả trò chơi</li>
-            <li>• Giá trị xúc xắc phải từ 1 đến 6</li>
-            <li>• Hành động này sẽ ảnh hưởng đến tất cả người chơi trong vòng chơi hiện tại</li>
-            <li>• Cân nhắc kỹ lưỡng trước khi đặt kết quả</li>
-          </ul>
-        </CardContent>
-      </Card>
     </div>
   );
 }

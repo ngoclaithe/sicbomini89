@@ -137,18 +137,6 @@ export default function GameConfigPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Info Card */}
-      <Card className="bg-blue-900/20 border-blue-700/50 max-w-2xl">
-        <CardContent className="p-6">
-          <h3 className="text-blue-300 font-semibold mb-3">ℹ️ Thông tin</h3>
-          <ul className="space-y-2 text-sm text-gray-300">
-            <li>• <strong>Thời gian đặt cược:</strong> Khoảng thời gian mà người chơi có thể đặt cược</li>
-            <li>• <strong>Tỷ lệ thắng:</strong> Số tiền thắng được tính b��ng cách nhân cược với tỷ lệ này</li>
-            <li>• Ví dụ: Cược 100K với tỷ lệ 2x sẽ thắng 200K</li>
-          </ul>
-        </CardContent>
-      </Card>
     </div>
   );
 }
