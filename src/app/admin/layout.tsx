@@ -8,7 +8,7 @@ import {
   LayoutDashboard,
   Users,
   Settings,
-  DiceFive,
+  Dice5,
   CreditCard,
   LogOut,
   Menu,
@@ -19,7 +19,7 @@ const menuItems = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
   { name: 'Quản lý người dùng', icon: Users, href: '/admin/user' },
   { name: 'Cấu hình game', icon: Settings, href: '/admin/config' },
-  { name: 'Điều chỉnh kết quả', icon: DiceFive, href: '/admin/setgameresult' },
+  { name: 'Điều chỉnh kết quả', icon: Dice5, href: '/admin/setgameresult' },
   { name: 'Quản lý nạp/rút', icon: CreditCard, href: '/admin/payment' },
 ];
 
