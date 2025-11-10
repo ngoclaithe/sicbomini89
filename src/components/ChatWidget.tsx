@@ -42,8 +42,11 @@ export const ChatWidget: React.FC = () => {
   useEffect(() => {
     if (!isClient) return;
 
-    // Disable chat if no token (user not logged in) or on admin pages
-    if (!token || pathname?.startsWith('/admin')) {
+    // Disable chat if:
+    // 1. No token (user not logged in)
+    // 2. On admin pages
+    // 3. On login/register page (home page without token)
+    if (!token || pathname?.startsWith('/admin') || pathname === '/') {
       setAllowed(false);
       return;
     }
