@@ -43,3 +43,23 @@ export async function getStatistics(token: string) {
 export async function getRecentActivity(token: string, limit = 50) {
   return api.get(`/admin/activity?limit=${limit}`, token)
 }
+
+export async function createPaymentInfo(token: string, paymentInfo: { bankName: string; accountNumber: string; accountHolder: string }) {
+  return api.post('/payment/info/create', paymentInfo, token)
+}
+
+export async function approveDeposit(token: string, depositId: string, note?: string) {
+  return api.put(`/payment/deposit/${depositId}/approve`, { depositId, note }, token)
+}
+
+export async function rejectDeposit(token: string, depositId: string, reason: string) {
+  return api.put(`/payment/deposit/${depositId}/reject`, { depositId, reason }, token)
+}
+
+export async function approveWithdrawal(token: string, withdrawalId: string, note?: string) {
+  return api.put(`/payment/withdrawal/${withdrawalId}/approve`, { withdrawalId, note }, token)
+}
+
+export async function rejectWithdrawal(token: string, withdrawalId: string, reason: string) {
+  return api.put(`/payment/withdrawal/${withdrawalId}/reject`, { withdrawalId, reason }, token)
+}
