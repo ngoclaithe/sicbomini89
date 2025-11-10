@@ -54,6 +54,7 @@ export default function PaymentManagementPage() {
   const [loadingBankInfo, setLoadingBankInfo] = useState(false);
   const [creatingBankInfo, setCreatingBankInfo] = useState(false);
   const [showBankInfoModal, setShowBankInfoModal] = useState(false);
+  const [togglingInfoId, setTogglingInfoId] = useState<string | null>(null);
 
   // Deposit states
   const [deposits, setDeposits] = useState<Deposit[]>([]);
