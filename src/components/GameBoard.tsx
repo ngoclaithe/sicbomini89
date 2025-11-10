@@ -135,7 +135,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     setPlacedBets([...placedBets, { type: bet, amount }]);
   };
 
-  const quickBetAmounts = [10000, 50000, 100000, 500000];
+  const getQuickBetAmounts = () => {
+    const baseAmounts = [200000, 1000000, 5000000];
+    return baseAmounts.filter(amount => amount <= balance);
+  };
+
+  const handleAllIn = () => {
+    const totalBetAmount = placedBets.reduce((sum, b) => sum + b.amount, 0);
+    const maxCanBet = balance - totalBetAmount;
+    setBetAmount(Math.max(0, maxCanBet).toString());
+  };
 
   const getBetLabel = (type: BetType): string => {
     const labels: { [key in BetType]: string } = {
