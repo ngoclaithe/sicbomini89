@@ -39,7 +39,7 @@ interface Withdrawal {
 export default function PaymentManagementPage() {
   const [token, setToken] = useState<string | null>(null);
   const [tab, setTab] = useState<'bankInfo' | 'deposits' | 'withdrawals'>('bankInfo');
-  
+
   // Bank Info states
   const [paymentInfos, setPaymentInfos] = useState<PaymentInfo[]>([]);
   const [newBankInfo, setNewBankInfo] = useState({
@@ -49,6 +49,7 @@ export default function PaymentManagementPage() {
   });
   const [loadingBankInfo, setLoadingBankInfo] = useState(false);
   const [creatingBankInfo, setCreatingBankInfo] = useState(false);
+  const [showBankInfoModal, setShowBankInfoModal] = useState(false);
 
   // Deposit states
   const [deposits, setDeposits] = useState<Deposit[]>([]);
