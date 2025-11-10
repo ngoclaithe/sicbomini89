@@ -45,7 +45,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [accountHolder, setAccountHolder] = useState('');
-  const [withdrawNote, setWithdrawNote] = useState('');
 
   // Load payment infos when modal opens or activeTab changes to deposit
   useEffect(() => {
@@ -195,7 +194,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           bankName: bankName.trim(),
           accountNumber: accountNumber.trim(),
           accountHolder: accountHolder.trim(),
-          note: withdrawNote || undefined,
         },
         token
       );
@@ -209,7 +207,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       setBankName('');
       setAccountNumber('');
       setAccountHolder('');
-      setWithdrawNote('');
       onSuccess();
       onClose();
     } catch (error) {
@@ -232,14 +229,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       setBankName('');
       setAccountNumber('');
       setAccountHolder('');
-      setWithdrawNote('');
       onClose();
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="w-full max-w-md mx-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Quản lý tiền</DialogTitle>
         </DialogHeader>
@@ -481,19 +477,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   placeholder="Tên chủ tài khoản"
                   value={accountHolder}
                   onChange={(e) => setAccountHolder(e.target.value)}
-                  disabled={isLoading}
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="withdraw-note">Ghi chú (tuỳ chọn)</Label>
-                <Input
-                  id="withdraw-note"
-                  type="text"
-                  placeholder="Ghi chú thêm"
-                  value={withdrawNote}
-                  onChange={(e) => setWithdrawNote(e.target.value)}
                   disabled={isLoading}
                   className="mt-1"
                 />
