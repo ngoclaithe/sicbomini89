@@ -98,11 +98,11 @@ export const ChatWidget: React.FC = () => {
   if (!allowed) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
       {/* Toggle Button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground shadow-lg px-4 py-2 sm:hidden"
+        className="flex items-center gap-2 rounded-full bg-primary text-primary-foreground shadow-lg px-4 py-2"
         aria-label="Mở chat"
       >
         <MessageCircle className="w-5 h-5" />
@@ -110,14 +110,19 @@ export const ChatWidget: React.FC = () => {
       </button>
 
       {/* Panel */}
+      {open && (
       <div
-        className={`${
-          open ? "" : "hidden sm:block"
-        } w-[92vw] sm:w-80 md:w-96 max-h-[60vh] sm:max-h-[70vh] rounded-xl overflow-hidden border border-primary/30 bg-gray-900/95 backdrop-blur shadow-2xl`}
+        className="w-[92vw] sm:w-80 md:w-96 max-h-[60vh] sm:max-h-[70vh] rounded-xl overflow-hidden border border-primary/30 bg-gray-900/95 backdrop-blur shadow-2xl"
       >
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800">
           <div className="font-semibold">Trò chuyện</div>
-          <div className="text-xs text-gray-400">Đang online: {online}</div>
+          <button
+            onClick={() => setOpen(false)}
+            className="p-1 hover:bg-gray-800 rounded-md transition-colors"
+            aria-label="Đóng chat"
+          >
+            <X className="w-4 h-4 text-gray-400 hover:text-white" />
+          </button>
         </div>
 
         <div className="p-3 space-y-2 overflow-y-auto max-h-[46vh] sm:max-h-[52vh]">
@@ -149,6 +154,7 @@ export const ChatWidget: React.FC = () => {
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 };
