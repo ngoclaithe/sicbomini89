@@ -136,8 +136,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   };
 
   const getQuickBetAmounts = () => {
-    const baseAmounts = [200000, 1000000, 5000000];
-    return baseAmounts.filter(amount => amount <= balance);
+    return [1000, 5000, 10000, 50000, 100000, 200000, 500000, 1000000, 5000000];
   };
 
   const handleAllIn = () => {
@@ -433,7 +432,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             className="text-lg h-10"
             disabled={phase !== 'betting'}
           />
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
             {getQuickBetAmounts().map((amount) => (
               <Button
                 key={amount}
