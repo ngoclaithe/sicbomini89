@@ -211,27 +211,26 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         </CardContent>
       </Card>
 
-      {/* Main Game Area - 2x2 Grid */}
-      <div className="grid grid-cols-2 gap-2 lg:gap-3">
-        {/* TÀI - Tái xỉu, col 1 */}
-        <div className="grid grid-cols-2 gap-2 lg:gap-3">
+      {/* Main Game Area - 3 columns grid */}
+      <div className="grid grid-cols-3 gap-2 items-stretch overflow-x-hidden">
+        {/* Left Column - TÀI và CHẴN */}
+        <div className="grid grid-rows-2 gap-2 h-full">
           {/* TÀI */}
           <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all">
             <CardHeader className="pb-2 sm:pb-3">
               <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
               <p className="text-center text-xs text-gray-400">11 - 17</p>
             </CardHeader>
-            <CardContent className="p-2 sm:p-6">
+            <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
               <Button
                 onClick={() => handlePlaceBet('tai')}
                 disabled={phase !== 'betting' || isRolling || !canPlaceBet('tai')}
-                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
-                size="lg"
+                className="w-full h-10 sm:h-12 text-sm sm:text-base font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
               >
                 Đặt TÀI
               </Button>
 
-              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+              <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
                 <div className="flex items-center justify-center gap-2">
                   <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
                   <div className="font-semibold text-red-400">{bettingStats.tai.count}</div>
@@ -239,64 +238,26 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 <div className="mt-1 text-red-400 font-semibold">
                   {formatCurrency(bettingStats.tai.totalAmount)}
                 </div>
-                <div className="flex justify-center mt-1">
-                  <Coins className="w-4 h-4 text-red-400" />
-                </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* XỈU */}
-          <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all">
-            <CardHeader className="pb-2 sm:pb-3">
-              <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
-              <p className="text-center text-xs text-gray-400">4 - 10</p>
-            </CardHeader>
-            <CardContent className="p-2 sm:p-6">
-              <Button
-                onClick={() => handlePlaceBet('xiu')}
-                disabled={phase !== 'betting' || isRolling || !canPlaceBet('xiu')}
-                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
-                size="lg"
-              >
-                Đặt XỈU
-              </Button>
-
-              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
-                <div className="flex items-center justify-center gap-2">
-                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
-                  <div className="font-semibold text-blue-400">{bettingStats.xiu.count}</div>
-                </div>
-                <div className="mt-1 text-blue-400 font-semibold">
-                  {formatCurrency(bettingStats.xiu.totalAmount)}
-                </div>
-                <div className="flex justify-center mt-1">
-                  <Coins className="w-4 h-4 text-blue-400" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* CHẴN / LẺ - Col 2 */}
-        <div className="grid grid-cols-2 gap-2 lg:gap-3">
           {/* CHẴN */}
           <Card className="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border-2 border-yellow-500/30 hover:border-yellow-500/60 transition-all">
             <CardHeader className="pb-2 sm:pb-3">
               <CardTitle className="text-lg sm:text-2xl text-center text-yellow-500">CHẴN</CardTitle>
               <p className="text-center text-xs text-gray-400">4,6,8,10,12,14,16</p>
             </CardHeader>
-            <CardContent className="p-2 sm:p-6">
+            <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
               <Button
                 onClick={() => handlePlaceBet('chan')}
                 disabled={phase !== 'betting' || isRolling || !canPlaceBet('chan')}
-                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:opacity-50"
-                size="lg"
+                className="w-full h-10 sm:h-12 text-sm sm:text-base font-bold bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:opacity-50"
               >
                 Đặt CHẴN
               </Button>
 
-              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+              <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
                 <div className="flex items-center justify-center gap-2">
                   <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
                   <div className="font-semibold text-yellow-400">{bettingStats.chan.count}</div>
@@ -304,8 +265,47 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 <div className="mt-1 text-yellow-400 font-semibold">
                   {formatCurrency(bettingStats.chan.totalAmount)}
                 </div>
-                <div className="flex justify-center mt-1">
-                  <Coins className="w-4 h-4 text-yellow-400" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Middle Column - Dice Roller */}
+        <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+          <CardContent className="p-2 sm:p-6 h-full flex flex-col items-center justify-center">
+            <DiceRoller
+              diceResults={diceResults}
+              isRolling={isRolling}
+              result={gameResult}
+              canReveal={canReveal}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Right Column - XỈU và LẺ */}
+        <div className="grid grid-rows-2 gap-2 h-full">
+          {/* XỈU */}
+          <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
+              <p className="text-center text-xs text-gray-400">4 - 10</p>
+            </CardHeader>
+            <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
+              <Button
+                onClick={() => handlePlaceBet('xiu')}
+                disabled={phase !== 'betting' || isRolling || !canPlaceBet('xiu')}
+                className="w-full h-10 sm:h-12 text-sm sm:text-base font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
+              >
+                Đặt XỈU
+              </Button>
+
+              <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
+                <div className="flex items-center justify-center gap-2">
+                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
+                  <div className="font-semibold text-blue-400">{bettingStats.xiu.count}</div>
+                </div>
+                <div className="mt-1 text-blue-400 font-semibold">
+                  {formatCurrency(bettingStats.xiu.totalAmount)}
                 </div>
               </div>
             </CardContent>
@@ -317,17 +317,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
               <CardTitle className="text-lg sm:text-2xl text-center text-green-500">LẺ</CardTitle>
               <p className="text-center text-xs text-gray-400">5,7,9,11,13,15,17</p>
             </CardHeader>
-            <CardContent className="p-2 sm:p-6">
+            <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
               <Button
                 onClick={() => handlePlaceBet('le')}
                 disabled={phase !== 'betting' || isRolling || !canPlaceBet('le')}
-                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 disabled:opacity-50"
-                size="lg"
+                className="w-full h-10 sm:h-12 text-sm sm:text-base font-bold bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 disabled:opacity-50"
               >
                 Đặt LẺ
               </Button>
 
-              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+              <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
                 <div className="flex items-center justify-center gap-2">
                   <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
                   <div className="font-semibold text-green-400">{bettingStats.le.count}</div>
@@ -335,26 +334,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 <div className="mt-1 text-green-400 font-semibold">
                   {formatCurrency(bettingStats.le.totalAmount)}
                 </div>
-                <div className="flex justify-center mt-1">
-                  <Coins className="w-4 h-4 text-green-400" />
-                </div>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
-
-      {/* Dice Roller - Center */}
-      <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
-        <CardContent className="p-2 sm:p-6">
-          <DiceRoller
-            diceResults={diceResults}
-            isRolling={isRolling}
-            result={gameResult}
-            canReveal={canReveal}
-          />
-        </CardContent>
-      </Card>
 
       {/* Bet Amount Input */}
       <Card>
