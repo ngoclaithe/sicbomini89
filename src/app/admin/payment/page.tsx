@@ -266,7 +266,7 @@ export default function PaymentManagementPage() {
         <div className="space-y-6">
           {/* Bank Info List */}
           <Card className="bg-gray-800/50 border-gray-700/50">
-            <CardHeader className="flex items-center justify-between">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-white">Danh sách tài khoản ngân hàng</CardTitle>
               <Button
                 onClick={() => setShowBankInfoModal(true)}
