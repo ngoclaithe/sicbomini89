@@ -5,11 +5,11 @@ export async function adminLogin(username: string, password: string) {
 }
 
 export async function adminLogout(token: string) {
-  return api.post('/admin/logout', {}, token)
+  return api.post('/auth/logout', {}, token)
 }
 
 export async function getAdminProfile(token: string) {
-  return api.get('/admin/me', token)
+  return api.get('/auth/me', token)
 }
 
 export async function updateGameConfig(token: string, config: { bettingTime?: number; winMultiplier?: number }) {
