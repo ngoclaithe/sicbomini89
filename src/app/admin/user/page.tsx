@@ -65,7 +65,7 @@ export default function UserManagementPage() {
     try {
       setLoading(true);
       const response = await AdminApi.getUsers(token, 1, itemsPerPage);
-      const filtered = (response.data || []).filter((user: User) =>
+      const filtered = (response.users || []).filter((user: User) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchQuery.toLowerCase())
       );
