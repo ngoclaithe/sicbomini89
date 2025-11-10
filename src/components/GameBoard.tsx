@@ -103,7 +103,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     if (totalBetAmount + amount > balance) {
       toast({
         title: "Lỗi",
-        description: "Số dư không đủ!",
+        description: "Số d�� không đủ!",
         variant: "destructive",
       });
       return;
@@ -260,10 +260,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
               <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
                 <div className="flex items-center justify-center gap-2">
                   <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
-                  <div className="font-semibold text-yellow-400">{bettingStats.chan.count}</div>
+                  <div className="font-semibold text-yellow-400">{bettingStats.chan?.count ?? 0}</div>
                 </div>
                 <div className="mt-1 text-yellow-400 font-semibold">
-                  {formatCurrency(bettingStats.chan.totalAmount)}
+                  {formatCurrency(bettingStats.chan?.totalAmount ?? 0)}
                 </div>
               </div>
             </CardContent>
@@ -329,10 +329,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
               <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
                 <div className="flex items-center justify-center gap-2">
                   <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
-                  <div className="font-semibold text-green-400">{bettingStats.le.count}</div>
+                  <div className="font-semibold text-green-400">{bettingStats.le?.count ?? 0}</div>
                 </div>
                 <div className="mt-1 text-green-400 font-semibold">
-                  {formatCurrency(bettingStats.le.totalAmount)}
+                  {formatCurrency(bettingStats.le?.totalAmount ?? 0)}
                 </div>
               </div>
             </CardContent>
