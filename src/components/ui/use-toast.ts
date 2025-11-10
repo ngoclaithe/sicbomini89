@@ -155,6 +155,17 @@ function toast({ ...props }: Toast) {
     },
   })
 
+  // Auto-dismiss after 3 seconds
+  const timeoutId = setTimeout(() => {
+    dismiss()
+  }, 3000)
+
+  // Store timeout ID for cleanup if needed
+  if (toastTimeouts.has(id)) {
+    clearTimeout(toastTimeouts.get(id)!)
+  }
+  toastTimeouts.set(id, timeoutId as any)
+
   return {
     id: id,
     dismiss,
