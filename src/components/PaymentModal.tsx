@@ -209,7 +209,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       setBankName('');
       setAccountNumber('');
       setAccountHolder('');
-      setWithdrawNote('');
       onSuccess();
       onClose();
     } catch (error) {
