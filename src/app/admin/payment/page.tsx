@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import * as AdminApi from '@/lib/admin';
 import * as PaymentApi from '@/lib/payment';
 import { toast } from 'react-hot-toast';
-import { Plus, Trash2, Check, X } from 'lucide-react';
+import { Plus, Trash2, Check, X, ToggleLeft, ToggleRight } from 'lucide-react';
 
 interface PaymentInfo {
   id: string;
@@ -219,7 +219,7 @@ export default function PaymentManagementPage() {
       loadWithdrawals(token);
     } catch (error) {
       console.error('Error rejecting withdrawal:', error);
-      toast.error('Lỗi khi t��� chối rút tiền');
+      toast.error('Lỗi khi từ chối rút tiền');
     } finally {
       setRejectingWithdrawal(null);
     }
@@ -566,7 +566,7 @@ export default function PaymentManagementPage() {
                   className="gap-2"
                 >
                   <Plus className="w-4 h-4" />
-                  {creatingBankInfo ? 'Đang th��m...' : 'Thêm tài khoản'}
+                  {creatingBankInfo ? 'Đang thêm...' : 'Thêm tài khoản'}
                 </Button>
               </div>
             </CardContent>
