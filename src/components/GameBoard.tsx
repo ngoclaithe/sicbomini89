@@ -136,8 +136,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   };
 
   const getQuickBetAmounts = () => {
-    const baseAmounts = [200000, 1000000, 5000000];
-    return baseAmounts.filter(amount => amount <= balance);
+    return [1000, 5000, 10000, 50000, 100000, 200000, 500000, 1000000, 5000000];
   };
 
   const handleAllIn = () => {
