@@ -495,6 +495,80 @@ export default function PaymentManagementPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Add Bank Info Modal */}
+      {showBankInfoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <Card className="bg-gray-800 border-gray-700 w-full max-w-md">
+            <CardHeader>
+              <CardTitle className="text-white">Thêm tài khoản ngân hàng</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="bank-name" className="text-gray-300">
+                  Tên ngân hàng
+                </Label>
+                <Input
+                  id="bank-name"
+                  value={newBankInfo.bankName}
+                  onChange={(e) =>
+                    setNewBankInfo({ ...newBankInfo, bankName: e.target.value })
+                  }
+                  placeholder="VD: Vietcombank"
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="account-number" className="text-gray-300">
+                  Số tài khoản
+                </Label>
+                <Input
+                  id="account-number"
+                  value={newBankInfo.accountNumber}
+                  onChange={(e) =>
+                    setNewBankInfo({ ...newBankInfo, accountNumber: e.target.value })
+                  }
+                  placeholder="VD: 0123456789"
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="account-holder" className="text-gray-300">
+                  Tên chủ tài khoản
+                </Label>
+                <Input
+                  id="account-holder"
+                  value={newBankInfo.accountHolder}
+                  onChange={(e) =>
+                    setNewBankInfo({ ...newBankInfo, accountHolder: e.target.value })
+                  }
+                  placeholder="VD: CTY LIVESTREAM TECH"
+                  className="mt-2"
+                />
+              </div>
+              <div className="flex gap-2 justify-end pt-4 border-t border-gray-700">
+                <Button
+                  onClick={() => {
+                    setShowBankInfoModal(false);
+                    setNewBankInfo({ bankName: '', accountNumber: '', accountHolder: '' });
+                  }}
+                  variant="outline"
+                >
+                  Hủy
+                </Button>
+                <Button
+                  onClick={handleCreatePaymentInfo}
+                  disabled={creatingBankInfo}
+                  className="gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  {creatingBankInfo ? 'Đang thêm...' : 'Thêm tài khoản'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
