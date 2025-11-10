@@ -37,6 +37,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     const socket = getSocket();
 
     const onSessionStart = (data: any) => {
+      console.log("🎲 [SESSION_START] New session:", data.sessionId, "Betting time:", data.bettingTime);
       setLastSessionId(data.sessionId);
       setSessionId(data.sessionId);
       setCountdown(data.bettingTime);
