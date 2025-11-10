@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { connectChatSocket, disconnectChatSocket, getChatSocket } from "@/lib/chatSocket";
-import { Send, MessageCircle } from "lucide-react";
+import { Send, MessageCircle, X } from "lucide-react";
 
 interface ChatMessage {
   id: string;
