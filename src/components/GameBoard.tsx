@@ -432,7 +432,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             className="text-lg h-10"
             disabled={phase !== 'betting'}
           />
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-5 sm:grid-cols-5 gap-2">
             {getQuickBetAmounts().map((amount) => (
               <Button
                 key={amount}
