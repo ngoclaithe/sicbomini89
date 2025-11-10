@@ -20,10 +20,16 @@ interface GameBoardProps {
   token?: string;
 }
 
+type BetType = 'tai' | 'xiu' | 'chan' | 'le';
+
+interface PlacedBet {
+  type: BetType;
+  amount: number;
+}
+
 export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalanceUpdate, token }) => {
   const [betAmount, setBetAmount] = useState('10000');
-  const [selectedBet, setSelectedBet] = useState<'tai' | 'xiu' | null>(null);
-  const [hasBet, setHasBet] = useState(false);
+  const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showTopPlayers, setShowTopPlayers] = useState(false);
   const { toast } = useToast();
@@ -35,12 +41,40 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     onBalanceUpdate,
   });
 
+  const canPlaceBet = (newBetType: BetType): boolean => {
+    const betTypesPlaced = placedBets.map(b => b.type);
+    
+    if (betTypesPlaced.includes(newBetType)) {
+      return false;
+    }
 
-  const handlePlaceBet = (bet: 'tai' | 'xiu') => {
-    if (hasBet) {
+    if (newBetType === 'tai' && betTypesPlaced.includes('xiu')) {
+      return false;
+    }
+    if (newBetType === 'xiu' && betTypesPlaced.includes('tai')) {
+      return false;
+    }
+    if (newBetType === 'chan' && betTypesPlaced.includes('le')) {
+      return false;
+    }
+    if (newBetType === 'le' && betTypesPlaced.includes('chan')) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const handlePlaceBet = (bet: BetType) => {
+    if (!canPlaceBet(bet)) {
+      const restrictions: { [key in BetType]: string } = {
+        'tai': 'Không được đặt Tài và Xỉu cùng lúc',
+        'xiu': 'Không được đặt Tài và Xỉu cùng lúc',
+        'chan': 'Không được đặt Chẵn và Lẻ cùng lúc',
+        'le': 'Không được đặt Chẵn và Lẻ cùng lúc',
+      };
       toast({
         title: "Cảnh báo",
-        description: "Bạn đã đặt cược cho phiên này rồi!",
+        description: restrictions[bet],
         variant: "destructive",
       });
       return;
@@ -65,7 +99,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
       return;
     }
 
-    if (amount > balance) {
+    const totalBetAmount = placedBets.reduce((sum, b) => sum + b.amount, 0);
+    if (totalBetAmount + amount > balance) {
       toast({
         title: "Lỗi",
         description: "Số dư không đủ!",
@@ -75,11 +110,30 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     }
 
     placeBet({ userId, bet, amount });
-    setSelectedBet(bet);
-    setHasBet(true);
+    setPlacedBets([...placedBets, { type: bet, amount }]);
   };
 
   const quickBetAmounts = [10000, 50000, 100000, 500000];
+
+  const getBetLabel = (type: BetType): string => {
+    const labels: { [key in BetType]: string } = {
+      'tai': 'TÀI',
+      'xiu': 'XỈU',
+      'chan': 'CHẴN',
+      'le': 'LẺ',
+    };
+    return labels[type];
+  };
+
+  const getBetColor = (type: BetType): string => {
+    const colors: { [key in BetType]: string } = {
+      'tai': 'text-red-500',
+      'xiu': 'text-blue-500',
+      'chan': 'text-yellow-500',
+      'le': 'text-green-500',
+    };
+    return colors[type];
+  };
 
   return (
     <div className="space-y-3 sm:space-y-4">
@@ -97,7 +151,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         token={token}
       />
 
-      {/* Countdown Timer - Thu gọn */}
+      {/* Countdown Timer */}
       <Card className="border-2 border-primary/50 bg-gradient-to-br from-gray-900 to-gray-800">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
@@ -139,98 +193,170 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             </div>
           </div>
 
-          {hasBet && selectedBet && (
+          {placedBets.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-2 text-center text-xs text-gray-400"
             >
-              Đã đặt: <span className={`font-bold ${selectedBet === 'tai' ? 'text-red-500' : 'text-blue-500'}`}>
-                {selectedBet.toUpperCase()}
-              </span> - {formatCurrency(parseFloat(betAmount))}
+              Đã đặt: <span className="font-bold">
+                {placedBets.map((b, idx) => (
+                  <span key={idx} className={getBetColor(b.type)}>
+                    {getBetLabel(b.type)} {formatCurrency(b.amount)}{idx < placedBets.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+              </span>
             </motion.div>
           )}
         </CardContent>
       </Card>
 
-      {/* Main Game Area - DiceRoller LUÔN ở giữa Tài và Xỉu */}
-      <div className="grid grid-cols-3 gap-2 items-stretch overflow-x-hidden">
-        {/* TÀI - Bên trái */}
-        <Card className="min-w-0 bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all h-full">
-          <CardHeader className="pb-2 sm:pb-3">
-            <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
-            <p className="text-center text-xs text-gray-400">11 - 17</p>
-          </CardHeader>
-          <CardContent className="p-2 sm:p-6">
-            <Button
-              onClick={() => handlePlaceBet('tai')}
-              disabled={phase !== 'betting' || hasBet || isRolling}
-              className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
-              size="lg"
-            >
-              Đặt TÀI
-            </Button>
+      {/* Main Game Area - 2x2 Grid */}
+      <div className="grid grid-cols-2 gap-2 lg:gap-3">
+        {/* TÀI - Tái xỉu, col 1 */}
+        <div className="grid grid-cols-2 gap-2 lg:gap-3">
+          {/* TÀI */}
+          <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
+              <p className="text-center text-xs text-gray-400">11 - 17</p>
+            </CardHeader>
+            <CardContent className="p-2 sm:p-6">
+              <Button
+                onClick={() => handlePlaceBet('tai')}
+                disabled={phase !== 'betting' || isRolling || !canPlaceBet('tai')}
+                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
+                size="lg"
+              >
+                Đặt TÀI
+              </Button>
 
-            <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
-              <div className="flex items-center justify-center gap-2">
-                <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
-                <div className="font-semibold text-red-400">{bettingStats.tai.count}</div>
+              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+                <div className="flex items-center justify-center gap-2">
+                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
+                  <div className="font-semibold text-red-400">{bettingStats.tai.count}</div>
+                </div>
+                <div className="mt-1 text-red-400 font-semibold">
+                  {formatCurrency(bettingStats.tai.totalAmount)}
+                </div>
+                <div className="flex justify-center mt-1">
+                  <Coins className="w-4 h-4 text-red-400" />
+                </div>
               </div>
-              <div className="mt-1 text-red-400 font-semibold">
-                {formatCurrency(bettingStats.tai.totalAmount)}
-              </div>
-              <div className="flex justify-center mt-1">
-                <Coins className="w-4 h-4 text-red-400" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Dice Roller - Ở giữa */}
-        <Card className="min-w-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
-          <CardContent className="p-2 sm:p-6">
-            <DiceRoller
-              diceResults={diceResults}
-              isRolling={isRolling}
-              result={gameResult}
-              canReveal={canReveal}
-            />
-          </CardContent>
-        </Card>
+          {/* XỈU */}
+          <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
+              <p className="text-center text-xs text-gray-400">4 - 10</p>
+            </CardHeader>
+            <CardContent className="p-2 sm:p-6">
+              <Button
+                onClick={() => handlePlaceBet('xiu')}
+                disabled={phase !== 'betting' || isRolling || !canPlaceBet('xiu')}
+                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
+                size="lg"
+              >
+                Đặt XỈU
+              </Button>
 
-        {/* XỈU - Bên phải */}
-        <Card className="min-w-0 bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all h-full">
-          <CardHeader className="pb-2 sm:pb-3">
-            <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
-            <p className="text-center text-xs text-gray-400">4 - 10</p>
-          </CardHeader>
-          <CardContent className="p-2 sm:p-6">
-            <Button
-              onClick={() => handlePlaceBet('xiu')}
-              disabled={phase !== 'betting' || hasBet || isRolling}
-              className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:opacity-50"
-              size="lg"
-            >
-              Đặt XỈU
-            </Button>
+              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+                <div className="flex items-center justify-center gap-2">
+                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
+                  <div className="font-semibold text-blue-400">{bettingStats.xiu.count}</div>
+                </div>
+                <div className="mt-1 text-blue-400 font-semibold">
+                  {formatCurrency(bettingStats.xiu.totalAmount)}
+                </div>
+                <div className="flex justify-center mt-1">
+                  <Coins className="w-4 h-4 text-blue-400" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-            <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
-              <div className="flex items-center justify-center gap-2">
-                <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
-                <div className="font-semibold text-blue-400">{bettingStats.xiu.count}</div>
+        {/* CHẴN / LẺ - Col 2 */}
+        <div className="grid grid-cols-2 gap-2 lg:gap-3">
+          {/* CHẴN */}
+          <Card className="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border-2 border-yellow-500/30 hover:border-yellow-500/60 transition-all">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-lg sm:text-2xl text-center text-yellow-500">CHẴN</CardTitle>
+              <p className="text-center text-xs text-gray-400">4,6,8,10,12,14,16</p>
+            </CardHeader>
+            <CardContent className="p-2 sm:p-6">
+              <Button
+                onClick={() => handlePlaceBet('chan')}
+                disabled={phase !== 'betting' || isRolling || !canPlaceBet('chan')}
+                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:opacity-50"
+                size="lg"
+              >
+                Đặt CHẴN
+              </Button>
+
+              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+                <div className="flex items-center justify-center gap-2">
+                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
+                  <div className="font-semibold text-yellow-400">{bettingStats.chan.count}</div>
+                </div>
+                <div className="mt-1 text-yellow-400 font-semibold">
+                  {formatCurrency(bettingStats.chan.totalAmount)}
+                </div>
+                <div className="flex justify-center mt-1">
+                  <Coins className="w-4 h-4 text-yellow-400" />
+                </div>
               </div>
-              <div className="mt-1 text-blue-400 font-semibold">
-                {formatCurrency(bettingStats.xiu.totalAmount)}
+            </CardContent>
+          </Card>
+
+          {/* LẺ */}
+          <Card className="bg-gradient-to-br from-green-900/30 to-green-800/20 border-2 border-green-500/30 hover:border-green-500/60 transition-all">
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-lg sm:text-2xl text-center text-green-500">LẺ</CardTitle>
+              <p className="text-center text-xs text-gray-400">5,7,9,11,13,15,17</p>
+            </CardHeader>
+            <CardContent className="p-2 sm:p-6">
+              <Button
+                onClick={() => handlePlaceBet('le')}
+                disabled={phase !== 'betting' || isRolling || !canPlaceBet('le')}
+                className="w-full h-10 sm:h-14 text-sm sm:text-lg font-bold bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 disabled:opacity-50"
+                size="lg"
+              >
+                Đặt LẺ
+              </Button>
+
+              <div className="mt-3 text-center text-xs sm:text-sm text-gray-300">
+                <div className="flex items-center justify-center gap-2">
+                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
+                  <div className="font-semibold text-green-400">{bettingStats.le.count}</div>
+                </div>
+                <div className="mt-1 text-green-400 font-semibold">
+                  {formatCurrency(bettingStats.le.totalAmount)}
+                </div>
+                <div className="flex justify-center mt-1">
+                  <Coins className="w-4 h-4 text-green-400" />
+                </div>
               </div>
-              <div className="flex justify-center mt-1">
-                <Coins className="w-4 h-4 text-blue-400" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      {/* Bet Amount Input - Dưới cùng */}
+      {/* Dice Roller - Center */}
+      <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+        <CardContent className="p-2 sm:p-6">
+          <DiceRoller
+            diceResults={diceResults}
+            isRolling={isRolling}
+            result={gameResult}
+            canReveal={canReveal}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Bet Amount Input */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
@@ -245,7 +371,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             onChange={(e) => setBetAmount(e.target.value)}
             placeholder="Nhập số tiền"
             className="text-lg h-10"
-            disabled={hasBet || phase !== 'betting'}
+            disabled={phase !== 'betting'}
           />
           <div className="grid grid-cols-4 gap-2">
             {quickBetAmounts.map((amount) => (
@@ -253,7 +379,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 key={amount}
                 onClick={() => setBetAmount(amount.toString())}
                 variant="outline"
-                disabled={hasBet || phase !== 'betting'}
+                disabled={phase !== 'betting'}
                 className="h-8 text-xs"
               >
                 {formatNumber(amount)}
