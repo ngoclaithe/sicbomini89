@@ -328,26 +328,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           {/* XỈU */}
           <motion.div
             onClick={() => handlePlaceBet('xiu')}
-            className={`cursor-pointer transition-all ${
-              phase === 'betting' && !isRolling && canPlaceBet('xiu')
-                ? 'hover:scale-105 hover:shadow-xl'
-                : ''
-            } ${
+            className={`cursor-pointer ${
               winningBets.includes('xiu')
                 ? 'animate-pulse'
                 : ''
             }`}
             whileHover={
               phase === 'betting' && !isRolling && canPlaceBet('xiu')
-                ? { scale: 1.05 }
+                ? {}
                 : {}
             }
           >
             <Card
               className={`bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 transition-all ${
                 winningBets.includes('xiu')
-                  ? 'border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.6)] bg-blue-900/50'
-                  : 'border-blue-500/30 hover:border-blue-500/60'
+                  ? 'border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.8)] bg-blue-900/50'
+                  : 'border-blue-500/30 hover:border-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]'
               } ${
                 phase === 'betting' && !isRolling && canPlaceBet('xiu')
                   ? ''
