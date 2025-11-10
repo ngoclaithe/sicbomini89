@@ -94,7 +94,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-sm">Tổng người dùng</p>
-                <p className="text-3xl font-bold text-white mt-2">{stats.totalUsers}</p>
+                <p className="text-3xl font-bold text-white mt-2">{stats.users.total}</p>
               </div>
               <Users className="w-10 h-10 text-blue-400 opacity-50" />
             </div>
@@ -106,7 +106,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-sm">Người dùng hoạt động</p>
-                <p className="text-3xl font-bold text-white mt-2">{stats.activeUsers}</p>
+                <p className="text-3xl font-bold text-white mt-2">{stats.users.active}</p>
               </div>
               <Users className="w-10 h-10 text-green-400 opacity-50" />
             </div>
@@ -117,8 +117,8 @@ export default function DashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Tổng game</p>
-                <p className="text-3xl font-bold text-white mt-2">{stats.totalGames}</p>
+                <p className="text-gray-400 text-sm">Tổng phiên chơi</p>
+                <p className="text-3xl font-bold text-white mt-2">{stats.games.totalSessions}</p>
               </div>
               <Gamepad2 className="w-10 h-10 text-purple-400 opacity-50" />
             </div>
@@ -129,9 +129,9 @@ export default function DashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Tổng doanh thu</p>
+                <p className="text-gray-400 text-sm">Lợi nhuận</p>
                 <p className="text-3xl font-bold text-white mt-2">
-                  {(stats.totalRevenue / 1000000).toFixed(1)}M
+                  {(stats.finance.profit / 1000).toFixed(0)}K
                 </p>
               </div>
               <TrendingUp className="w-10 h-10 text-yellow-400 opacity-50" />
