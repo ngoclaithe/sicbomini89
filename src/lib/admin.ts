@@ -1,7 +1,7 @@
 import { api } from '@/lib/api'
 
 export async function adminLogin(username: string, password: string) {
-  return api.post('/admin/login', { username, password })
+  return api.post('/auth/login', { username, password })
 }
 
 export async function adminLogout(token: string) {
