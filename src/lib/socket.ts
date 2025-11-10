@@ -1,11 +1,17 @@
-﻿import { io, Socket } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 let socket: Socket | null = null;
 
+const getGameUrl = () => {
+  const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+  return `${base.replace(/\/$/, '')}/game`;
+};
+
 export const getSocket = () => {
   if (!socket) {
-    socket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001', {
+    socket = io(getGameUrl(), {
       autoConnect: false,
+      transports: ['websocket'],
     });
   }
   return socket;
