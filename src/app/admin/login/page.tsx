@@ -45,25 +45,25 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <Card className="w-full max-w-md border-2 border-amber-600/50 shadow-2xl shadow-amber-600/20">
-        <CardHeader className="text-center space-y-4 border-b border-amber-600/30">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)' }}>
+      <Card className="w-full max-w-md shadow-2xl">
+        <CardHeader className="text-center space-y-4 border-b">
           <div className="flex justify-center">
-            <div className="p-4 bg-amber-600/20 rounded-full">
-              <Shield className="w-12 h-12 text-amber-500" />
+            <div className="p-4 bg-blue-100 rounded-full">
+              <Shield className="w-12 h-12 text-blue-600" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold text-amber-500">
+          <CardTitle className="text-3xl font-bold">
             Quản Lý Hệ Thống
           </CardTitle>
-          <CardDescription className="text-sm text-amber-200/70">
+          <CardDescription>
             Đăng nhập quản trị viên
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="admin-username" className="text-amber-200">
+              <Label htmlFor="admin-username" className="font-semibold">
                 Tên quản trị viên
               </Label>
               <Input
@@ -73,11 +73,11 @@ export default function AdminLoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Nhập tên quản trị viên"
                 required
-                className="h-11 bg-slate-800 border-amber-600/30 text-white placeholder:text-gray-500 focus:border-amber-500"
+                className="h-11"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="admin-password" className="text-amber-200">
+              <Label htmlFor="admin-password" className="font-semibold">
                 Mật khẩu
               </Label>
               <Input
@@ -88,17 +88,17 @@ export default function AdminLoginPage() {
                 placeholder="Nhập mật khẩu"
                 required
                 minLength={6}
-                className="h-11 bg-slate-800 border-amber-600/30 text-white placeholder:text-gray-500 focus:border-amber-500"
+                className="h-11"
               />
             </div>
             <Button 
               type="submit" 
-              className="w-full h-11 text-base bg-amber-600 hover:bg-amber-700 text-white font-semibold"
+              className="w-full h-11 text-base bg-blue-600 hover:bg-blue-700 text-white font-semibold"
               disabled={loading}
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <Lock className="w-4 h-4" />
+                  <Lock className="w-4 h-4 animate-spin" />
                   Đang xác thực...
                 </span>
               ) : (
@@ -109,8 +109,8 @@ export default function AdminLoginPage() {
               )}
             </Button>
           </form>
-          <div className="mt-6 pt-4 border-t border-amber-600/20">
-            <p className="text-xs text-center text-amber-200/50">
+          <div className="mt-6 pt-4 border-t">
+            <p className="text-xs text-center text-gray-500">
               ⚠️ Chỉ dành cho quản trị viên được ủy quyền
             </p>
           </div>
