@@ -267,26 +267,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           {/* CHẴN */}
           <motion.div
             onClick={() => handlePlaceBet('chan')}
-            className={`cursor-pointer transition-all ${
-              phase === 'betting' && !isRolling && canPlaceBet('chan')
-                ? 'hover:scale-105 hover:shadow-xl'
-                : ''
-            } ${
+            className={`cursor-pointer ${
               winningBets.includes('chan')
                 ? 'animate-pulse'
                 : ''
             }`}
             whileHover={
               phase === 'betting' && !isRolling && canPlaceBet('chan')
-                ? { scale: 1.05 }
+                ? {}
                 : {}
             }
           >
             <Card
               className={`bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border-2 transition-all ${
                 winningBets.includes('chan')
-                  ? 'border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.6)] bg-yellow-900/50'
-                  : 'border-yellow-500/30 hover:border-yellow-500/60'
+                  ? 'border-yellow-500 shadow-[0_0_30px_rgba(234,179,8,0.8)] bg-yellow-900/50'
+                  : 'border-yellow-500/30 hover:border-yellow-500 hover:shadow-[0_0_20px_rgba(234,179,8,0.5)]'
               } ${
                 phase === 'betting' && !isRolling && canPlaceBet('chan')
                   ? ''
