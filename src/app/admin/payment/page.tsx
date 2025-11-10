@@ -83,10 +83,8 @@ export default function PaymentManagementPage() {
   const loadPaymentInfos = async (authToken: string) => {
     try {
       setLoadingBankInfo(true);
-      const profile = await AdminApi.getAdminProfile(authToken);
-      if (profile?.paymentInfos) {
-        setPaymentInfos(profile.paymentInfos);
-      }
+      const infos = await PaymentApi.getPaymentInfos(authToken);
+      setPaymentInfos(infos);
     } catch (error) {
       console.error('Error loading payment infos:', error);
       toast.error('Lỗi khi tải thông tin tài khoản ngân hàng');
@@ -190,7 +188,7 @@ export default function PaymentManagementPage() {
       }
     } catch (error) {
       console.error('Error loading withdrawals:', error);
-      toast.error('Lỗi khi tải danh sách rút tiền');
+      toast.error('Lỗi khi tải danh sách rút ti��n');
     } finally {
       setLoadingWithdrawals(false);
     }
