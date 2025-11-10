@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { connectChatSocket, disconnectChatSocket, getChatSocket } from "@/lib/chatSocket";
 import { Send, MessageCircle } from "lucide-react";
 
@@ -16,6 +17,7 @@ export const ChatWidget: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [online, setOnline] = useState(0);
+  const pathname = usePathname();
 
   const username = useMemo(() => {
     try {
@@ -28,9 +30,9 @@ export const ChatWidget: React.FC = () => {
   const [allowed, setAllowed] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // only enable chat when user is logged in
+    // only enable chat when user is logged in and not on admin page
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (!token) {
+    if (!token || pathname?.startsWith('/admin')) {
       setAllowed(false);
       return;
     }
