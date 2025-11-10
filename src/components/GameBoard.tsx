@@ -215,21 +215,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             </div>
           </div>
 
-          {placedBets.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-2 text-center text-xs text-gray-400"
-            >
-              Đã đặt: <span className="font-bold">
-                {placedBets.map((b, idx) => (
-                  <span key={idx} className={getBetColor(b.type)}>
-                    {getBetLabel(b.type)} {formatCurrency(b.amount)}{idx < placedBets.length - 1 ? ', ' : ''}
-                  </span>
-                ))}
-              </span>
-            </motion.div>
-          )}
         </CardContent>
       </Card>
 
