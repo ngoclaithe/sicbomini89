@@ -239,7 +239,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="w-full max-w-md mx-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Quản lý tiền</DialogTitle>
         </DialogHeader>
@@ -373,7 +373,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 <Input
                   id="deposit-amount"
                   type="number"
-                  placeholder="Nhập số tiền"
+                  placeholder="Nhập s��� tiền"
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(e.target.value)}
                   disabled={isLoading}
