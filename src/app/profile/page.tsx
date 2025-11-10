@@ -74,6 +74,7 @@ export default function ProfilePage() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
       <div className="max-w-3xl mx-auto space-y-6">
         <Card className="border-2 border-primary/30">
@@ -101,5 +102,7 @@ export default function ProfilePage() {
         </Card>
       </div>
     </div>
+    <ChatWidget />
+    </>
   )
 }
