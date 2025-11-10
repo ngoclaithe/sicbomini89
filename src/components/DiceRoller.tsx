@@ -292,12 +292,6 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ diceResults, isRolling, 
               ))}
             </div>
 
-            <motion.div
-              className="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-blue-500 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-bold text-white shadow-lg backdrop-blur-sm text-xs sm:text-sm"
-              animate={{ opacity: [1, 0.8, 1], scale: [1, 1.05, 1] }}
-              transition={{ duration: 0.8, repeat: Infinity }}
-            >
-            </motion.div>
           </motion.div>
         )}
       </div>
