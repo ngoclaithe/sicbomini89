@@ -172,7 +172,7 @@ export default function AdminDashboardPage() {
                         <span className="text-xs text-amber-200/60">đặt cược {activity.betAmount}</span>
                       </div>
                       <div className="text-sm text-amber-200/60 mt-1">
-                        Kết quả: [{activity.result.join(', ')}] - {activity.isWin ? '✓ Thắng' : '✗ Thua'}
+                        Kết quả: [{Array.isArray(activity.result) ? activity.result.join(', ') : activity.result || 'N/A'}] - {activity.isWin ? '✓ Thắng' : '✗ Thua'}
                       </div>
                     </div>
                     {activity.isWin && (
