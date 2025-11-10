@@ -56,7 +56,9 @@ export default function UserManagementPage() {
 
   const handleSearch = async () => {
     if (!token || !searchQuery.trim()) {
-      loadUsers(token, 1);
+      if (token) {
+        loadUsers(token, 1);
+      }
       return;
     }
 
