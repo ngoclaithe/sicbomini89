@@ -7,10 +7,34 @@ import { Users, Gamepad2, TrendingUp, Wallet } from 'lucide-react';
 import * as AdminApi from '@/lib/admin';
 
 interface DashboardStats {
-  totalUsers: number;
-  activeUsers: number;
-  totalGames: number;
-  totalRevenue: number;
+  users: {
+    total: number;
+    active: number;
+    inactive: number;
+  };
+  games: {
+    totalSessions: number;
+    completedSessions: number;
+    totalBets: number;
+  };
+  finance: {
+    totalBetsAmount: number;
+    totalWinAmount: number;
+    profit: number;
+    totalWalletBalance: number;
+  };
+}
+
+interface RecentActivity {
+  id: string;
+  username: string;
+  sessionId: string;
+  bet: string;
+  betAmount: string;
+  result: string;
+  isWin: boolean;
+  winAmount: string;
+  createdAt: string;
 }
 
 export default function DashboardPage() {
