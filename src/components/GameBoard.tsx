@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,32 +32,54 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
   const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showTopPlayers, setShowTopPlayers] = useState(false);
+  const [winningBets, setWinningBets] = useState<BetType[]>([]);
   const { toast } = useToast();
 
   const notify = (args: { title: string; description?: string; variant?: 'destructive' | undefined }) => toast(args as any);
 
-  const { countdown, phase, isRolling, diceResults, gameResult, canReveal, bettingStats, placeBet } = useGameSocket({
+  const { countdown, phase, isRolling, diceResults, gameResult, canReveal, bettingStats, placeBet, lastSessionId } = useGameSocket({
     onNotify: notify,
     onBalanceUpdate,
   });
 
-  const canPlaceBet = (newBetType: BetType): boolean => {
-    const betTypesPlaced = placedBets.map(b => b.type);
-    
-    if (betTypesPlaced.includes(newBetType)) {
-      return false;
+  // Reset placed bets when session starts
+  useEffect(() => {
+    setPlacedBets([]);
+    setWinningBets([]);
+  }, [lastSessionId]);
+
+  // Calculate winning bets based on dice results
+  useEffect(() => {
+    if (!diceResults || diceResults.length === 0) {
+      setWinningBets([]);
+      return;
     }
 
-    if (newBetType === 'tai' && betTypesPlaced.includes('xiu')) {
+    const sum = diceResults.reduce((acc, val) => acc + val, 0);
+    const isEven = sum % 2 === 0;
+    const isBig = sum > 10;
+
+    const winning: BetType[] = [];
+    if (isBig) winning.push('tai');
+    if (!isBig) winning.push('xiu');
+    if (isEven) winning.push('chan');
+    if (!isEven) winning.push('le');
+
+    setWinningBets(winning);
+  }, [diceResults]);
+
+  const canPlaceBet = (newBetType: BetType): boolean => {
+    // Check conflicting bet types
+    if (newBetType === 'tai' && placedBets.some(b => b.type === 'xiu')) {
       return false;
     }
-    if (newBetType === 'xiu' && betTypesPlaced.includes('tai')) {
+    if (newBetType === 'xiu' && placedBets.some(b => b.type === 'tai')) {
       return false;
     }
-    if (newBetType === 'chan' && betTypesPlaced.includes('le')) {
+    if (newBetType === 'chan' && placedBets.some(b => b.type === 'le')) {
       return false;
     }
-    if (newBetType === 'le' && betTypesPlaced.includes('chan')) {
+    if (newBetType === 'le' && placedBets.some(b => b.type === 'chan')) {
       return false;
     }
 
