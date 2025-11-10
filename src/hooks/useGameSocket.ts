@@ -57,6 +57,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
       setCountdown(data.remainingTime);
       setPhase(data.phase);
       if (data.bettingStats) {
+        console.log("🎲 [COUNTDOWN] Betting Stats Update:", data.bettingStats);
         setBettingStats({
           tai: data.bettingStats.tai || { count: 0, totalAmount: 0 },
           xiu: data.bettingStats.xiu || { count: 0, totalAmount: 0 },
@@ -66,7 +67,10 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
       }
     };
 
-    const onBettingStats = (data: any) => setBettingStats(data);
+    const onBettingStats = (data: any) => {
+      console.log("🎲 [BETTING_STATS] Update:", data);
+      setBettingStats(data);
+    };
 
     const onBettingClosed = () => {
       setIsRolling(true);
