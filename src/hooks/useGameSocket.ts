@@ -54,7 +54,14 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     const onCountdown = (data: any) => {
       setCountdown(data.remainingTime);
       setPhase(data.phase);
-      if (data.bettingStats) setBettingStats(data.bettingStats);
+      if (data.bettingStats) {
+        setBettingStats({
+          tai: data.bettingStats.tai || { count: 0, totalAmount: 0 },
+          xiu: data.bettingStats.xiu || { count: 0, totalAmount: 0 },
+          chan: data.bettingStats.chan || { count: 0, totalAmount: 0 },
+          le: data.bettingStats.le || { count: 0, totalAmount: 0 },
+        });
+      }
     };
 
     const onBettingStats = (data: any) => setBettingStats(data);
