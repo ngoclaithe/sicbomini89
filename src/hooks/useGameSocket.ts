@@ -89,6 +89,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     };
 
     const onBetPlaced = (data: any) => {
+      console.log("🎲 [BET_PLACED] Bet type:", data.bet, "Amount:", data.amount);
       onNotify({ title: "Đặt cược thành công!", description: `${String(data.bet).toUpperCase()} - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.amount)}` });
       onBalanceUpdate();
     };
