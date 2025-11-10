@@ -15,6 +15,10 @@ interface PaymentInfo {
   bankName: string;
   accountNumber: string;
   accountHolder: string;
+  isActive: boolean;
+  description?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Deposit {
@@ -215,7 +219,7 @@ export default function PaymentManagementPage() {
       loadWithdrawals(token);
     } catch (error) {
       console.error('Error rejecting withdrawal:', error);
-      toast.error('Lỗi khi từ chối rút tiền');
+      toast.error('Lỗi khi t��� chối rút tiền');
     } finally {
       setRejectingWithdrawal(null);
     }
@@ -562,7 +566,7 @@ export default function PaymentManagementPage() {
                   className="gap-2"
                 >
                   <Plus className="w-4 h-4" />
-                  {creatingBankInfo ? 'Đang thêm...' : 'Thêm tài khoản'}
+                  {creatingBankInfo ? 'Đang th��m...' : 'Thêm tài khoản'}
                 </Button>
               </div>
             </CardContent>

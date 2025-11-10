@@ -5,6 +5,10 @@ export interface PaymentInfo {
   bankName: string;
   accountNumber: string;
   accountHolder: string;
+  isActive?: boolean;
+  description?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface DepositRequest {
