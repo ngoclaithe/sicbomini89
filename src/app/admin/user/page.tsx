@@ -43,8 +43,8 @@ export default function UserManagementPage() {
     try {
       setLoading(true);
       const response = await AdminApi.getUsers(authToken, page, itemsPerPage);
-      setUsers(response.data || []);
-      setTotalPages(Math.ceil((response.total || 0) / itemsPerPage));
+      setUsers(response.users || []);
+      setTotalPages(response.totalPages || 1);
       setCurrentPage(page);
     } catch (error) {
       console.error('Error loading users:', error);
