@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { LoginForm } from '@/components/LoginForm';
 import { GameBoard } from '@/components/GameBoard';
 import { GameHistory } from '@/components/GameHistory';
+import { ChatWidget } from '@/components/ChatWidget';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket';
