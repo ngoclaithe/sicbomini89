@@ -135,7 +135,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     setPlacedBets([...placedBets, { type: bet, amount }]);
   };
 
-  const quickBetAmounts = [10000, 50000, 100000, 500000];
+  const getQuickBetAmounts = () => {
+    const baseAmounts = [200000, 1000000, 5000000];
+    return baseAmounts.filter(amount => amount <= balance);
+  };
+
+  const handleAllIn = () => {
+    const totalBetAmount = placedBets.reduce((sum, b) => sum + b.amount, 0);
+    const maxCanBet = balance - totalBetAmount;
+    setBetAmount(Math.max(0, maxCanBet).toString());
+  };
 
   const getBetLabel = (type: BetType): string => {
     const labels: { [key in BetType]: string } = {
@@ -425,7 +434,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
             disabled={phase !== 'betting'}
           />
           <div className="grid grid-cols-4 gap-2">
-            {quickBetAmounts.map((amount) => (
+            {getQuickBetAmounts().map((amount) => (
               <Button
                 key={amount}
                 onClick={() => setBetAmount(amount.toString())}
@@ -436,6 +445,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
                 {formatNumber(amount)}
               </Button>
             ))}
+            <Button
+              onClick={handleAllIn}
+              variant="outline"
+              disabled={phase !== 'betting'}
+              className="h-8 text-xs bg-gradient-to-r from-amber-600/20 to-amber-700/20 border-amber-500 text-amber-400 hover:bg-amber-600/30"
+            >
+              ALL IN
+            </Button>
           </div>
           <div className="text-sm text-gray-400 text-center">
             Số dư: <span className="text-primary font-bold">{formatCurrency(balance)}</span>
