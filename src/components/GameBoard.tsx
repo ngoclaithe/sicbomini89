@@ -225,26 +225,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           {/* TÀI */}
           <motion.div
             onClick={() => handlePlaceBet('tai')}
-            className={`cursor-pointer transition-all ${
-              phase === 'betting' && !isRolling && canPlaceBet('tai')
-                ? 'hover:scale-105 hover:shadow-xl'
-                : ''
-            } ${
+            className={`cursor-pointer ${
               winningBets.includes('tai')
                 ? 'animate-pulse'
                 : ''
             }`}
             whileHover={
               phase === 'betting' && !isRolling && canPlaceBet('tai')
-                ? { scale: 1.05 }
+                ? {}
                 : {}
             }
           >
             <Card
               className={`bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 transition-all ${
                 winningBets.includes('tai')
-                  ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6)] bg-red-900/50'
-                  : 'border-red-500/30 hover:border-red-500/60'
+                  ? 'border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.8)] bg-red-900/50'
+                  : 'border-red-500/30 hover:border-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.5)]'
               } ${
                 phase === 'betting' && !isRolling && canPlaceBet('tai')
                   ? ''
@@ -271,26 +267,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           {/* CHẴN */}
           <motion.div
             onClick={() => handlePlaceBet('chan')}
-            className={`cursor-pointer transition-all ${
-              phase === 'betting' && !isRolling && canPlaceBet('chan')
-                ? 'hover:scale-105 hover:shadow-xl'
-                : ''
-            } ${
+            className={`cursor-pointer ${
               winningBets.includes('chan')
                 ? 'animate-pulse'
                 : ''
             }`}
             whileHover={
               phase === 'betting' && !isRolling && canPlaceBet('chan')
-                ? { scale: 1.05 }
+                ? {}
                 : {}
             }
           >
             <Card
               className={`bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border-2 transition-all ${
                 winningBets.includes('chan')
-                  ? 'border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.6)] bg-yellow-900/50'
-                  : 'border-yellow-500/30 hover:border-yellow-500/60'
+                  ? 'border-yellow-500 shadow-[0_0_30px_rgba(234,179,8,0.8)] bg-yellow-900/50'
+                  : 'border-yellow-500/30 hover:border-yellow-500 hover:shadow-[0_0_20px_rgba(234,179,8,0.5)]'
               } ${
                 phase === 'betting' && !isRolling && canPlaceBet('chan')
                   ? ''
@@ -332,26 +324,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           {/* XỈU */}
           <motion.div
             onClick={() => handlePlaceBet('xiu')}
-            className={`cursor-pointer transition-all ${
-              phase === 'betting' && !isRolling && canPlaceBet('xiu')
-                ? 'hover:scale-105 hover:shadow-xl'
-                : ''
-            } ${
+            className={`cursor-pointer ${
               winningBets.includes('xiu')
                 ? 'animate-pulse'
                 : ''
             }`}
             whileHover={
               phase === 'betting' && !isRolling && canPlaceBet('xiu')
-                ? { scale: 1.05 }
+                ? {}
                 : {}
             }
           >
             <Card
               className={`bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 transition-all ${
                 winningBets.includes('xiu')
-                  ? 'border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.6)] bg-blue-900/50'
-                  : 'border-blue-500/30 hover:border-blue-500/60'
+                  ? 'border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.8)] bg-blue-900/50'
+                  : 'border-blue-500/30 hover:border-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]'
               } ${
                 phase === 'betting' && !isRolling && canPlaceBet('xiu')
                   ? ''
@@ -378,26 +366,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           {/* LẺ */}
           <motion.div
             onClick={() => handlePlaceBet('le')}
-            className={`cursor-pointer transition-all ${
-              phase === 'betting' && !isRolling && canPlaceBet('le')
-                ? 'hover:scale-105 hover:shadow-xl'
-                : ''
-            } ${
+            className={`cursor-pointer ${
               winningBets.includes('le')
                 ? 'animate-pulse'
                 : ''
             }`}
             whileHover={
               phase === 'betting' && !isRolling && canPlaceBet('le')
-                ? { scale: 1.05 }
+                ? {}
                 : {}
             }
           >
             <Card
               className={`bg-gradient-to-br from-green-900/30 to-green-800/20 border-2 transition-all ${
                 winningBets.includes('le')
-                  ? 'border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.6)] bg-green-900/50'
-                  : 'border-green-500/30 hover:border-green-500/60'
+                  ? 'border-green-500 shadow-[0_0_30px_rgba(34,197,94,0.8)] bg-green-900/50'
+                  : 'border-green-500/30 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.5)]'
               } ${
                 phase === 'betting' && !isRolling && canPlaceBet('le')
                   ? ''
