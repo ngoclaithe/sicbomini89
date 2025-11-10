@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Game Tài Xỉu Online",
-  description: "Trải nghiệm game tài xỉu trực tuyến",
+  title: "TX88",
+  description: "Trải nghiệm trò chơi giải trí",
 };
 
 export default function RootLayout({

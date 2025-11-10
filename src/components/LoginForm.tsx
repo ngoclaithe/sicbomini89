@@ -32,10 +32,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
-      toast({
-        title: "Thành công!",
-        description: isLogin ? "Đăng nhập thành công" : "Đăng ký thành công",
-      });
+      // toast({
+      //   title: "Thành công!",
+      //   description: isLogin ? "Đăng nhập thành công" : "Đăng ký thành công",
+      // });
       
       onLogin(data.access_token, data.user);
     } catch (error: any) {
