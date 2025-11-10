@@ -24,6 +24,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
   const [diceResults, setDiceResults] = useState<number[]>([]);
   const [gameResult, setGameResult] = useState<"tai" | "xiu" | null>(null);
   const [sessionId, setSessionId] = useState("");
+  const [lastSessionId, setLastSessionId] = useState("");
   const [canReveal, setCanReveal] = useState(false);
   const [bettingStats, setBettingStats] = useState<BettingStats>({
     tai: { count: 0, totalAmount: 0 },
@@ -36,6 +37,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     const socket = getSocket();
 
     const onSessionStart = (data: any) => {
+      setLastSessionId(data.sessionId);
       setSessionId(data.sessionId);
       setCountdown(data.bettingTime);
       setPhase("betting");
@@ -121,6 +123,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     diceResults,
     gameResult,
     sessionId,
+    lastSessionId,
     canReveal,
     bettingStats,
     placeBet,
