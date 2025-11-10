@@ -8,13 +8,17 @@ import { Label } from '@/components/ui/label';
 import * as AdminApi from '@/lib/admin';
 import * as PaymentApi from '@/lib/payment';
 import { toast } from 'react-hot-toast';
-import { Plus, Trash2, Check, X } from 'lucide-react';
+import { Plus, Trash2, Check, X, ToggleLeft, ToggleRight } from 'lucide-react';
 
 interface PaymentInfo {
   id: string;
   bankName: string;
   accountNumber: string;
   accountHolder: string;
+  isActive: boolean;
+  description?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Deposit {
@@ -50,6 +54,7 @@ export default function PaymentManagementPage() {
   const [loadingBankInfo, setLoadingBankInfo] = useState(false);
   const [creatingBankInfo, setCreatingBankInfo] = useState(false);
   const [showBankInfoModal, setShowBankInfoModal] = useState(false);
+  const [togglingInfoId, setTogglingInfoId] = useState<string | null>(null);
 
   // Deposit states
   const [deposits, setDeposits] = useState<Deposit[]>([]);
@@ -114,6 +119,25 @@ export default function PaymentManagementPage() {
       toast.error('Lỗi khi thêm tài khoản ngân hàng');
     } finally {
       setCreatingBankInfo(false);
+    }
+  };
+
+  const handleTogglePaymentInfo = async (infoId: string, isCurrentlyActive: boolean) => {
+    try {
+      setTogglingInfoId(infoId);
+      if (isCurrentlyActive) {
+        await AdminApi.deactivateInfoPayment(infoId);
+        toast.success('Đã vô hiệu hóa tài khoản ngân hàng');
+      } else {
+        await AdminApi.activateInfoPayment(infoId);
+        toast.success('Đã kích hoạt tài khoản ngân hàng');
+      }
+      loadPaymentInfos(token!);
+    } catch (error) {
+      console.error('Error toggling payment info:', error);
+      toast.error('Lỗi khi thay đổi trạng thái tài khoản');
+    } finally {
+      setTogglingInfoId(null);
     }
   };
 
@@ -286,20 +310,57 @@ export default function PaymentManagementPage() {
                   {paymentInfos.map((info) => (
                     <div
                       key={info.id}
-                      className="bg-gray-700/50 p-4 rounded-lg flex items-start justify-between"
+                      className="bg-gray-700/50 p-4 rounded-lg"
                     >
-                      <div className="flex-1">
-                        <p className="text-white font-semibold">{info.bankName}</p>
-                        <p className="text-gray-400 text-sm">
-                          Số TK: {info.accountNumber}
-                        </p>
-                        <p className="text-gray-400 text-sm">
-                          Chủ TK: {info.accountHolder}
-                        </p>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <p className="text-white font-semibold">{info.bankName}</p>
+                          <p className="text-gray-400 text-sm">
+                            Số TK: {info.accountNumber}
+                          </p>
+                          <p className="text-gray-400 text-sm">
+                            Chủ TK: {info.accountHolder}
+                          </p>
+                        </div>
+                        <span
+                          className={`px-3 py-1 rounded text-xs font-semibold ${
+                            info.isActive
+                              ? 'bg-green-900/50 text-green-300'
+                              : 'bg-red-900/50 text-red-300'
+                          }`}
+                        >
+                          {info.isActive ? 'Hoạt động' : 'Vô hiệu hóa'}
+                        </span>
                       </div>
-                      <Button variant="outline" size="sm" className="text-red-400">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      <div className="flex gap-2 justify-end pt-3 border-t border-gray-600">
+                        <Button
+                          onClick={() => handleTogglePaymentInfo(info.id, info.isActive)}
+                          disabled={togglingInfoId === info.id}
+                          variant="outline"
+                          size="sm"
+                          className={`gap-2 ${
+                            info.isActive
+                              ? 'text-red-400 hover:text-red-300'
+                              : 'text-green-400 hover:text-green-300'
+                          }`}
+                        >
+                          {info.isActive ? (
+                            <>
+                              <ToggleRight className="w-4 h-4" />
+                              Vô hiệu hóa
+                            </>
+                          ) : (
+                            <>
+                              <ToggleLeft className="w-4 h-4" />
+                              Kích hoạt
+                            </>
+                          )}
+                        </Button>
+                        <Button variant="outline" size="sm" className="text-red-400 gap-2">
+                          <Trash2 className="w-4 h-4" />
+                          Xóa
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
