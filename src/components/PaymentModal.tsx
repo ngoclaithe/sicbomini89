@@ -378,7 +378,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               </div>
 
               <div>
-                <Label htmlFor="deposit-note">Ghi chú (tu�� chọn)</Label>
+                <Label htmlFor="deposit-note">Ghi chú (tự chọn)</Label>
                 <Input
                   id="deposit-note"
                   type="text"
