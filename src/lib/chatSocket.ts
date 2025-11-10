@@ -3,8 +3,6 @@ import { io, Socket } from 'socket.io-client';
 let chatSocket: Socket | null = null;
 
 const getChatUrl = () => {
-  const explicit = process.env.NEXT_PUBLIC_CHAT_SOCKET_URL;
-  if (explicit) return explicit;
   const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   return `${base.replace(/\/$/, '')}/chat`;
 };
