@@ -63,6 +63,7 @@ export default function Home() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
@@ -137,5 +138,7 @@ export default function Home() {
         </motion.div>
       </div>
     </div>
+    <ChatWidget />
+    </>
   );
 }
