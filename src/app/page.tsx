@@ -5,6 +5,7 @@ import { LoginForm } from '@/components/LoginForm';
 import { GameBoard } from '@/components/GameBoard';
 import { GameHistory } from '@/components/GameHistory';
 import { ChatWidget } from '@/components/ChatWidget';
+import { PaymentModal } from '@/components/PaymentModal';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket';
@@ -19,6 +20,7 @@ export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [balance, setBalance] = useState(0);
   const [activeTab, setActiveTab] = useState<'game' | 'history'>('game');
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -83,6 +85,14 @@ export default function Home() {
                   <div className="text-sm text-gray-400 flex items-center gap-2">
                     <Wallet className="w-4 h-4" />
                     {formatCurrency(balance)}
+                    <Button
+                      onClick={() => setIsPaymentModalOpen(true)}
+                      variant="ghost"
+                      size="sm"
+                      className="h-5 px-2 text-xs ml-2 hover:bg-primary/20"
+                    >
+                      Nạp/Rút
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -139,6 +149,13 @@ export default function Home() {
       </div>
     </div>
     <ChatWidget />
+    <PaymentModal
+      isOpen={isPaymentModalOpen}
+      onClose={() => setIsPaymentModalOpen(false)}
+      token={token}
+      balance={balance}
+      onSuccess={() => loadBalance(token)}
+    />
     </>
   );
 }

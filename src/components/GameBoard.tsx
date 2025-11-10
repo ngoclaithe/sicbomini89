@@ -453,9 +453,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
               ALL IN
             </Button>
           </div>
-          <div className="text-sm text-gray-400 text-center">
-            Số dư: <span className="text-primary font-bold">{formatCurrency(balance)}</span>
-          </div>
         </CardContent>
       </Card>
     </div>
