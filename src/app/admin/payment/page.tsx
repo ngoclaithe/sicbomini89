@@ -122,14 +122,14 @@ export default function PaymentManagementPage() {
     }
   };
 
-  const handleTogglePaymentInfo = async (infoId: string, isCurrentlyActive: boolean) => {
+  const handleTogglePaymentInfo = async (token: string, infoId: string, isCurrentlyActive: boolean) => {
     try {
       setTogglingInfoId(infoId);
       if (isCurrentlyActive) {
-        await AdminApi.deactivateInfoPayment(infoId);
+        await AdminApi.deactivateInfoPayment(token, infoId);
         toast.success('Đã vô hiệu hóa tài khoản ngân hàng');
       } else {
-        await AdminApi.activateInfoPayment(infoId);
+        await AdminApi.activateInfoPayment(token, infoId);
         toast.success('Đã kích hoạt tài khoản ngân hàng');
       }
       loadPaymentInfos(token!);
