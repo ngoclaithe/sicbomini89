@@ -82,18 +82,16 @@ export default function Home() {
                 </button>
                 <div>
                   <div className="font-semibold text-lg">{user.username}</div>
-                  <div className="text-sm text-gray-400 flex items-center gap-2">
+                  <div className="text-sm text-gray-400 flex items-center gap-3">
                     <Wallet className="w-4 h-4" />
                     {formatCurrency(balance)}
-                    <Button
-                      onClick={() => setIsPaymentModalOpen(true)}
-                      variant="ghost"
-                      size="sm"
-                      className="h-5 px-2 text-xs ml-2 hover:bg-primary/20"
-                    >
-                      Nạp/Rút
-                    </Button>
                   </div>
+                  <Button
+                    onClick={() => setIsPaymentModalOpen(true)}
+                    className="mt-2 h-10 px-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
+                  >
+                    💰 Nạp / Rút tiền
+                  </Button>
                 </div>
               </div>
               <Button
