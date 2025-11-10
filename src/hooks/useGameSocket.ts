@@ -118,6 +118,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
   }, [onNotify, onBalanceUpdate]);
 
   const placeBet = (payload: { userId: string; bet: "tai" | "xiu" | "chan" | "le"; amount: number }) => {
+    console.log("🎲 [PLACE_BET] Sending to server:", payload);
     const socket = getSocket();
     socket.emit("placeBet", payload);
   };
