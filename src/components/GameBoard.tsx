@@ -103,7 +103,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     if (totalBetAmount + amount > balance) {
       toast({
         title: "Lỗi",
-        description: "Số d�� không đủ!",
+        description: "Số dư không đủ!",
         variant: "destructive",
       });
       return;
@@ -219,7 +219,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all">
             <CardHeader className="pb-2 sm:pb-3">
               <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
-              <p className="text-center text-xs text-gray-400">11 - 17</p>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
               <Button
@@ -246,7 +245,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           <Card className="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border-2 border-yellow-500/30 hover:border-yellow-500/60 transition-all">
             <CardHeader className="pb-2 sm:pb-3">
               <CardTitle className="text-lg sm:text-2xl text-center text-yellow-500">CHẴN</CardTitle>
-              <p className="text-center text-xs text-gray-400">4,6,8,10,12,14,16</p>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
               <Button
@@ -288,7 +286,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-2 border-blue-500/30 hover:border-blue-500/60 transition-all">
             <CardHeader className="pb-2 sm:pb-3">
               <CardTitle className="text-lg sm:text-2xl text-center text-blue-500">XỈU</CardTitle>
-              <p className="text-center text-xs text-gray-400">4 - 10</p>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
               <Button
@@ -315,7 +312,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           <Card className="bg-gradient-to-br from-green-900/30 to-green-800/20 border-2 border-green-500/30 hover:border-green-500/60 transition-all">
             <CardHeader className="pb-2 sm:pb-3">
               <CardTitle className="text-lg sm:text-2xl text-center text-green-500">LẺ</CardTitle>
-              <p className="text-center text-xs text-gray-400">5,7,9,11,13,15,17</p>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
               <Button
