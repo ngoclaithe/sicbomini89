@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import * as AdminApi from '@/lib/admin';
+import * as PaymentApi from '@/lib/payment';
 import { toast } from 'react-hot-toast';
 import { Plus, Trash2, Check, X } from 'lucide-react';
 
@@ -82,10 +83,8 @@ export default function PaymentManagementPage() {
   const loadPaymentInfos = async (authToken: string) => {
     try {
       setLoadingBankInfo(true);
-      const profile = await AdminApi.getAdminProfile(authToken);
-      if (profile?.paymentInfos) {
-        setPaymentInfos(profile.paymentInfos);
-      }
+      const infos = await PaymentApi.getPaymentInfos(authToken);
+      setPaymentInfos(infos);
     } catch (error) {
       console.error('Error loading payment infos:', error);
       toast.error('Lỗi khi tải thông tin tài khoản ngân hàng');
@@ -118,18 +117,7 @@ export default function PaymentManagementPage() {
 
   // Deposit Functions
   const loadDeposits = async (authToken: string) => {
-    try {
-      setLoadingDeposits(true);
-      const profile = await AdminApi.getAdminProfile(authToken);
-      if (profile?.deposits) {
-        setDeposits(profile.deposits);
-      }
-    } catch (error) {
-      console.error('Error loading deposits:', error);
-      toast.error('Lỗi khi tải danh sách nạp tiền');
-    } finally {
-      setLoadingDeposits(false);
-    }
+    setLoadingDeposits(false);
   };
 
   const handleApproveDeposit = async (depositId: string) => {
@@ -181,18 +169,7 @@ export default function PaymentManagementPage() {
 
   // Withdrawal Functions
   const loadWithdrawals = async (authToken: string) => {
-    try {
-      setLoadingWithdrawals(true);
-      const profile = await AdminApi.getAdminProfile(authToken);
-      if (profile?.withdrawals) {
-        setWithdrawals(profile.withdrawals);
-      }
-    } catch (error) {
-      console.error('Error loading withdrawals:', error);
-      toast.error('Lỗi khi tải danh sách rút tiền');
-    } finally {
-      setLoadingWithdrawals(false);
-    }
+    setLoadingWithdrawals(false);
   };
 
   const handleApproveWithdrawal = async (withdrawalId: string) => {

@@ -24,24 +24,9 @@ export default function GameConfigPage() {
     const savedToken = localStorage.getItem('token');
     if (savedToken) {
       setToken(savedToken);
-      loadConfig(savedToken);
-    }
-  }, []);
-
-  const loadConfig = async (authToken: string) => {
-    try {
-      setIsLoading(true);
-      const profile = await AdminApi.getAdminProfile(authToken);
-      if (profile?.config) {
-        setBettingTime(profile.config.bettingTime?.toString() || '30');
-        setWinMultiplier(profile.config.winMultiplier?.toString() || '2');
-      }
-    } catch (error) {
-      console.error('Error loading config:', error);
-    } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const handleSaveConfig = async () => {
     if (!token) return;
