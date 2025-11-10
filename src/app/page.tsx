@@ -149,6 +149,13 @@ export default function Home() {
       </div>
     </div>
     <ChatWidget />
+    <PaymentModal
+      isOpen={isPaymentModalOpen}
+      onClose={() => setIsPaymentModalOpen(false)}
+      token={token}
+      balance={balance}
+      onSuccess={() => loadBalance(token)}
+    />
     </>
   );
 }
