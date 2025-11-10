@@ -38,7 +38,7 @@ export default function AdminLayout({
     const savedUser = localStorage.getItem('user');
 
     if (!savedToken || !savedUser) {
-      router.push('/admin/login');
+      router.push('/login');
       return;
     }
 
