@@ -225,26 +225,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
           {/* TÀI */}
           <motion.div
             onClick={() => handlePlaceBet('tai')}
-            className={`cursor-pointer transition-all ${
-              phase === 'betting' && !isRolling && canPlaceBet('tai')
-                ? 'hover:scale-105 hover:shadow-xl'
-                : ''
-            } ${
+            className={`cursor-pointer ${
               winningBets.includes('tai')
                 ? 'animate-pulse'
                 : ''
             }`}
             whileHover={
               phase === 'betting' && !isRolling && canPlaceBet('tai')
-                ? { scale: 1.05 }
+                ? {}
                 : {}
             }
           >
             <Card
               className={`bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 transition-all ${
                 winningBets.includes('tai')
-                  ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6)] bg-red-900/50'
-                  : 'border-red-500/30 hover:border-red-500/60'
+                  ? 'border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.8)] bg-red-900/50'
+                  : 'border-red-500/30 hover:border-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.5)]'
               } ${
                 phase === 'betting' && !isRolling && canPlaceBet('tai')
                   ? ''
