@@ -20,13 +20,19 @@ export default function AdminDashboardPage() {
     const adminToken = localStorage.getItem('adminToken');
     const adminData = localStorage.getItem('admin');
 
-    if (!adminToken || !adminData) {
+    if (!adminToken || !adminData || adminData === 'undefined') {
       router.push('/admin/login');
       return;
     }
 
-    setAdmin(JSON.parse(adminData));
-    loadDashboardData(adminToken);
+    try {
+      setAdmin(JSON.parse(adminData));
+      loadDashboardData(adminToken);
+    } catch (error) {
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('admin');
+      router.push('/admin/login');
+    }
   }, [router]);
 
   const loadDashboardData = async (token: string) => {
