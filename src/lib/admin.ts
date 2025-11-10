@@ -24,6 +24,12 @@ export async function getUserDetail(token: string, userId: string) {
   return api.get(`/admin/users/${userId}`, token)
 }
 
+export async function activateInfoPayment(infoId: string) {
+  return api.put(`/payment/info/${infoId}/activate`, {})
+}
+export async function deactivateInfoPayment(infoId: string) {
+  return api.put(`/payment/info/${infoId}/deactivate`, {}, )
+}
 export async function toggleUserStatus(token: string, userId: string) {
   return api.put(`/admin/users/${userId}/toggle-status`, {}, token)
 }
