@@ -123,6 +123,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     diceResults,
     gameResult,
     sessionId,
+    lastSessionId,
     canReveal,
     bettingStats,
     placeBet,
