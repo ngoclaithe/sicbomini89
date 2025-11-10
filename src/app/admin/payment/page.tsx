@@ -310,20 +310,57 @@ export default function PaymentManagementPage() {
                   {paymentInfos.map((info) => (
                     <div
                       key={info.id}
-                      className="bg-gray-700/50 p-4 rounded-lg flex items-start justify-between"
+                      className="bg-gray-700/50 p-4 rounded-lg"
                     >
-                      <div className="flex-1">
-                        <p className="text-white font-semibold">{info.bankName}</p>
-                        <p className="text-gray-400 text-sm">
-                          Số TK: {info.accountNumber}
-                        </p>
-                        <p className="text-gray-400 text-sm">
-                          Chủ TK: {info.accountHolder}
-                        </p>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <p className="text-white font-semibold">{info.bankName}</p>
+                          <p className="text-gray-400 text-sm">
+                            Số TK: {info.accountNumber}
+                          </p>
+                          <p className="text-gray-400 text-sm">
+                            Chủ TK: {info.accountHolder}
+                          </p>
+                        </div>
+                        <span
+                          className={`px-3 py-1 rounded text-xs font-semibold ${
+                            info.isActive
+                              ? 'bg-green-900/50 text-green-300'
+                              : 'bg-red-900/50 text-red-300'
+                          }`}
+                        >
+                          {info.isActive ? 'Hoạt động' : 'Vô hiệu hóa'}
+                        </span>
                       </div>
-                      <Button variant="outline" size="sm" className="text-red-400">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      <div className="flex gap-2 justify-end pt-3 border-t border-gray-600">
+                        <Button
+                          onClick={() => handleTogglePaymentInfo(info.id, info.isActive)}
+                          disabled={togglingInfoId === info.id}
+                          variant="outline"
+                          size="sm"
+                          className={`gap-2 ${
+                            info.isActive
+                              ? 'text-red-400 hover:text-red-300'
+                              : 'text-green-400 hover:text-green-300'
+                          }`}
+                        >
+                          {info.isActive ? (
+                            <>
+                              <ToggleRight className="w-4 h-4" />
+                              Vô hiệu hóa
+                            </>
+                          ) : (
+                            <>
+                              <ToggleLeft className="w-4 h-4" />
+                              Kích hoạt
+                            </>
+                          )}
+                        </Button>
+                        <Button variant="outline" size="sm" className="text-red-400 gap-2">
+                          <Trash2 className="w-4 h-4" />
+                          Xóa
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
