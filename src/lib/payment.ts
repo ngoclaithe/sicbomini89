@@ -57,6 +57,10 @@ export interface WithdrawalHistory {
 }
 
 // User endpoints
+export async function getPaymentInfos(token: string): Promise<PaymentInfo[]> {
+  return api.get('/payment/infos', token);
+}
+
 export async function createDeposit(
   deposit: DepositRequest,
   token: string
