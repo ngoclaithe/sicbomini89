@@ -8,6 +8,8 @@ export type Phase = "betting" | "revealing";
 interface BettingStats {
   tai: { count: number; totalAmount: number };
   xiu: { count: number; totalAmount: number };
+  chan: { count: number; totalAmount: number };
+  le: { count: number; totalAmount: number };
 }
 
 interface UseGameSocketOptions {
@@ -26,6 +28,8 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
   const [bettingStats, setBettingStats] = useState<BettingStats>({
     tai: { count: 0, totalAmount: 0 },
     xiu: { count: 0, totalAmount: 0 },
+    chan: { count: 0, totalAmount: 0 },
+    le: { count: 0, totalAmount: 0 },
   });
 
   useEffect(() => {
@@ -42,6 +46,8 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
       setBettingStats({
         tai: { count: 0, totalAmount: 0 },
         xiu: { count: 0, totalAmount: 0 },
+        chan: { count: 0, totalAmount: 0 },
+        le: { count: 0, totalAmount: 0 },
       });
     };
 
@@ -96,7 +102,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     };
   }, [onNotify, onBalanceUpdate]);
 
-  const placeBet = (payload: { userId: string; bet: "tai" | "xiu"; amount: number }) => {
+  const placeBet = (payload: { userId: string; bet: "tai" | "xiu" | "chan" | "le"; amount: number }) => {
     const socket = getSocket();
     socket.emit("placeBet", payload);
   };

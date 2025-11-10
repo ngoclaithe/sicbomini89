@@ -1,4 +1,4 @@
-﻿export interface User {
+export interface User {
   id: string;
   username: string;
   email: string;
@@ -23,7 +23,7 @@ export interface Game {
 
 export interface Bet {
   id: string;
-  betType: 'TAI' | 'XIU';
+  betType: 'TAI' | 'XIU' | 'CHAN' | 'LE';
   amount: number;
   isWin?: boolean;
   payout?: number;

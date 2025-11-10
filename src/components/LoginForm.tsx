@@ -59,7 +59,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             </div>
           </div>
           <CardTitle className="text-4xl font-bold bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent">
-            TÀI XỈU
+            TX88
           </CardTitle>
           <CardDescription className="text-base">
             {isLogin ? 'Đăng nhập để bắt đầu chơi' : 'Tạo tài khoản mới'}
