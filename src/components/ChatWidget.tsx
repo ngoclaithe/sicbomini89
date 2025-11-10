@@ -18,6 +18,8 @@ export const ChatWidget: React.FC = () => {
   const [input, setInput] = useState("");
   const [online, setOnline] = useState(0);
   const pathname = usePathname();
+  const [token, setToken] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
   const username = useMemo(() => {
     try {
@@ -27,16 +29,31 @@ export const ChatWidget: React.FC = () => {
     return "Khách";
   }, []);
 
-  const [allowed, setAllowed] = useState<boolean | null>(null);
+  const [allowed, setAllowed] = useState<boolean>(false);
 
+  // Check token and auth status on mount and when dependencies change
   useEffect(() => {
-    // only enable chat when user is logged in and not on admin page
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    setIsClient(true);
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  }, []);
+
+  // Enable/disable chat based on auth status and page
+  useEffect(() => {
+    if (!isClient) return;
+
+    // Disable chat if no token (user not logged in) or on admin pages
     if (!token || pathname?.startsWith('/admin')) {
       setAllowed(false);
       return;
     }
+
     setAllowed(true);
+  }, [token, pathname, isClient]);
+
+  useEffect(() => {
+    // Only setup socket if chat is allowed
+    if (!allowed) return;
 
     const sock = connectChatSocket();
 
@@ -64,7 +81,7 @@ export const ChatWidget: React.FC = () => {
       sock.off("online", onOnline);
       disconnectChatSocket();
     };
-  }, []);
+  }, [allowed]);
 
   const send = () => {
     const text = input.trim();
