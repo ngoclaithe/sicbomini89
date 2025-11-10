@@ -93,7 +93,8 @@ export const ChatWidget: React.FC = () => {
     setInput("");
   };
 
-  if (allowed === false) return null;
+  // Don't render chat widget if not allowed (not logged in or on admin page)
+  if (!allowed) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
