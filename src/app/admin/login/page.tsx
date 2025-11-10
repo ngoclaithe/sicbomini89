@@ -24,8 +24,8 @@ export default function AdminLoginPage() {
     try {
       const data = await AdminAuth.adminLogin(username, password);
 
-      localStorage.setItem('adminToken', data.access_token);
-      localStorage.setItem('admin', JSON.stringify(data.user));
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       
       toast({
         title: "Thành công!",
