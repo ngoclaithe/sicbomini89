@@ -194,7 +194,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           bankName: bankName.trim(),
           accountNumber: accountNumber.trim(),
           accountHolder: accountHolder.trim(),
-          note: withdrawNote || undefined,
         },
         token
       );
