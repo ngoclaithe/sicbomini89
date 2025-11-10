@@ -45,7 +45,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [accountHolder, setAccountHolder] = useState('');
-  const [withdrawNote, setWithdrawNote] = useState('');
 
   // Load payment infos when modal opens or activeTab changes to deposit
   useEffect(() => {
