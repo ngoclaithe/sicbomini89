@@ -122,14 +122,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
     }
 
     const totalBetAmount = placedBets.reduce((sum, b) => sum + b.amount, 0);
-    if (totalBetAmount + amount > balance) {
-      toast({
-        title: "Lỗi",
-        description: "Số dư không đủ!",
-        variant: "destructive",
-      });
-      return;
-    }
+    // if (totalBetAmount + amount > balance) {
+    //   toast({
+    //     title: "Lỗi",
+    //     description: "Số dư không đủ!",
+    //     variant: "destructive",
+    //   });
+    //   return;
+    // }
 
     placeBet({ userId, bet, amount });
     setPlacedBets([...placedBets, { type: bet, amount }]);
