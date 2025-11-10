@@ -169,18 +169,7 @@ export default function PaymentManagementPage() {
 
   // Withdrawal Functions
   const loadWithdrawals = async (authToken: string) => {
-    try {
-      setLoadingWithdrawals(true);
-      const profile = await AdminApi.getAdminProfile(authToken);
-      if (profile?.withdrawals) {
-        setWithdrawals(profile.withdrawals);
-      }
-    } catch (error) {
-      console.error('Error loading withdrawals:', error);
-      toast.error('Lỗi khi tải danh sách rút tiền');
-    } finally {
-      setLoadingWithdrawals(false);
-    }
+    setLoadingWithdrawals(false);
   };
 
   const handleApproveWithdrawal = async (withdrawalId: string) => {
