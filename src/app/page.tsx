@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { LoginForm } from '@/components/LoginForm';
 import { GameBoard } from '@/components/GameBoard';
 import { GameHistory } from '@/components/GameHistory';
+import { ChatWidget } from '@/components/ChatWidget';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket';
@@ -62,6 +63,7 @@ export default function Home() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
@@ -136,5 +138,7 @@ export default function Home() {
         </motion.div>
       </div>
     </div>
+    <ChatWidget />
+    </>
   );
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ChatWidget } from '@/components/ChatWidget'
 import { useToast } from '@/components/ui/use-toast'
 import { formatCurrency } from '@/lib/utils'
 import * as WalletApi from '@/lib/wallet'
@@ -73,6 +74,7 @@ export default function ProfilePage() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
       <div className="max-w-3xl mx-auto space-y-6">
         <Card className="border-2 border-primary/30">
@@ -90,7 +92,7 @@ export default function ProfilePage() {
             <CardTitle>Nạp / Rút tiền</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Nhập số tiền" className="h-11" />
+            <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Nhập s�� tiền" className="h-11" />
             <div className="flex gap-2">
               <Button className="flex-1 h-11" onClick={handleDeposit}>Nạp</Button>
               <Button className="flex-1 h-11" variant="outline" onClick={handleWithdraw}>Rút</Button>
@@ -100,5 +102,7 @@ export default function ProfilePage() {
         </Card>
       </div>
     </div>
+    <ChatWidget />
+    </>
   )
 }
