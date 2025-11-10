@@ -5,6 +5,7 @@ import { LoginForm } from '@/components/LoginForm';
 import { GameBoard } from '@/components/GameBoard';
 import { GameHistory } from '@/components/GameHistory';
 import { ChatWidget } from '@/components/ChatWidget';
+import { PaymentModal } from '@/components/PaymentModal';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket';
@@ -19,6 +20,7 @@ export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [balance, setBalance] = useState(0);
   const [activeTab, setActiveTab] = useState<'game' | 'history'>('game');
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
