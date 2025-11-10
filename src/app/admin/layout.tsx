@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -32,26 +32,42 @@ export default function AdminLayout({
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Check if current path is login page
+  const isLoginPage = pathname === '/admin/login';
 
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
 
+    // Allow login page without token
+    if (isLoginPage) {
+      return;
+    }
+
+    // Require token for other admin pages
     if (!savedToken || !savedUser) {
-      router.push('/login');
+      router.push('/admin/login');
       return;
     }
 
     setToken(savedToken);
     setUser(JSON.parse(savedUser));
-  }, [router]);
+  }, [router, isLoginPage]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    router.push('/');
+    router.push('/admin/login');
   };
 
+  // Show login page without sidebar
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  // Require token for other pages
   if (!token || !user) {
     return null;
   }
