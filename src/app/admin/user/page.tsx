@@ -43,8 +43,8 @@ export default function UserManagementPage() {
     try {
       setLoading(true);
       const response = await AdminApi.getUsers(authToken, page, itemsPerPage);
-      setUsers(response.data || []);
-      setTotalPages(Math.ceil((response.total || 0) / itemsPerPage));
+      setUsers(response.users || []);
+      setTotalPages(response.totalPages || 1);
       setCurrentPage(page);
     } catch (error) {
       console.error('Error loading users:', error);
@@ -65,7 +65,7 @@ export default function UserManagementPage() {
     try {
       setLoading(true);
       const response = await AdminApi.getUsers(token, 1, itemsPerPage);
-      const filtered = (response.data || []).filter((user: User) =>
+      const filtered = (response.users || []).filter((user: User) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchQuery.toLowerCase())
       );
