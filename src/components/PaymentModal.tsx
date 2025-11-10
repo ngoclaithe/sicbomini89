@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import * as PaymentApi from '@/lib/payment';
 import { formatCurrency } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
-import { CreditCard, Bank, Loader2 } from 'lucide-react';
+import { CreditCard, DollarSign, Loader2 } from 'lucide-react';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -213,7 +213,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Bank className="w-4 h-4 inline mr-2" />
+              <DollarSign className="w-4 h-4 inline mr-2" />
               Rút tiền
             </button>
           </div>
