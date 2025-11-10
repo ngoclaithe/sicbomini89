@@ -238,56 +238,96 @@ export const GameBoard: React.FC<GameBoardProps> = ({ userId, balance, onBalance
         {/* Left Column - TÀI và CHẴN */}
         <div className="grid grid-rows-2 gap-2 h-full">
           {/* TÀI */}
-          <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 border-red-500/30 hover:border-red-500/60 transition-all">
-            <CardHeader className="pb-2 sm:pb-3">
-              <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
-            </CardHeader>
-            <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
-              <Button
-                onClick={() => handlePlaceBet('tai')}
-                disabled={phase !== 'betting' || isRolling || !canPlaceBet('tai')}
-                className="w-full h-10 sm:h-12 text-sm sm:text-base font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50"
-              >
-                Đặt TÀI
-              </Button>
-
-              <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
-                <div className="flex items-center justify-center gap-2">
-                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
-                  <div className="font-semibold text-red-400">{bettingStats.tai.count}</div>
+          <motion.div
+            onClick={() => handlePlaceBet('tai')}
+            className={`cursor-pointer transition-all ${
+              phase === 'betting' && !isRolling && canPlaceBet('tai')
+                ? 'hover:scale-105 hover:shadow-xl'
+                : ''
+            } ${
+              winningBets.includes('tai')
+                ? 'animate-pulse'
+                : ''
+            }`}
+            whileHover={
+              phase === 'betting' && !isRolling && canPlaceBet('tai')
+                ? { scale: 1.05 }
+                : {}
+            }
+          >
+            <Card
+              className={`bg-gradient-to-br from-red-900/30 to-red-800/20 border-2 transition-all ${
+                winningBets.includes('tai')
+                  ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6)] bg-red-900/50'
+                  : 'border-red-500/30 hover:border-red-500/60'
+              } ${
+                phase === 'betting' && !isRolling && canPlaceBet('tai')
+                  ? ''
+                  : 'opacity-60'
+              }`}
+            >
+              <CardHeader className="pb-2 sm:pb-3">
+                <CardTitle className="text-lg sm:text-2xl text-center text-red-500">TÀI</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
+                <div className="text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
+                    <div className="font-semibold text-red-400">{bettingStats.tai.count}</div>
+                  </div>
+                  <div className="mt-1 text-red-400 font-semibold">
+                    {formatCurrency(bettingStats.tai.totalAmount)}
+                  </div>
                 </div>
-                <div className="mt-1 text-red-400 font-semibold">
-                  {formatCurrency(bettingStats.tai.totalAmount)}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
 
           {/* CHẴN */}
-          <Card className="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border-2 border-yellow-500/30 hover:border-yellow-500/60 transition-all">
-            <CardHeader className="pb-2 sm:pb-3">
-              <CardTitle className="text-lg sm:text-2xl text-center text-yellow-500">CHẴN</CardTitle>
-            </CardHeader>
-            <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
-              <Button
-                onClick={() => handlePlaceBet('chan')}
-                disabled={phase !== 'betting' || isRolling || !canPlaceBet('chan')}
-                className="w-full h-10 sm:h-12 text-sm sm:text-base font-bold bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 disabled:opacity-50"
-              >
-                Đặt CHẴN
-              </Button>
-
-              <div className="mt-2 text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
-                <div className="flex items-center justify-center gap-2">
-                  <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
-                  <div className="font-semibold text-yellow-400">{bettingStats.chan?.count ?? 0}</div>
+          <motion.div
+            onClick={() => handlePlaceBet('chan')}
+            className={`cursor-pointer transition-all ${
+              phase === 'betting' && !isRolling && canPlaceBet('chan')
+                ? 'hover:scale-105 hover:shadow-xl'
+                : ''
+            } ${
+              winningBets.includes('chan')
+                ? 'animate-pulse'
+                : ''
+            }`}
+            whileHover={
+              phase === 'betting' && !isRolling && canPlaceBet('chan')
+                ? { scale: 1.05 }
+                : {}
+            }
+          >
+            <Card
+              className={`bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border-2 transition-all ${
+                winningBets.includes('chan')
+                  ? 'border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.6)] bg-yellow-900/50'
+                  : 'border-yellow-500/30 hover:border-yellow-500/60'
+              } ${
+                phase === 'betting' && !isRolling && canPlaceBet('chan')
+                  ? ''
+                  : 'opacity-60'
+              }`}
+            >
+              <CardHeader className="pb-2 sm:pb-3">
+                <CardTitle className="text-lg sm:text-2xl text-center text-yellow-500">CHẴN</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
+                <div className="text-center text-xs sm:text-sm text-gray-300 flex-grow flex flex-col justify-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <img src="/group.png" alt="Người đặt" className="w-4 h-4 opacity-80" />
+                    <div className="font-semibold text-yellow-400">{bettingStats.chan?.count ?? 0}</div>
+                  </div>
+                  <div className="mt-1 text-yellow-400 font-semibold">
+                    {formatCurrency(bettingStats.chan?.totalAmount ?? 0)}
+                  </div>
                 </div>
-                <div className="mt-1 text-yellow-400 font-semibold">
-                  {formatCurrency(bettingStats.chan?.totalAmount ?? 0)}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
 
         {/* Middle Column - Dice Roller */}
