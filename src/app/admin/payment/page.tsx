@@ -107,6 +107,7 @@ export default function PaymentManagementPage() {
       await AdminApi.createPaymentInfo(token, newBankInfo);
       toast.success('Tài khoản ngân hàng đã được thêm thành công');
       setNewBankInfo({ bankName: '', accountNumber: '', accountHolder: '' });
+      setShowBankInfoModal(false);
       loadPaymentInfos(token);
     } catch (error) {
       console.error('Error creating payment info:', error);
