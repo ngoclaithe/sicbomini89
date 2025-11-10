@@ -122,6 +122,25 @@ export default function PaymentManagementPage() {
     }
   };
 
+  const handleTogglePaymentInfo = async (infoId: string, isCurrentlyActive: boolean) => {
+    try {
+      setTogglingInfoId(infoId);
+      if (isCurrentlyActive) {
+        await AdminApi.deactivateInfoPayment(infoId);
+        toast.success('Đã vô hiệu hóa tài khoản ngân hàng');
+      } else {
+        await AdminApi.activateInfoPayment(infoId);
+        toast.success('Đã kích hoạt tài khoản ngân hàng');
+      }
+      loadPaymentInfos(token!);
+    } catch (error) {
+      console.error('Error toggling payment info:', error);
+      toast.error('Lỗi khi thay đổi trạng thái tài khoản');
+    } finally {
+      setTogglingInfoId(null);
+    }
+  };
+
   // Deposit Functions
   const loadDeposits = async (authToken: string) => {
     setLoadingDeposits(false);
