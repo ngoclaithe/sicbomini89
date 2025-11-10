@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import * as PaymentApi from '@/lib/payment';
 import { formatCurrency } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
-import { CreditCard, DollarSign, Loader2 } from 'lucide-react';
+import { CreditCard, DollarSign, Loader2, Copy, Check } from 'lucide-react';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -30,10 +30,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('deposit');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingBanks, setIsLoadingBanks] = useState(false);
+  const [paymentInfos, setPaymentInfos] = useState<PaymentApi.PaymentInfo[]>([]);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Deposit form state
   const [depositAmount, setDepositAmount] = useState('');
+  const [selectedPaymentInfoId, setSelectedPaymentInfoId] = useState('');
   const [depositNote, setDepositNote] = useState('');
 
   // Withdrawal form state
@@ -42,6 +46,46 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [accountNumber, setAccountNumber] = useState('');
   const [accountHolder, setAccountHolder] = useState('');
   const [withdrawNote, setWithdrawNote] = useState('');
+
+  // Load payment infos when modal opens or activeTab changes to deposit
+  useEffect(() => {
+    if (isOpen && activeTab === 'deposit') {
+      loadPaymentInfos();
+    }
+  }, [isOpen, activeTab]);
+
+  const loadPaymentInfos = async () => {
+    setIsLoadingBanks(true);
+    try {
+      const infos = await PaymentApi.getPaymentInfos(token);
+      setPaymentInfos(infos);
+      if (infos.length > 0) {
+        setSelectedPaymentInfoId(infos[0].id);
+      }
+    } catch (error) {
+      toast({
+        title: 'Lỗi',
+        description: 'Không thể tải danh sách ngân hàng',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoadingBanks(false);
+    }
+  };
+
+  const copyToClipboard = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (error) {
+      toast({
+        title: 'Lỗi',
+        description: 'Không thể sao chép',
+        variant: 'destructive',
+      });
+    }
+  };
 
   const handleDeposit = async () => {
     const amount = parseFloat(depositAmount);
@@ -55,12 +99,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       return;
     }
 
+    if (!selectedPaymentInfoId) {
+      toast({
+        title: 'Lỗi',
+        description: 'Vui lòng chọn ngân hàng',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       await PaymentApi.createDeposit(
         {
           amount,
-          paymentInfoId: 'default',
+          paymentInfoId: selectedPaymentInfoId,
           note: depositNote || undefined,
         },
         token
@@ -222,6 +275,100 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           {activeTab === 'deposit' && (
             <div className="space-y-4">
               <div>
+                <Label htmlFor="bank-select">Chọn tài khoản ngân hàng</Label>
+                {isLoadingBanks ? (
+                  <div className="mt-1 flex items-center justify-center p-3 bg-muted rounded-md">
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    <span className="text-sm">Đang tải...</span>
+                  </div>
+                ) : (
+                  <select
+                    id="bank-select"
+                    value={selectedPaymentInfoId}
+                    onChange={(e) => setSelectedPaymentInfoId(e.target.value)}
+                    disabled={isLoading || paymentInfos.length === 0}
+                    className="mt-1 w-full h-10 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
+                  >
+                    <option value="">Chọn ngân hàng...</option>
+                    {paymentInfos.map((info) => (
+                      <option key={info.id} value={info.id}>
+                        {info.bankName} - {info.accountNumber}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {selectedPaymentInfoId && paymentInfos.length > 0 && (
+                <Card className="bg-primary/5 border border-primary/30">
+                  <CardContent className="pt-4 space-y-2">
+                    {paymentInfos
+                      .filter((info) => info.id === selectedPaymentInfoId)
+                      .map((info) => (
+                        <div key={info.id} className="space-y-2">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="text-xs text-muted-foreground">Tên ngân hàng</p>
+                              <p className="font-semibold text-sm">{info.bankName}</p>
+                            </div>
+                            <Button
+                              onClick={() => copyToClipboard(info.bankName, `bank-${info.id}`)}
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0"
+                            >
+                              {copiedId === `bank-${info.id}` ? (
+                                <Check className="w-3 h-3 text-green-500" />
+                              ) : (
+                                <Copy className="w-3 h-3" />
+                              )}
+                            </Button>
+                          </div>
+
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="text-xs text-muted-foreground">Số tài khoản</p>
+                              <p className="font-semibold text-sm font-mono">{info.accountNumber}</p>
+                            </div>
+                            <Button
+                              onClick={() => copyToClipboard(info.accountNumber, `account-${info.id}`)}
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0"
+                            >
+                              {copiedId === `account-${info.id}` ? (
+                                <Check className="w-3 h-3 text-green-500" />
+                              ) : (
+                                <Copy className="w-3 h-3" />
+                              )}
+                            </Button>
+                          </div>
+
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="text-xs text-muted-foreground">Chủ tài khoản</p>
+                              <p className="font-semibold text-sm">{info.accountHolder}</p>
+                            </div>
+                            <Button
+                              onClick={() => copyToClipboard(info.accountHolder, `holder-${info.id}`)}
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0"
+                            >
+                              {copiedId === `holder-${info.id}` ? (
+                                <Check className="w-3 h-3 text-green-500" />
+                              ) : (
+                                <Copy className="w-3 h-3" />
+                              )}
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                  </CardContent>
+                </Card>
+              )}
+
+              <div>
                 <Label htmlFor="deposit-amount">Số tiền nạp</Label>
                 <Input
                   id="deposit-amount"
@@ -235,7 +382,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               </div>
 
               <div>
-                <Label htmlFor="deposit-note">Ghi chú (tuỳ chọn)</Label>
+                <Label htmlFor="deposit-note">Ghi chú (tu�� chọn)</Label>
                 <Input
                   id="deposit-note"
                   type="text"
@@ -257,7 +404,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
               <Button
                 onClick={handleDeposit}
-                disabled={isLoading || !depositAmount}
+                disabled={isLoading || !depositAmount || !selectedPaymentInfoId}
                 className="w-full"
               >
                 {isLoading ? (
