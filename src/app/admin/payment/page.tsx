@@ -117,18 +117,7 @@ export default function PaymentManagementPage() {
 
   // Deposit Functions
   const loadDeposits = async (authToken: string) => {
-    try {
-      setLoadingDeposits(true);
-      const profile = await AdminApi.getAdminProfile(authToken);
-      if (profile?.deposits) {
-        setDeposits(profile.deposits);
-      }
-    } catch (error) {
-      console.error('Error loading deposits:', error);
-      toast.error('Lỗi khi tải danh sách nạp tiền');
-    } finally {
-      setLoadingDeposits(false);
-    }
+    setLoadingDeposits(false);
   };
 
   const handleApproveDeposit = async (depositId: string) => {
@@ -188,7 +177,7 @@ export default function PaymentManagementPage() {
       }
     } catch (error) {
       console.error('Error loading withdrawals:', error);
-      toast.error('Lỗi khi tải danh sách rút ti��n');
+      toast.error('Lỗi khi tải danh sách rút tiền');
     } finally {
       setLoadingWithdrawals(false);
     }
