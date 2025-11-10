@@ -373,7 +373,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 <Input
                   id="deposit-amount"
                   type="number"
-                  placeholder="Nhập s��� tiền"
+                  placeholder="Nhập số tiền"
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(e.target.value)}
                   disabled={isLoading}
@@ -481,19 +481,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   placeholder="Tên chủ tài khoản"
                   value={accountHolder}
                   onChange={(e) => setAccountHolder(e.target.value)}
-                  disabled={isLoading}
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="withdraw-note">Ghi chú (tuỳ chọn)</Label>
-                <Input
-                  id="withdraw-note"
-                  type="text"
-                  placeholder="Ghi chú thêm"
-                  value={withdrawNote}
-                  onChange={(e) => setWithdrawNote(e.target.value)}
                   disabled={isLoading}
                   className="mt-1"
                 />
