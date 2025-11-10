@@ -218,10 +218,10 @@ export default function UserManagementPage() {
           )}
 
           {/* Pagination */}
-          {totalPages > 1 && (
+          {totalPages > 1 && token && (
             <div className="flex items-center justify-center gap-4 mt-6">
               <Button
-                onClick={() => loadUsers(token!, currentPage - 1)}
+                onClick={() => loadUsers(token, currentPage - 1)}
                 disabled={currentPage === 1}
                 variant="outline"
               >
@@ -231,7 +231,7 @@ export default function UserManagementPage() {
                 Trang {currentPage} / {totalPages}
               </span>
               <Button
-                onClick={() => loadUsers(token!, currentPage + 1)}
+                onClick={() => loadUsers(token, currentPage + 1)}
                 disabled={currentPage === totalPages}
                 variant="outline"
               >
