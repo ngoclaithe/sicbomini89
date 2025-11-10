@@ -40,12 +40,11 @@ interface RecentActivity {
 export default function DashboardPage() {
   const [token, setToken] = useState<string | null>(null);
   const [stats, setStats] = useState<DashboardStats>({
-    totalUsers: 0,
-    activeUsers: 0,
-    totalGames: 0,
-    totalRevenue: 0,
+    users: { total: 0, active: 0, inactive: 0 },
+    games: { totalSessions: 0, completedSessions: 0, totalBets: 0 },
+    finance: { totalBetsAmount: 0, totalWinAmount: 0, profit: 0, totalWalletBalance: 0 },
   });
-  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
