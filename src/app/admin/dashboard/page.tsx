@@ -7,21 +7,44 @@ import { Users, Gamepad2, TrendingUp, Wallet } from 'lucide-react';
 import * as AdminApi from '@/lib/admin';
 
 interface DashboardStats {
-  totalUsers: number;
-  activeUsers: number;
-  totalGames: number;
-  totalRevenue: number;
+  users: {
+    total: number;
+    active: number;
+    inactive: number;
+  };
+  games: {
+    totalSessions: number;
+    completedSessions: number;
+    totalBets: number;
+  };
+  finance: {
+    totalBetsAmount: number;
+    totalWinAmount: number;
+    profit: number;
+    totalWalletBalance: number;
+  };
+}
+
+interface RecentActivity {
+  id: string;
+  username: string;
+  sessionId: string;
+  bet: string;
+  betAmount: string;
+  result: string;
+  isWin: boolean;
+  winAmount: string;
+  createdAt: string;
 }
 
 export default function DashboardPage() {
   const [token, setToken] = useState<string | null>(null);
   const [stats, setStats] = useState<DashboardStats>({
-    totalUsers: 0,
-    activeUsers: 0,
-    totalGames: 0,
-    totalRevenue: 0,
+    users: { total: 0, active: 0, inactive: 0 },
+    games: { totalSessions: 0, completedSessions: 0, totalBets: 0 },
+    finance: { totalBetsAmount: 0, totalWinAmount: 0, profit: 0, totalWalletBalance: 0 },
   });
-  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -71,7 +94,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-sm">Tổng người dùng</p>
-                <p className="text-3xl font-bold text-white mt-2">{stats.totalUsers}</p>
+                <p className="text-3xl font-bold text-white mt-2">{stats.users.total}</p>
               </div>
               <Users className="w-10 h-10 text-blue-400 opacity-50" />
             </div>
@@ -83,7 +106,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-sm">Người dùng hoạt động</p>
-                <p className="text-3xl font-bold text-white mt-2">{stats.activeUsers}</p>
+                <p className="text-3xl font-bold text-white mt-2">{stats.users.active}</p>
               </div>
               <Users className="w-10 h-10 text-green-400 opacity-50" />
             </div>
@@ -94,8 +117,8 @@ export default function DashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Tổng game</p>
-                <p className="text-3xl font-bold text-white mt-2">{stats.totalGames}</p>
+                <p className="text-gray-400 text-sm">Tổng phiên chơi</p>
+                <p className="text-3xl font-bold text-white mt-2">{stats.games.totalSessions}</p>
               </div>
               <Gamepad2 className="w-10 h-10 text-purple-400 opacity-50" />
             </div>
@@ -106,9 +129,9 @@ export default function DashboardPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Tổng doanh thu</p>
+                <p className="text-gray-400 text-sm">Lợi nhuận</p>
                 <p className="text-3xl font-bold text-white mt-2">
-                  {(stats.totalRevenue / 1000000).toFixed(1)}M
+                  {(stats.finance.profit / 1000).toFixed(0)}K
                 </p>
               </div>
               <TrendingUp className="w-10 h-10 text-yellow-400 opacity-50" />
@@ -128,20 +151,57 @@ export default function DashboardPage() {
           ) : recentActivity.length === 0 ? (
             <div className="text-gray-400 text-center py-8">Không có hoạt động nào</div>
           ) : (
-            <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg">
-                  <div className="flex-1">
-                    <p className="text-white font-medium">{activity.type || 'Hoạt động'}</p>
-                    <p className="text-gray-400 text-sm">{activity.description || activity.note || ''}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-gray-400 text-sm">
-                      {new Date(activity.createdAt || activity.timestamp).toLocaleString('vi-VN')}
-                    </p>
-                  </div>
-                </div>
-              ))}
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-700">
+                    <th className="text-left py-3 px-4 text-gray-300 font-semibold">Người dùng</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-semibold">Cược</th>
+                    <th className="text-right py-3 px-4 text-gray-300 font-semibold">Số tiền cược</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-semibold">Kết quả</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-semibold">Trạng thái</th>
+                    <th className="text-right py-3 px-4 text-gray-300 font-semibold">Tiền thắng</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-semibold">Thời gian</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentActivity.map((activity) => (
+                    <tr key={activity.id} className="border-b border-gray-700 hover:bg-gray-700/50">
+                      <td className="py-3 px-4 text-gray-200">{activity.username}</td>
+                      <td className="py-3 px-4 text-gray-300 capitalize">
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                          activity.bet === 'tai' ? 'bg-red-900/50 text-red-300' : 'bg-blue-900/50 text-blue-300'
+                        }`}>
+                          {activity.bet === 'tai' ? 'Tài' : activity.bet === 'xiu' ? 'Xỉu' : 'Chẵn/Lẻ'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right text-gray-200">
+                        {(parseFloat(activity.betAmount) / 1000).toFixed(0)}K
+                      </td>
+                      <td className="py-3 px-4 text-gray-300 capitalize">
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                          activity.result === 'tai' ? 'bg-red-900/50 text-red-300' : 'bg-blue-900/50 text-blue-300'
+                        }`}>
+                          {activity.result === 'tai' ? 'Tài' : activity.result === 'xiu' ? 'Xỉu' : 'Chẵn/Lẻ'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                          activity.isWin ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'
+                        }`}>
+                          {activity.isWin ? 'Thắng' : 'Thua'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right text-gray-200">
+                        {(parseFloat(activity.winAmount) / 1000).toFixed(0)}K
+                      </td>
+                      <td className="py-3 px-4 text-gray-400 whitespace-nowrap text-xs">
+                        {new Date(activity.createdAt).toLocaleString('vi-VN')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </CardContent>
