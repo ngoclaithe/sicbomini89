@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import * as PaymentApi from '@/lib/payment';
 import { formatCurrency } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
-import { CreditCard, DollarSign, Loader2, Copy, Check } from 'lucide-react';
+import { CreditCard, DollarSign, Loader2, Copy, Check, QrCode, ArrowLeft } from 'lucide-react';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ interface PaymentModalProps {
 }
 
 type TabType = 'deposit' | 'withdrawal';
+type DepositStep = 'form' | 'qr';
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({
   isOpen,
@@ -29,10 +30,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   onSuccess,
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('deposit');
+  const [depositStep, setDepositStep] = useState<DepositStep>('form');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingBanks, setIsLoadingBanks] = useState(false);
   const [paymentInfos, setPaymentInfos] = useState<PaymentApi.PaymentInfo[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [depositResponse, setDepositResponse] = useState<PaymentApi.DepositResponse | null>(null);
   const { toast } = useToast();
 
   // Deposit form state
@@ -86,6 +89,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
+  const generateQRUrl = (paymentInfo: PaymentApi.PaymentInfo, amount: number, codepay: string) => {
+    const bankCode = paymentInfo.bankName.toUpperCase().replace(/\s+/g, '');
+    return `https://qr.sepay.vn/img?acc=${paymentInfo.accountNumber}&bank=${bankCode}&amount=${amount}&des=${codepay}`;
+  };
+
   const handleDeposit = async () => {
     const amount = parseFloat(depositAmount);
 
@@ -109,7 +117,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
     setIsLoading(true);
     try {
-      await PaymentApi.createDeposit(
+      const response = await PaymentApi.createDeposit(
         {
           amount,
           paymentInfoId: selectedPaymentInfoId,
@@ -118,19 +126,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         token
       );
 
+      setDepositResponse(response);
+      setDepositStep('qr');
+
       toast({
         title: 'Thành công',
-        description: 'Yêu cầu nạp tiền đã được gửi. Vui lòng đợi xác nhận.',
+        description: 'Vui lòng quét mã QR để hoàn tất giao dịch',
       });
-
-      setDepositAmount('');
-      setDepositNote('');
-      onSuccess();
-      onClose();
     } catch (error) {
       toast({
         title: 'Lỗi',
-        description: error instanceof Error ? error.message : 'Không thể nạp tiền',
+        description: error instanceof Error ? error.message : 'Không thể tạo lệnh nạp tiền',
         variant: 'destructive',
       });
     } finally {
@@ -223,52 +229,159 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const handleClose = () => {
     if (!isLoading) {
       setActiveTab('deposit');
+      setDepositStep('form');
       setDepositAmount('');
       setDepositNote('');
       setWithdrawAmount('');
       setBankName('');
       setAccountNumber('');
       setAccountHolder('');
+      setDepositResponse(null);
       onClose();
     }
+  };
+
+  const handleBackToForm = () => {
+    setDepositStep('form');
+    setDepositResponse(null);
+  };
+
+  const handleDoneQR = () => {
+    onSuccess();
+    handleClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="w-full max-w-md mx-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Quản lý tiền</DialogTitle>
+          <DialogTitle>
+            {depositStep === 'qr' ? 'Quét mã QR để thanh toán' : 'Quản lý tiền'}
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Tabs */}
-          <div className="flex gap-2 border-b border-border">
-            <button
-              onClick={() => setActiveTab('deposit')}
-              className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${
-                activeTab === 'deposit'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <CreditCard className="w-4 h-4 inline mr-2" />
-              Nạp tiền
-            </button>
-            <button
-              onClick={() => setActiveTab('withdrawal')}
-              className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${
-                activeTab === 'withdrawal'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <DollarSign className="w-4 h-4 inline mr-2" />
-              Rút tiền
-            </button>
-          </div>
+          {/* Show tabs only on form step */}
+          {depositStep === 'form' && (
+            <div className="flex gap-2 border-b border-border">
+              <button
+                onClick={() => setActiveTab('deposit')}
+                className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${
+                  activeTab === 'deposit'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <CreditCard className="w-4 h-4 inline mr-2" />
+                Nạp tiền
+              </button>
+              <button
+                onClick={() => setActiveTab('withdrawal')}
+                className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${
+                  activeTab === 'withdrawal'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <DollarSign className="w-4 h-4 inline mr-2" />
+                Rút tiền
+              </button>
+            </div>
+          )}
 
-          {/* Deposit Tab */}
-          {activeTab === 'deposit' && (
+          {/* QR Code Step */}
+          {activeTab === 'deposit' && depositStep === 'qr' && depositResponse && (
+            <div className="space-y-4">
+              <Button
+                onClick={handleBackToForm}
+                variant="ghost"
+                size="sm"
+                className="mb-2"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Quay lại
+              </Button>
+
+              <Card className="bg-white">
+                <CardContent className="pt-6 flex flex-col items-center">
+                  <div className="mb-4 p-4 bg-white rounded-lg border-2 border-gray-200">
+                    <img
+                      src={generateQRUrl(depositResponse.paymentInfo, depositResponse.amount, depositResponse.codepay)}
+                      alt="QR Code"
+                      className="w-64 h-64"
+                    />
+                  </div>
+                  
+                  <div className="w-full space-y-3">
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground">Số tiền</p>
+                      <p className="text-2xl font-bold text-primary">
+                        {formatCurrency(depositResponse.amount)}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Mã giao dịch</p>
+                        <p className="font-mono font-semibold">{depositResponse.codepay}</p>
+                      </div>
+                      <Button
+                        onClick={() => copyToClipboard(depositResponse.codepay, 'codepay')}
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                      >
+                        {copiedId === 'codepay' ? (
+                          <Check className="w-4 h-4 text-green-500" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+
+                    <div className="p-3 bg-muted rounded-lg">
+                      <p className="text-xs text-muted-foreground mb-1">Ngân hàng</p>
+                      <p className="font-semibold">{depositResponse.paymentInfo.bankName}</p>
+                      <p className="text-sm mt-1">{depositResponse.paymentInfo.accountNumber}</p>
+                      <p className="text-sm">{depositResponse.paymentInfo.accountHolder}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="pt-4">
+                  <div className="flex items-start gap-2">
+                    <QrCode className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div className="text-sm text-blue-800">
+                      <p className="font-semibold mb-1">Hướng dẫn:</p>
+                      <ol className="list-decimal list-inside space-y-1">
+                        <li>Mở ứng dụng ngân hàng của bạn</li>
+                        <li>Quét mã QR hoặc chuyển khoản thủ công</li>
+                        <li>Kiểm tra nội dung chuyển khoản là mã: <span className="font-mono font-bold">{depositResponse.codepay}</span></li>
+                        <li>Xác nhận giao dịch</li>
+                      </ol>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-amber-50 border-amber-200">
+                <CardContent className="pt-4">
+                  <p className="text-sm text-amber-800">
+                    ⚠️ Giao dịch sẽ được xử lý tự động trong vòng 1-5 phút sau khi chuyển khoản thành công
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Button onClick={handleDoneQR} className="w-full" variant="outline">
+                Hoàn tất
+              </Button>
+            </div>
+          )}
+
+          {/* Deposit Form */}
+          {activeTab === 'deposit' && depositStep === 'form' && (
             <div className="space-y-4">
               <div>
                 <Label htmlFor="bank-select">Chọn tài khoản ngân hàng</Label>
@@ -390,14 +503,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 />
               </div>
 
-              <Card className="bg-muted">
-                <CardContent className="pt-4">
-                  <p className="text-sm text-muted-foreground">
-                    Yêu cầu nạp tiền sẽ được xử lý trong vòng 5-30 phút
-                  </p>
-                </CardContent>
-              </Card>
-
               <Button
                 onClick={handleDeposit}
                 disabled={isLoading || !depositAmount || !selectedPaymentInfoId}
@@ -409,7 +514,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     Đang xử lý...
                   </>
                 ) : (
-                  'Nạp tiền'
+                  'Tạo mã QR'
                 )}
               </Button>
             </div>
