@@ -348,32 +348,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   </div>
                 </CardContent>
               </Card>
-
-              <Card className="bg-blue-50 border-blue-200">
-                <CardContent className="pt-4">
-                  <div className="flex items-start gap-2">
-                    <QrCode className="w-5 h-5 text-blue-600 mt-0.5" />
-                    <div className="text-sm text-blue-800">
-                      <p className="font-semibold mb-1">Hướng dẫn:</p>
-                      <ol className="list-decimal list-inside space-y-1">
-                        <li>Mở ứng dụng ngân hàng của bạn</li>
-                        <li>Quét mã QR hoặc chuyển khoản thủ công</li>
-                        <li>Kiểm tra nội dung chuyển khoản là mã: <span className="font-mono font-bold">{depositResponse.codepay}</span></li>
-                        <li>Xác nhận giao dịch</li>
-                      </ol>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-amber-50 border-amber-200">
-                <CardContent className="pt-4">
-                  <p className="text-sm text-amber-800">
-                    ⚠️ Giao dịch sẽ được xử lý tự động trong vòng 1-5 phút sau khi chuyển khoản thành công
-                  </p>
-                </CardContent>
-              </Card>
-
               <Button onClick={handleDoneQR} className="w-full" variant="outline">
                 Hoàn tất
               </Button>
