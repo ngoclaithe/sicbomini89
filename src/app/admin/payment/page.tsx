@@ -8,18 +8,10 @@ import { Label } from '@/components/ui/label';
 import * as AdminApi from '@/lib/admin';
 import * as PaymentApi from '@/lib/payment';
 import { toast } from 'react-hot-toast';
-import { Plus, Trash2, Check, X, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Plus, Trash2, Check, X, ToggleLeft, ToggleRight, RefreshCw } from 'lucide-react';
 
-interface PaymentInfo {
-  id: string;
-  bankName: string;
-  accountNumber: string;
-  accountHolder: string;
-  isActive: boolean;
-  description?: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
+// interface PaymentInfo removed
+
 
 interface Deposit {
   id: string;
@@ -28,6 +20,7 @@ interface Deposit {
   status: 'pending' | 'success' | 'failed';
   createdAt: string;
   note?: string;
+  paymentInfoId?: string;
 }
 
 interface Withdrawal {
@@ -38,6 +31,7 @@ interface Withdrawal {
   bankName: string;
   accountNumber: string;
   accountHolder: string;
+  note?: string;
 }
 
 export default function PaymentManagementPage() {
@@ -45,7 +39,7 @@ export default function PaymentManagementPage() {
   const [tab, setTab] = useState<'bankInfo' | 'deposits' | 'withdrawals'>('bankInfo');
 
   // Bank Info states
-  const [paymentInfos, setPaymentInfos] = useState<PaymentInfo[]>([]);
+  const [paymentInfos, setPaymentInfos] = useState<PaymentApi.PaymentInfo[]>([]);
   const [newBankInfo, setNewBankInfo] = useState({
     bankName: '',
     accountNumber: '',
@@ -74,16 +68,20 @@ export default function PaymentManagementPage() {
     const savedToken = localStorage.getItem('token');
     if (savedToken) {
       setToken(savedToken);
-      // Load initial data based on default tab
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
       if (tab === 'bankInfo') {
-        loadPaymentInfos(savedToken);
+        loadPaymentInfos(token);
       } else if (tab === 'deposits') {
-        loadDeposits(savedToken);
+        loadDeposits(token);
       } else {
-        loadWithdrawals(savedToken);
+        loadWithdrawals(token);
       }
     }
-  }, [tab]);
+  }, [token, tab]);
 
   // Bank Info Functions
   const loadPaymentInfos = async (authToken: string) => {
@@ -122,7 +120,9 @@ export default function PaymentManagementPage() {
     }
   };
 
-  const handleTogglePaymentInfo = async (token: string, infoId: string, isCurrentlyActive: boolean) => {
+  const handleTogglePaymentInfo = async (infoId: string, isCurrentlyActive: boolean) => {
+    if (!token) return;
+
     try {
       setTogglingInfoId(infoId);
       if (isCurrentlyActive) {
@@ -132,7 +132,7 @@ export default function PaymentManagementPage() {
         await AdminApi.activateInfoPayment(token, infoId);
         toast.success('Đã kích hoạt tài khoản ngân hàng');
       }
-      loadPaymentInfos(token!);
+      loadPaymentInfos(token);
     } catch (error) {
       console.error('Error toggling payment info:', error);
       toast.error('Lỗi khi thay đổi trạng thái tài khoản');
@@ -143,7 +143,16 @@ export default function PaymentManagementPage() {
 
   // Deposit Functions
   const loadDeposits = async (authToken: string) => {
-    setLoadingDeposits(false);
+    try {
+      setLoadingDeposits(true);
+      const data = await AdminApi.getDeposits(authToken);
+      setDeposits(data);
+    } catch (error) {
+      console.error('Error loading deposits:', error);
+      toast.error('Lỗi khi tải danh sách nạp tiền');
+    } finally {
+      setLoadingDeposits(false);
+    }
   };
 
   const handleApproveDeposit = async (depositId: string) => {
@@ -195,7 +204,16 @@ export default function PaymentManagementPage() {
 
   // Withdrawal Functions
   const loadWithdrawals = async (authToken: string) => {
-    setLoadingWithdrawals(false);
+    try {
+      setLoadingWithdrawals(true);
+      const data = await AdminApi.getWithdrawals(authToken);
+      setWithdrawals(data);
+    } catch (error) {
+      console.error('Error loading withdrawals:', error);
+      toast.error('Lỗi khi tải danh sách rút tiền');
+    } finally {
+      setLoadingWithdrawals(false);
+    }
   };
 
   const handleApproveWithdrawal = async (withdrawalId: string) => {
@@ -245,41 +263,57 @@ export default function PaymentManagementPage() {
     }
   };
 
+  const handleRefresh = () => {
+    if (!token) return;
+    if (tab === 'bankInfo') {
+      loadPaymentInfos(token);
+    } else if (tab === 'deposits') {
+      loadDeposits(token);
+    } else {
+      loadWithdrawals(token);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-white">Quản lý nạp/rút tiền</h1>
+        <Button
+          onClick={handleRefresh}
+          variant="outline"
+          className="gap-2"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Làm mới
+        </Button>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-2 border-b border-gray-700">
         <button
           onClick={() => setTab('bankInfo')}
-          className={`px-4 py-2 font-medium transition-colors ${
-            tab === 'bankInfo'
-              ? 'text-white border-b-2 border-blue-500'
-              : 'text-gray-400 hover:text-gray-300'
-          }`}
+          className={`px-4 py-2 font-medium transition-colors ${tab === 'bankInfo'
+            ? 'text-white border-b-2 border-blue-500'
+            : 'text-gray-400 hover:text-gray-300'
+            }`}
         >
           Tài khoản ngân hàng
         </button>
         <button
           onClick={() => setTab('deposits')}
-          className={`px-4 py-2 font-medium transition-colors ${
-            tab === 'deposits'
-              ? 'text-white border-b-2 border-blue-500'
-              : 'text-gray-400 hover:text-gray-300'
-          }`}
+          className={`px-4 py-2 font-medium transition-colors ${tab === 'deposits'
+            ? 'text-white border-b-2 border-blue-500'
+            : 'text-gray-400 hover:text-gray-300'
+            }`}
         >
           Nạp tiền
         </button>
         <button
           onClick={() => setTab('withdrawals')}
-          className={`px-4 py-2 font-medium transition-colors ${
-            tab === 'withdrawals'
-              ? 'text-white border-b-2 border-blue-500'
-              : 'text-gray-400 hover:text-gray-300'
-          }`}
+          className={`px-4 py-2 font-medium transition-colors ${tab === 'withdrawals'
+            ? 'text-white border-b-2 border-blue-500'
+            : 'text-gray-400 hover:text-gray-300'
+            }`}
         >
           Rút tiền
         </button>
@@ -288,7 +322,6 @@ export default function PaymentManagementPage() {
       {/* Bank Info Tab */}
       {tab === 'bankInfo' && (
         <div className="space-y-6">
-          {/* Bank Info List */}
           <Card className="bg-gray-800/50 border-gray-700/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-white">Danh sách tài khoản ngân hàng</CardTitle>
@@ -321,13 +354,15 @@ export default function PaymentManagementPage() {
                           <p className="text-gray-400 text-sm">
                             Chủ TK: {info.accountHolder}
                           </p>
+                          <p className="text-gray-500 text-xs mt-1">
+                            ID: {info.id}
+                          </p>
                         </div>
                         <span
-                          className={`px-3 py-1 rounded text-xs font-semibold ${
-                            info.isActive
-                              ? 'bg-green-900/50 text-green-300'
-                              : 'bg-red-900/50 text-red-300'
-                          }`}
+                          className={`px-3 py-1 rounded text-xs font-semibold ${info.isActive
+                            ? 'bg-green-900/50 text-green-300'
+                            : 'bg-red-900/50 text-red-300'
+                            }`}
                         >
                           {info.isActive ? 'Hoạt động' : 'Vô hiệu hóa'}
                         </span>
@@ -338,11 +373,10 @@ export default function PaymentManagementPage() {
                           disabled={togglingInfoId === info.id}
                           variant="outline"
                           size="sm"
-                          className={`gap-2 ${
-                            info.isActive
-                              ? 'text-red-400 hover:text-red-300'
-                              : 'text-green-400 hover:text-green-300'
-                          }`}
+                          className={`gap-2 ${info.isActive
+                            ? 'text-red-400 hover:text-red-300'
+                            : 'text-green-400 hover:text-green-300'
+                            }`}
                         >
                           {info.isActive ? (
                             <>
@@ -355,10 +389,6 @@ export default function PaymentManagementPage() {
                               Kích hoạt
                             </>
                           )}
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-red-400 gap-2">
-                          <Trash2 className="w-4 h-4" />
-                          Xóa
                         </Button>
                       </div>
                     </div>
@@ -394,33 +424,40 @@ export default function PaymentManagementPage() {
                           Code: {deposit.codepay}
                         </p>
                         <p className="text-gray-400 text-sm">
-                          Số tiền: {(deposit.amount / 1000).toFixed(0)}K đ
+                          Số tiền: {deposit.amount.toLocaleString('vi-VN')} đ
                         </p>
                         <p className="text-gray-400 text-sm">
                           {new Date(deposit.createdAt).toLocaleString('vi-VN')}
                         </p>
+                        {deposit.note && (
+                          <p className="text-gray-500 text-xs mt-1">
+                            Ghi chú: {deposit.note}
+                          </p>
+                        )}
+                        <p className="text-gray-500 text-xs mt-1">
+                          ID: {deposit.id}
+                        </p>
                       </div>
                       <span
-                        className={`px-3 py-1 rounded text-xs font-semibold ${
-                          deposit.status === 'pending'
-                            ? 'bg-yellow-900/50 text-yellow-300'
-                            : deposit.status === 'success'
+                        className={`px-3 py-1 rounded text-xs font-semibold ${deposit.status === 'pending'
+                          ? 'bg-yellow-900/50 text-yellow-300'
+                          : deposit.status === 'success'
                             ? 'bg-green-900/50 text-green-300'
                             : 'bg-red-900/50 text-red-300'
-                        }`}
+                          }`}
                       >
                         {deposit.status === 'pending'
                           ? 'Chờ duyệt'
                           : deposit.status === 'success'
-                          ? 'Đã duyệt'
-                          : 'Từ chối'}
+                            ? 'Đã duyệt'
+                            : 'Từ chối'}
                       </span>
                     </div>
 
                     {deposit.status === 'pending' && (
                       <div className="space-y-2 pt-2 border-t border-gray-600">
                         <Input
-                          placeholder="Ghi chú (optional)"
+                          placeholder="Ghi chú / Lý do (bắt buộc khi từ chối)"
                           value={depositNote[deposit.id] || ''}
                           onChange={(e) =>
                             setDepositNote({
@@ -437,7 +474,7 @@ export default function PaymentManagementPage() {
                             className="flex-1 gap-2 bg-green-600 hover:bg-green-700"
                           >
                             <Check className="w-4 h-4" />
-                            Duyệt
+                            {approvingDeposit === deposit.id ? 'Đang duyệt...' : 'Duyệt'}
                           </Button>
                           <Button
                             onClick={() => handleRejectDeposit(deposit.id)}
@@ -449,7 +486,7 @@ export default function PaymentManagementPage() {
                             className="flex-1 gap-2 text-red-400"
                           >
                             <X className="w-4 h-4" />
-                            Từ chối
+                            {rejectingDeposit === deposit.id ? 'Đang từ chối...' : 'Từ chối'}
                           </Button>
                         </div>
                       </div>
@@ -489,33 +526,40 @@ export default function PaymentManagementPage() {
                           Chủ TK: {withdrawal.accountHolder}
                         </p>
                         <p className="text-gray-400 text-sm">
-                          Số tiền: {(withdrawal.amount / 1000).toFixed(0)}K đ
+                          Số tiền: {withdrawal.amount.toLocaleString('vi-VN')} đ
                         </p>
                         <p className="text-gray-400 text-sm">
                           {new Date(withdrawal.createdAt).toLocaleString('vi-VN')}
                         </p>
+                        {withdrawal.note && (
+                          <p className="text-gray-500 text-xs mt-1">
+                            Ghi chú: {withdrawal.note}
+                          </p>
+                        )}
+                        <p className="text-gray-500 text-xs mt-1">
+                          ID: {withdrawal.id}
+                        </p>
                       </div>
                       <span
-                        className={`px-3 py-1 rounded text-xs font-semibold ${
-                          withdrawal.status === 'pending'
-                            ? 'bg-yellow-900/50 text-yellow-300'
-                            : withdrawal.status === 'success'
+                        className={`px-3 py-1 rounded text-xs font-semibold ${withdrawal.status === 'pending'
+                          ? 'bg-yellow-900/50 text-yellow-300'
+                          : withdrawal.status === 'success'
                             ? 'bg-green-900/50 text-green-300'
                             : 'bg-red-900/50 text-red-300'
-                        }`}
+                          }`}
                       >
                         {withdrawal.status === 'pending'
                           ? 'Chờ duyệt'
                           : withdrawal.status === 'success'
-                          ? 'Đã duyệt'
-                          : 'Từ chối'}
+                            ? 'Đã duyệt'
+                            : 'Từ chối'}
                       </span>
                     </div>
 
                     {withdrawal.status === 'pending' && (
                       <div className="space-y-2 pt-2 border-t border-gray-600">
                         <Input
-                          placeholder="Ghi chú (optional)"
+                          placeholder="Ghi chú / Lý do (bắt buộc khi từ chối)"
                           value={withdrawalNote[withdrawal.id] || ''}
                           onChange={(e) =>
                             setWithdrawalNote({
@@ -532,7 +576,7 @@ export default function PaymentManagementPage() {
                             className="flex-1 gap-2 bg-green-600 hover:bg-green-700"
                           >
                             <Check className="w-4 h-4" />
-                            Duyệt
+                            {approvingWithdrawal === withdrawal.id ? 'Đang duyệt...' : 'Duyệt'}
                           </Button>
                           <Button
                             onClick={() => handleRejectWithdrawal(withdrawal.id)}
@@ -544,7 +588,7 @@ export default function PaymentManagementPage() {
                             className="flex-1 gap-2 text-red-400"
                           >
                             <X className="w-4 h-4" />
-                            Từ chối
+                            {rejectingWithdrawal === withdrawal.id ? 'Đang từ chối...' : 'Từ chối'}
                           </Button>
                         </div>
                       </div>

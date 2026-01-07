@@ -27,9 +27,11 @@ export async function getUserDetail(token: string, userId: string) {
 export async function activateInfoPayment(token: string, infoId: string) {
   return api.put(`/payment/info/${infoId}/activate`, {}, token)
 }
+
 export async function deactivateInfoPayment(token: string, infoId: string) {
   return api.put(`/payment/info/${infoId}/deactivate`, {}, token)
 }
+
 export async function toggleUserStatus(token: string, userId: string) {
   return api.put(`/admin/users/${userId}/toggle-status`, {}, token)
 }
@@ -50,18 +52,52 @@ export async function createPaymentInfo(token: string, paymentInfo: { bankName: 
   return api.post('/payment/info/create', paymentInfo, token)
 }
 
+// ===== DEPOSIT APIs =====
+
+export async function createDeposit(
+  token: string, 
+  data: { amount: number; paymentInfoId: string; note?: string }
+) {
+  return api.post('/admin/deposits', data, token)
+}
+
 export async function approveDeposit(token: string, depositId: string, note?: string) {
-  return api.put(`/payment/deposit/${depositId}/approve`, { depositId, note }, token)
+  return api.post('/admin/deposits/approve', { depositId, note }, token)
 }
 
 export async function rejectDeposit(token: string, depositId: string, reason: string) {
-  return api.put(`/payment/deposit/${depositId}/reject`, { depositId, reason }, token)
+  return api.post('/admin/deposits/reject', { depositId, reason }, token)
+}
+
+export async function getDeposits(token: string, status?: 'pending' | 'success' | 'failed') {
+  const query = status ? `?status=${status}` : ''
+  return api.get(`/admin/deposits${query}`, token)
+}
+
+// ===== WITHDRAWAL APIs =====
+
+export async function createWithdrawal(
+  token: string,
+  data: {
+    amount: number
+    bankName: string
+    accountNumber: string
+    accountHolder: string
+    note?: string
+  }
+) {
+  return api.post('/admin/withdrawals', data, token)
 }
 
 export async function approveWithdrawal(token: string, withdrawalId: string, note?: string) {
-  return api.put(`/payment/withdrawal/${withdrawalId}/approve`, { withdrawalId, note }, token)
+  return api.post('/admin/withdrawals/approve', { withdrawalId, note }, token)
 }
 
 export async function rejectWithdrawal(token: string, withdrawalId: string, reason: string) {
-  return api.put(`/payment/withdrawal/${withdrawalId}/reject`, { withdrawalId, reason }, token)
+  return api.post('/admin/withdrawals/reject', { withdrawalId, reason }, token)
+}
+
+export async function getWithdrawals(token: string, status?: 'pending' | 'success' | 'failed') {
+  const query = status ? `?status=${status}` : ''
+  return api.get(`/admin/withdrawals${query}`, token)
 }
