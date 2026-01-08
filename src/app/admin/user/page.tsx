@@ -252,7 +252,7 @@ export default function UserManagementPage() {
             <div>
               <Label className="text-gray-300">Người dùng: {filteredUsers.find(u => u.id === selectedUserId)?.username}</Label>
               <p className="text-sm text-gray-400 mt-1">
-                Số dư hiện tại: {(filteredUsers.find(u => u.id === selectedUserId)?.balance || 0 / 1000).toFixed(0)}K
+                Số dư hiện tại: {((filteredUsers.find(u => u.id === selectedUserId)?.balance || 0) / 1000).toFixed(0)}K
               </p>
             </div>
             <div>
