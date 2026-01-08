@@ -19,7 +19,6 @@ interface User {
 }
 
 export default function UserManagementPage() {
-  const [token, setToken] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,17 +31,13 @@ export default function UserManagementPage() {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    if (savedToken) {
-      setToken(savedToken);
-      loadUsers(savedToken, 1);
-    }
+    loadUsers(1);
   }, []);
 
-  const loadUsers = async (authToken: string, page: number) => {
+  const loadUsers = async (page: number) => {
     try {
       setLoading(true);
-      const response = await AdminApi.getUsers(authToken, page, itemsPerPage);
+      const response = await AdminApi.getUsers(page, itemsPerPage);
       setUsers(response.users || []);
       setTotalPages(response.totalPages || 1);
       setCurrentPage(page);
@@ -55,16 +50,14 @@ export default function UserManagementPage() {
   };
 
   const handleSearch = async () => {
-    if (!token || !searchQuery.trim()) {
-      if (token) {
-        loadUsers(token, 1);
-      }
+    if (!searchQuery.trim()) {
+      loadUsers(1);
       return;
     }
 
     try {
       setLoading(true);
-      const response = await AdminApi.getUsers(token, 1, itemsPerPage);
+      const response = await AdminApi.getUsers(1, itemsPerPage);
       const filtered = (response.users || []).filter((user: User) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -80,19 +73,18 @@ export default function UserManagementPage() {
   };
 
   const handleToggleStatus = async (userId: string) => {
-    if (!token) return;
     try {
-      await AdminApi.toggleUserStatus(token, userId);
+      await AdminApi.toggleUserStatus(userId);
       toast.success('Cập nhật trạng thái thành công');
-      loadUsers(token, currentPage);
+      loadUsers(currentPage);
     } catch (error) {
       toast.error('Lỗi khi cập nhật trạng thái');
     }
   };
 
   const handleAdjustBalance = async () => {
-    if (!token || !selectedUserId) return;
-    
+    if (!selectedUserId) return;
+
     const amount = parseFloat(adjustAmount);
     if (isNaN(amount)) {
       toast.error('Vui lòng nhập số tiền hợp lệ');
@@ -101,11 +93,11 @@ export default function UserManagementPage() {
 
     try {
       setIsAdjusting(true);
-      await AdminApi.adjustUserBalance(token, selectedUserId, amount);
+      await AdminApi.adjustUserBalance(selectedUserId, amount);
       toast.success('Điều chỉnh số dư thành công');
       setSelectedUserId(null);
       setAdjustAmount('0');
-      loadUsers(token, currentPage);
+      loadUsers(currentPage);
     } catch (error) {
       toast.error('Lỗi khi điều chỉnh số dư');
     } finally {
@@ -218,10 +210,10 @@ export default function UserManagementPage() {
           )}
 
           {/* Pagination */}
-          {totalPages > 1 && token && (
+          {totalPages > 1 && (
             <div className="flex items-center justify-center gap-4 mt-6">
               <Button
-                onClick={() => loadUsers(token, currentPage - 1)}
+                onClick={() => loadUsers(currentPage - 1)}
                 disabled={currentPage === 1}
                 variant="outline"
               >
@@ -231,7 +223,7 @@ export default function UserManagementPage() {
                 Trang {currentPage} / {totalPages}
               </span>
               <Button
-                onClick={() => loadUsers(token, currentPage + 1)}
+                onClick={() => loadUsers(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 variant="outline"
               >

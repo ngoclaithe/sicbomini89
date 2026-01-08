@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { connectChatSocket, disconnectChatSocket, getChatSocket } from "@/lib/chatSocket";
 import { Send, MessageCircle, X } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserStore } from "@/store/useUserStore";
 
 interface ChatMessage {
   id: string;
@@ -18,39 +20,23 @@ export const ChatWidget: React.FC = () => {
   const [input, setInput] = useState("");
   const [online, setOnline] = useState(0);
   const pathname = usePathname();
-  const [token, setToken] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false);
-
-  const username = useMemo(() => {
-    try {
-      const u = localStorage.getItem("user");
-      if (u) return JSON.parse(u).username || "Khách";
-    } catch {}
-    return "Khách";
-  }, []);
-
+  const { isAuthenticated } = useAuth();
+  const user = useUserStore((state) => state.user);
   const [allowed, setAllowed] = useState<boolean>(false);
 
-  // Check token and auth status on mount and when dependencies change
-  useEffect(() => {
-    setIsClient(true);
-    const storedToken = localStorage.getItem('token');
-    setToken(storedToken);
-  }, []);
+  const username = user?.username || "Khách";
 
   // Enable/disable chat based on auth status and page
   useEffect(() => {
-    if (!isClient) return;
-
-    // Disable chat if no token (user not logged in) or on admin pages
-    if (!token || pathname?.startsWith('/admin')) {
+    // Disable chat if not authenticated or on admin pages
+    if (!isAuthenticated || pathname?.startsWith('/admin')) {
       setAllowed(false);
       disconnectChatSocket();
       return;
     }
 
     setAllowed(true);
-  }, [token, pathname, isClient]);
+  }, [isAuthenticated, pathname]);
 
   useEffect(() => {
     // Only setup socket if chat is allowed

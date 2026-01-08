@@ -1,50 +1,61 @@
 "use client";
 
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import * as Auth from '@/lib/auth'
-
-type User = {
-  id: string
-  username: string
-  [key: string]: any
-}
+import { create } from 'zustand';
+import * as Auth from '@/lib/auth';
+import { useUserStore } from '@/store/useUserStore';
 
 type AuthState = {
-  token: string | null
-  user: User | null
-  login: (username: string, password: string) => Promise<void>
-  register: (username: string, password: string) => Promise<void>
-  getMe: () => Promise<void>
-  logout: () => void
-}
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  login: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
+};
 
-export const useAuth = create<AuthState>()(
-  persist(
-    (set, get) => ({
-      token: null,
-      user: null,
-      async login(username, password) {
-        const data = await Auth.login(username, password)
-        set({ token: data.access_token || data.token || null, user: data.user || null })
-      },
-      async register(username, password) {
-        const data = await Auth.register(username, password)
-        set({ token: data.access_token || data.token || null, user: data.user || null })
-      },
-      async getMe() {
-        const token = get().token
-        if (!token) return
-        const data = await Auth.getMe(token)
-        set({ user: data })
-      },
-      logout() {
-        set({ token: null, user: null })
-      },
-    }),
-    {
-      name: 'auth-store',
-      partialize: (state) => ({ token: state.token, user: state.user }),
+export const useAuth = create<AuthState>()((set, get) => ({
+  isLoading: false,
+  isAuthenticated: false,
+
+  async login(username, password) {
+    set({ isLoading: true });
+    try {
+      const data = await Auth.login(username, password);
+      useUserStore.getState().setUser(data.user);
+      set({ isAuthenticated: true });
+    } finally {
+      set({ isLoading: false });
     }
-  )
-)
+  },
+
+  async register(username, password) {
+    set({ isLoading: true });
+    try {
+      const data = await Auth.register(username, password);
+      useUserStore.getState().setUser(data.user);
+      set({ isAuthenticated: true });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  async logout() {
+    await Auth.logout();
+    useUserStore.getState().clearUser();
+    set({ isAuthenticated: false });
+  },
+
+  async checkAuth() {
+    set({ isLoading: true });
+    try {
+      const user = await Auth.getMe();
+      useUserStore.getState().setUser(user);
+      set({ isAuthenticated: true });
+    } catch (error) {
+      useUserStore.getState().clearUser();
+      set({ isAuthenticated: false });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+}));

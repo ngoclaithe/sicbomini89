@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import {
   LayoutDashboard,
   Users,
@@ -14,6 +13,8 @@ import {
   Menu,
   X,
 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserStore } from '@/store/useUserStore';
 
 const menuItems = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
@@ -28,48 +29,49 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { isAuthenticated, isLoading, checkAuth, logout } = useAuth();
+  const user = useUserStore((state) => state.user);
+  const isAdmin = useUserStore((state) => state.isAdmin());
+  const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
-  // Check if current path is login page
   const isLoginPage = pathname === '/admin/login';
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
+    if (isLoginPage) return;
 
-    // Allow login page without token
-    if (isLoginPage) {
-      return;
-    }
+    checkAuth();
+  }, [isLoginPage]);
 
-    // Require token for other admin pages
-    if (!savedToken || !savedUser) {
+  useEffect(() => {
+    if (isLoginPage) return;
+
+    if (!isLoading && !isAuthenticated) {
       router.push('/admin/login');
       return;
     }
 
-    setToken(savedToken);
-    setUser(JSON.parse(savedUser));
-  }, [router, isLoginPage]);
+    if (!isLoading && isAuthenticated && !isAdmin) {
+      router.push('/');
+    }
+  }, [isLoading, isAuthenticated, isAdmin, router, isLoginPage]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    await logout();
     router.push('/admin/login');
   };
 
-  // Show login page without sidebar
   if (isLoginPage) {
     return <>{children}</>;
   }
 
-  // Require token for other pages
-  if (!token || !user) {
-    return null;
+  if (isLoading || !isAuthenticated || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white text-xl">Đang tải...</div>
+      </div>
+    );
   }
 
   return (

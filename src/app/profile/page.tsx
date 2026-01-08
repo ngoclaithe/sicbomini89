@@ -8,33 +8,49 @@ import { useToast } from '@/components/ui/use-toast'
 import { formatCurrency } from '@/lib/utils'
 import * as WalletApi from '@/lib/wallet'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
+import { useUserStore } from '@/store/useUserStore'
 
 export default function ProfilePage() {
-  const [token, setToken] = useState<string | null>(null)
-  const [user, setUser] = useState<any>(null)
+  const { isAuthenticated, isLoading, checkAuth } = useAuth()
+  const user = useUserStore((state) => state.user)
   const [balance, setBalance] = useState<number>(0)
   const { toast } = useToast()
   const router = useRouter()
 
   useEffect(() => {
-    const t = localStorage.getItem('token')
-    const u = localStorage.getItem('user')
-    if (!t || !u) {
+    checkAuth()
+  }, [])
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
       router.push('/')
       return
     }
-    setToken(t)
-    try { setUser(JSON.parse(u)) } catch {}
-    refreshBalance(t)
-  }, [router])
+    if (isAuthenticated) {
+      refreshBalance()
+    }
+  }, [isLoading, isAuthenticated, router])
 
-  const refreshBalance = async (t: string) => {
+  const refreshBalance = async () => {
     try {
-      const bal = await WalletApi.getBalance(t)
+      const bal = await WalletApi.getBalance()
       setBalance(bal)
     } catch (e) {
       toast({ title: 'Lỗi', description: 'Không tải được số dư', variant: 'destructive' })
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="text-white text-xl">Đang tải...</div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated || !user) {
+    return null
   }
 
   return (

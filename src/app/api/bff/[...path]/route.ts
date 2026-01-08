@@ -11,10 +11,18 @@ async function proxy(req: NextRequest, { params }: { params: { path: string[] } 
   headers.delete('host')
   headers.delete('accept-encoding')
 
+  // Forward cookies from client
+  const cookies = req.cookies.getAll()
+  if (cookies.length > 0) {
+    const cookieHeader = cookies.map(c => `${c.name}=${c.value}`).join('; ')
+    headers.set('cookie', cookieHeader)
+  }
+
   const init: RequestInit = {
     method: req.method,
     headers,
     cache: 'no-store',
+    credentials: 'include',
   }
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -30,13 +38,23 @@ async function proxy(req: NextRequest, { params }: { params: { path: string[] } 
     resHeaders.delete('transfer-encoding')
     resHeaders.set('cache-control', 'no-store')
 
+    // Forward set-cookie headers
+    const setCookies = res.headers.get('set-cookie')
+
     const data = await res.arrayBuffer()
 
-    return new NextResponse(data, {
+    const response = new NextResponse(data, {
       status: res.status,
       statusText: res.statusText,
       headers: resHeaders,
     })
+
+    // Set cookies in client response
+    if (setCookies) {
+      response.headers.set('set-cookie', setCookies)
+    }
+
+    return response
   } catch (err: any) {
     return NextResponse.json(
       { message: 'BFF proxy error', error: err?.message || 'Unknown error' },

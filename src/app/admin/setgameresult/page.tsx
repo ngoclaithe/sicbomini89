@@ -10,17 +10,9 @@ import { toast } from 'react-hot-toast';
 import { Dice5, Dice6 } from 'lucide-react';
 
 export default function SetGameResultPage() {
-  const [token, setToken] = useState<string | null>(null);
   const [diceResults, setDiceResults] = useState<string[]>(['', '', '']);
   const [loading, setLoading] = useState(false);
   const [selectedDice, setSelectedDice] = useState<number | null>(null);
-
-  React.useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    if (savedToken) {
-      setToken(savedToken);
-    }
-  }, []);
 
   const handleDiceInputChange = (index: number, value: string) => {
     const numValue = value === '' ? '' : String(parseInt(value, 10) || '');
@@ -39,11 +31,6 @@ export default function SetGameResultPage() {
   };
 
   const handleSetResult = async () => {
-    if (!token) {
-      toast.error('Vui lòng đăng nhập lại');
-      return;
-    }
-
     if (diceResults.some(r => r === '')) {
       toast.error('Vui lòng nhập kết quả cho cả 3 con xúc xắc');
       return;
@@ -57,7 +44,7 @@ export default function SetGameResultPage() {
 
     try {
       setLoading(true);
-      await AdminApi.setGameResult(token, results);
+      await AdminApi.setGameResult(results);
       toast.success('Kết quả trò chơi đã được đặt thành công');
       setDiceResults(['', '', '']);
     } catch (error) {

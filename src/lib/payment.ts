@@ -61,28 +61,26 @@ export interface WithdrawalHistory {
 }
 
 // User endpoints
-export async function getPaymentInfos(token: string): Promise<PaymentInfo[]> {
-  return api.get('/payment/infos', token);
+export async function getPaymentInfos(): Promise<PaymentInfo[]> {
+  return api.get('/payment/infos');
 }
 
 export async function createDeposit(
-  deposit: DepositRequest,
-  token: string
+  deposit: DepositRequest
 ): Promise<DepositResponse> {
-  return api.post('/payment/deposit/create', deposit, token);
+  return api.post('/payment/deposit/create', deposit);
 }
 
-export async function getDepositHistory(token: string): Promise<DepositHistory[]> {
-  return api.get('/payment/deposits/user', token);
+export async function getDepositHistory(): Promise<DepositHistory[]> {
+  return api.get('/payment/deposits/user');
 }
 
 export async function createWithdrawal(
-  withdrawal: WithdrawalRequest,
-  token: string
+  withdrawal: WithdrawalRequest
 ): Promise<WithdrawalResponse> {
-  return api.post('/payment/withdrawal/create', withdrawal, token);
+  return api.post('/payment/withdrawal/create', withdrawal);
 }
 
-export async function getWithdrawalHistory(token: string): Promise<WithdrawalHistory[]> {
-  return api.get('/payment/withdrawals/user', token);
+export async function getWithdrawalHistory(): Promise<WithdrawalHistory[]> {
+  return api.get('/payment/withdrawals/user');
 }

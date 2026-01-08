@@ -8,6 +8,10 @@ export async function register(username: string, password: string) {
   return api.post('/auth/register', { username, password })
 }
 
-export async function getMe(token: string) {
-  return api.get('/auth/me', token)
+export async function logout() {
+  return api.post('/auth/logout', {})
+}
+
+export async function getMe() {
+  return api.get('/auth/me')
 }

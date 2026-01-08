@@ -6,32 +6,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import * as AdminAuth from '@/lib/admin';
 import { useToast } from '@/components/ui/use-toast';
 import { Shield, Lock } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { login, isLoading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
-      const data = await AdminAuth.adminLogin(username, password);
+      await login(username, password);
 
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
       toast({
         title: "Thành công!",
         description: "Đăng nhập admin thành công",
       });
-      
+
       router.push('/admin/dashboard');
     } catch (error: any) {
       toast({
@@ -39,8 +35,6 @@ export default function AdminLoginPage() {
         description: error.message || "Sai tên đăng nhập hoặc mật khẩu",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -91,12 +85,12 @@ export default function AdminLoginPage() {
                 className="h-11"
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full h-11 text-base bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-              disabled={loading}
+              disabled={isLoading}
             >
-              {loading ? (
+              {isLoading ? (
                 <span className="flex items-center gap-2">
                   <Lock className="w-4 h-4 animate-spin" />
                   Đang xác thực...

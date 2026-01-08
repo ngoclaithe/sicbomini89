@@ -35,7 +35,6 @@ interface Withdrawal {
 }
 
 export default function PaymentManagementPage() {
-  const [token, setToken] = useState<string | null>(null);
   const [tab, setTab] = useState<'bankInfo' | 'deposits' | 'withdrawals'>('bankInfo');
 
   // Bank Info states
@@ -65,29 +64,20 @@ export default function PaymentManagementPage() {
   const [withdrawalNote, setWithdrawalNote] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    if (savedToken) {
-      setToken(savedToken);
+    if (tab === 'bankInfo') {
+      loadPaymentInfos();
+    } else if (tab === 'deposits') {
+      loadDeposits();
+    } else {
+      loadWithdrawals();
     }
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      if (tab === 'bankInfo') {
-        loadPaymentInfos(token);
-      } else if (tab === 'deposits') {
-        loadDeposits(token);
-      } else {
-        loadWithdrawals(token);
-      }
-    }
-  }, [token, tab]);
+  }, [tab]);
 
   // Bank Info Functions
-  const loadPaymentInfos = async (authToken: string) => {
+  const loadPaymentInfos = async () => {
     try {
       setLoadingBankInfo(true);
-      const infos = await PaymentApi.getPaymentInfos(authToken);
+      const infos = await PaymentApi.getPaymentInfos();
       setPaymentInfos(infos);
     } catch (error) {
       console.error('Error loading payment infos:', error);
@@ -98,8 +88,6 @@ export default function PaymentManagementPage() {
   };
 
   const handleCreatePaymentInfo = async () => {
-    if (!token) return;
-
     if (!newBankInfo.bankName.trim() || !newBankInfo.accountNumber.trim() || !newBankInfo.accountHolder.trim()) {
       toast.error('Vui lòng điền đầy đủ thông tin');
       return;
@@ -107,11 +95,11 @@ export default function PaymentManagementPage() {
 
     try {
       setCreatingBankInfo(true);
-      await AdminApi.createPaymentInfo(token, newBankInfo);
+      await AdminApi.createPaymentInfo(newBankInfo);
       toast.success('Tài khoản ngân hàng đã được thêm thành công');
       setNewBankInfo({ bankName: '', accountNumber: '', accountHolder: '' });
       setShowBankInfoModal(false);
-      loadPaymentInfos(token);
+      loadPaymentInfos();
     } catch (error) {
       console.error('Error creating payment info:', error);
       toast.error('Lỗi khi thêm tài khoản ngân hàng');
@@ -121,18 +109,16 @@ export default function PaymentManagementPage() {
   };
 
   const handleTogglePaymentInfo = async (infoId: string, isCurrentlyActive: boolean) => {
-    if (!token) return;
-
     try {
       setTogglingInfoId(infoId);
       if (isCurrentlyActive) {
-        await AdminApi.deactivateInfoPayment(token, infoId);
+        await AdminApi.deactivateInfoPayment(infoId);
         toast.success('Đã vô hiệu hóa tài khoản ngân hàng');
       } else {
-        await AdminApi.activateInfoPayment(token, infoId);
+        await AdminApi.activateInfoPayment(infoId);
         toast.success('Đã kích hoạt tài khoản ngân hàng');
       }
-      loadPaymentInfos(token);
+      loadPaymentInfos();
     } catch (error) {
       console.error('Error toggling payment info:', error);
       toast.error('Lỗi khi thay đổi trạng thái tài khoản');
@@ -142,10 +128,10 @@ export default function PaymentManagementPage() {
   };
 
   // Deposit Functions
-  const loadDeposits = async (authToken: string) => {
+  const loadDeposits = async () => {
     try {
       setLoadingDeposits(true);
-      const data = await AdminApi.getDeposits(authToken);
+      const data = await AdminApi.getDeposits();
       setDeposits(data);
     } catch (error) {
       console.error('Error loading deposits:', error);
@@ -156,18 +142,16 @@ export default function PaymentManagementPage() {
   };
 
   const handleApproveDeposit = async (depositId: string) => {
-    if (!token) return;
-
     try {
       setApprovingDeposit(depositId);
-      await AdminApi.approveDeposit(token, depositId, depositNote[depositId] || undefined);
+      await AdminApi.approveDeposit(depositId, depositNote[depositId] || undefined);
       toast.success('Duyệt nạp tiền thành công');
       setDepositNote(prev => {
         const newNote = { ...prev };
         delete newNote[depositId];
         return newNote;
       });
-      loadDeposits(token);
+      loadDeposits();
     } catch (error) {
       console.error('Error approving deposit:', error);
       toast.error('Lỗi khi duyệt nạp tiền');
@@ -177,7 +161,6 @@ export default function PaymentManagementPage() {
   };
 
   const handleRejectDeposit = async (depositId: string) => {
-    if (!token) return;
     const reason = depositNote[depositId];
     if (!reason?.trim()) {
       toast.error('Vui lòng nhập lý do từ chối');
@@ -186,14 +169,14 @@ export default function PaymentManagementPage() {
 
     try {
       setRejectingDeposit(depositId);
-      await AdminApi.rejectDeposit(token, depositId, reason);
+      await AdminApi.rejectDeposit(depositId, reason);
       toast.success('Từ chối nạp tiền thành công');
       setDepositNote(prev => {
         const newNote = { ...prev };
         delete newNote[depositId];
         return newNote;
       });
-      loadDeposits(token);
+      loadDeposits();
     } catch (error) {
       console.error('Error rejecting deposit:', error);
       toast.error('Lỗi khi từ chối nạp tiền');
@@ -203,10 +186,10 @@ export default function PaymentManagementPage() {
   };
 
   // Withdrawal Functions
-  const loadWithdrawals = async (authToken: string) => {
+  const loadWithdrawals = async () => {
     try {
       setLoadingWithdrawals(true);
-      const data = await AdminApi.getWithdrawals(authToken);
+      const data = await AdminApi.getWithdrawals();
       setWithdrawals(data);
     } catch (error) {
       console.error('Error loading withdrawals:', error);
@@ -217,18 +200,16 @@ export default function PaymentManagementPage() {
   };
 
   const handleApproveWithdrawal = async (withdrawalId: string) => {
-    if (!token) return;
-
     try {
       setApprovingWithdrawal(withdrawalId);
-      await AdminApi.approveWithdrawal(token, withdrawalId, withdrawalNote[withdrawalId] || undefined);
+      await AdminApi.approveWithdrawal(withdrawalId, withdrawalNote[withdrawalId] || undefined);
       toast.success('Duyệt rút tiền thành công');
       setWithdrawalNote(prev => {
         const newNote = { ...prev };
         delete newNote[withdrawalId];
         return newNote;
       });
-      loadWithdrawals(token);
+      loadWithdrawals();
     } catch (error) {
       console.error('Error approving withdrawal:', error);
       toast.error('Lỗi khi duyệt rút tiền');
@@ -238,7 +219,6 @@ export default function PaymentManagementPage() {
   };
 
   const handleRejectWithdrawal = async (withdrawalId: string) => {
-    if (!token) return;
     const reason = withdrawalNote[withdrawalId];
     if (!reason?.trim()) {
       toast.error('Vui lòng nhập lý do từ chối');
@@ -247,14 +227,14 @@ export default function PaymentManagementPage() {
 
     try {
       setRejectingWithdrawal(withdrawalId);
-      await AdminApi.rejectWithdrawal(token, withdrawalId, reason);
+      await AdminApi.rejectWithdrawal(withdrawalId, reason);
       toast.success('Từ chối rút tiền thành công');
       setWithdrawalNote(prev => {
         const newNote = { ...prev };
         delete newNote[withdrawalId];
         return newNote;
       });
-      loadWithdrawals(token);
+      loadWithdrawals();
     } catch (error) {
       console.error('Error rejecting withdrawal:', error);
       toast.error('Lỗi khi từ chối rút tiền');
@@ -264,13 +244,12 @@ export default function PaymentManagementPage() {
   };
 
   const handleRefresh = () => {
-    if (!token) return;
     if (tab === 'bankInfo') {
-      loadPaymentInfos(token);
+      loadPaymentInfos();
     } else if (tab === 'deposits') {
-      loadDeposits(token);
+      loadDeposits();
     } else {
-      loadWithdrawals(token);
+      loadWithdrawals();
     }
   };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,23 +14,11 @@ interface GameConfig {
 }
 
 export default function GameConfigPage() {
-  const [token, setToken] = useState<string | null>(null);
   const [bettingTime, setBettingTime] = useState('30');
   const [winMultiplier, setWinMultiplier] = useState('2');
   const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    if (savedToken) {
-      setToken(savedToken);
-      setIsLoading(false);
-    }
-  }, []);
 
   const handleSaveConfig = async () => {
-    if (!token) return;
-
     const bettingTimeNum = parseFloat(bettingTime);
     const winMultiplierNum = parseFloat(winMultiplier);
 
@@ -46,7 +34,7 @@ export default function GameConfigPage() {
 
     try {
       setLoading(true);
-      await AdminApi.updateGameConfig(token, {
+      await AdminApi.updateGameConfig({
         bettingTime: bettingTimeNum,
         winMultiplier: winMultiplierNum,
       });
@@ -58,14 +46,6 @@ export default function GameConfigPage() {
       setLoading(false);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <div className="text-gray-400">Đang tải cấu hình...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">

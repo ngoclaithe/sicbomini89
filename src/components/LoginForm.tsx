@@ -5,47 +5,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import * as Auth from '@/lib/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/components/ui/use-toast';
 import { Dices } from 'lucide-react';
 
 interface LoginFormProps {
-  onLogin: (token: string, user: any) => void;
+  onLogin: () => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { login, register, isLoading } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
-      const data = isLogin
-        ? await Auth.login(username, password)
-        : await Auth.register(username, password)
-      
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      // toast({
-      //   title: "Thành công!",
-      //   description: isLogin ? "Đăng nhập thành công" : "Đăng ký thành công",
-      // });
-      
-      onLogin(data.access_token, data.user);
+      if (isLogin) {
+        await login(username, password);
+      } else {
+        await register(username, password);
+      }
+      onLogin();
     } catch (error: any) {
       toast({
         title: "Lỗi",
         description: error.message,
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -92,12 +82,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                 className="h-11"
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full h-11 text-base"
-              disabled={loading}
+              disabled={isLoading}
             >
-              {loading ? 'Đang xử lý...' : (isLogin ? 'Đăng nhập' : 'Đăng ký')}
+              {isLoading ? 'Đang xử lý...' : (isLogin ? 'Đăng nhập' : 'Đăng ký')}
             </Button>
           </form>
           <div className="mt-4 text-center">

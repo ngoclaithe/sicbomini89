@@ -15,6 +15,7 @@ export const api = {
       headers,
       body: JSON.stringify(data),
       cache: 'no-store',
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -39,6 +40,7 @@ export const api = {
     const response = await fetch(`${BFF_BASE}${endpoint}`, {
       headers,
       cache: 'no-store',
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -67,6 +69,7 @@ export const api = {
       headers,
       body: JSON.stringify(data),
       cache: 'no-store',
+      credentials: 'include',
     });
 
     if (!response.ok) {

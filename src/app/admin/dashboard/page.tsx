@@ -38,7 +38,6 @@ interface RecentActivity {
 }
 
 export default function DashboardPage() {
-  const [token, setToken] = useState<string | null>(null);
   const [stats, setStats] = useState<DashboardStats>({
     users: { total: 0, active: 0, inactive: 0 },
     games: { totalSessions: 0, completedSessions: 0, totalBets: 0 },
@@ -48,19 +47,15 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    if (savedToken) {
-      setToken(savedToken);
-      loadDashboardData(savedToken);
-    }
+    loadDashboardData();
   }, []);
 
-  const loadDashboardData = async (authToken: string) => {
+  const loadDashboardData = async () => {
     try {
       setLoading(true);
       const [statsData, activityData] = await Promise.all([
-        AdminApi.getStatistics(authToken),
-        AdminApi.getRecentActivity(authToken, 10),
+        AdminApi.getStatistics(),
+        AdminApi.getRecentActivity(10),
       ]);
 
       setStats(statsData);
@@ -73,9 +68,7 @@ export default function DashboardPage() {
   };
 
   const refreshData = () => {
-    if (token) {
-      loadDashboardData(token);
-    }
+    loadDashboardData();
   };
 
   return (
