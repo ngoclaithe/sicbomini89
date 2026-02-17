@@ -12,10 +12,10 @@ export async function getSessions(limit: number, token?: string) {
   return api.get(`/history/sessions?limit=${limit}`, token)
 }
 
-export async function getRecentHistory(limit: number, token: string) {
+export async function getRecentHistory(limit: number, token?: string) {
   return api.get(`/history?limit=${limit}`, token)
 }
 
-export async function getStatistics(token: string) {
+export async function getStatistics(token?: string) {
   return api.get(`/history/statistics`, token)
 }

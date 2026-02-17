@@ -14,7 +14,6 @@ import { CreditCard, DollarSign, Loader2, Copy, Check, QrCode, ArrowLeft } from 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  token: string;
   balance: number;
   onSuccess: () => void;
 }
@@ -25,7 +24,6 @@ type DepositStep = 'form' | 'qr';
 export const PaymentModal: React.FC<PaymentModalProps> = ({
   isOpen,
   onClose,
-  token,
   balance,
   onSuccess,
 }) => {
@@ -59,7 +57,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const loadPaymentInfos = async () => {
     setIsLoadingBanks(true);
     try {
-      const infos = await PaymentApi.getPaymentInfos(token);
+      const infos = await PaymentApi.getPaymentInfos();
       setPaymentInfos(infos);
       if (infos.length > 0) {
         setSelectedPaymentInfoId(infos[0].id);
@@ -122,8 +120,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           amount,
           paymentInfoId: selectedPaymentInfoId,
           note: depositNote || undefined,
-        },
-        token
+        }
       );
 
       setDepositResponse(response);
@@ -200,8 +197,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           bankName: bankName.trim(),
           accountNumber: accountNumber.trim(),
           accountHolder: accountHolder.trim(),
-        },
-        token
+        }
       );
 
       toast({
@@ -266,22 +262,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             <div className="flex gap-2 border-b border-border">
               <button
                 onClick={() => setActiveTab('deposit')}
-                className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${
-                  activeTab === 'deposit'
+                className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${activeTab === 'deposit'
                     ? 'border-primary text-primary'
                     : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
+                  }`}
               >
                 <CreditCard className="w-4 h-4 inline mr-2" />
                 Nạp tiền
               </button>
               <button
                 onClick={() => setActiveTab('withdrawal')}
-                className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${
-                  activeTab === 'withdrawal'
+                className={`pb-2 px-4 font-semibold border-b-2 transition-colors ${activeTab === 'withdrawal'
                     ? 'border-primary text-primary'
                     : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
+                  }`}
               >
                 <DollarSign className="w-4 h-4 inline mr-2" />
                 Rút tiền
@@ -311,7 +305,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                       className="w-64 h-64"
                     />
                   </div>
-                  
+
                   <div className="w-full space-y-3">
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Số tiền</p>

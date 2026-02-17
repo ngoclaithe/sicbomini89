@@ -7,7 +7,7 @@ import { LoginForm } from '@/components/LoginForm';
 export default function LoginPage() {
   const router = useRouter();
 
-  const handleLogin = (token: string, user: any) => {
+  const handleLogin = () => {
     router.push('/');
   };
 

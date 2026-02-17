@@ -8,7 +8,7 @@ import { History, TrendingUp, TrendingDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface GameHistoryProps {
-  token: string;
+  token?: string;
 }
 
 export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
@@ -84,11 +84,10 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className={`p-3 sm:p-4 rounded-lg border-2 ${
-                  item.isWin
+                className={`p-3 sm:p-4 rounded-lg border-2 ${item.isWin
                     ? 'bg-green-900/20 border-green-500/30'
                     : 'bg-red-900/20 border-red-500/30'
-                }`}
+                  }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
                   <div className="flex items-center gap-3">
