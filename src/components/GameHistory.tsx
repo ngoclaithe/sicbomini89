@@ -22,7 +22,7 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
 
   const loadHistory = async () => {
     try {
-      const data = await HistoryApi.getRecentHistory(10, token);
+      const data = await HistoryApi.getRecentHistory(10);
       setHistory(data);
     } catch (error) {
       console.error('Error loading history:', error);
@@ -31,7 +31,7 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
 
   const loadStats = async () => {
     try {
-      const data = await HistoryApi.getStatistics(token);
+      const data = await HistoryApi.getStatistics();
       setStats(data);
     } catch (error) {
       console.error('Error loading stats:', error);
@@ -85,8 +85,8 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 }}
                 className={`p-3 sm:p-4 rounded-lg border-2 ${item.isWin
-                    ? 'bg-green-900/20 border-green-500/30'
-                    : 'bg-red-900/20 border-red-500/30'
+                  ? 'bg-green-900/20 border-green-500/30'
+                  : 'bg-red-900/20 border-red-500/30'
                   }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">

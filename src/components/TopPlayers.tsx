@@ -39,7 +39,7 @@ export const TopPlayers: React.FC<TopPlayersProps> = ({ isOpen, onClose, token }
   const loadTopWinners = async () => {
     setLoading(true);
     try {
-      const winnersRes = await HistoryApi.getTopWinnersToday(10, token);
+      const winnersRes = await HistoryApi.getTopWinnersToday(10);
       setTopWinners(winnersRes);
     } catch (error) {
       toast({

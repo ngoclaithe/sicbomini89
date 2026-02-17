@@ -49,8 +49,8 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
     setLoading(true);
     try {
       const [diceRes, sessionsRes] = await Promise.all([
-        HistoryApi.getDiceHistory(50, token),
-        HistoryApi.getSessions(100, token),
+        HistoryApi.getDiceHistory(50),
+        HistoryApi.getSessions(100),
       ]);
 
       setDiceData(diceRes);
@@ -227,11 +227,10 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         onClick={() => toggleDice('dice1')}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${
-                          visibleDice.dice1
+                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${visibleDice.dice1
                             ? 'bg-yellow-500/20 border border-yellow-400'
                             : 'bg-gray-800/50 border border-gray-600 opacity-50'
-                        }`}
+                          }`}
                       >
                         <div className="w-4 h-1 bg-yellow-400 rounded"></div>
                         <span className={visibleDice.dice1 ? 'text-yellow-400' : 'text-gray-400'}>Xúc xắc 1</span>
@@ -240,11 +239,10 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         onClick={() => toggleDice('dice2')}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${
-                          visibleDice.dice2
+                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${visibleDice.dice2
                             ? 'bg-red-500/20 border border-red-400'
                             : 'bg-gray-800/50 border border-gray-600 opacity-50'
-                        }`}
+                          }`}
                       >
                         <div className="w-4 h-1 bg-red-500 rounded"></div>
                         <span className={visibleDice.dice2 ? 'text-red-400' : 'text-gray-400'}>Xúc xắc 2</span>
@@ -253,11 +251,10 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         onClick={() => toggleDice('dice3')}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${
-                          visibleDice.dice3
+                        className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${visibleDice.dice3
                             ? 'bg-blue-500/20 border border-blue-400'
                             : 'bg-gray-800/50 border border-gray-600 opacity-50'
-                        }`}
+                          }`}
                       >
                         <div className="w-4 h-1 bg-blue-500 rounded"></div>
                         <span className={visibleDice.dice3 ? 'text-blue-400' : 'text-gray-400'}>Xúc xắc 3</span>
@@ -301,9 +298,8 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                               return (
                                 <td
                                   key={colIdx}
-                                  className={`text-center py-2 px-2 font-bold text-xs ${
-                                    sess.result === 'tai' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
-                                  }`}
+                                  className={`text-center py-2 px-2 font-bold text-xs ${sess.result === 'tai' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
+                                    }`}
                                 >
                                   {sess.result === 'tai' ? 'T' : 'X'}
                                 </td>
