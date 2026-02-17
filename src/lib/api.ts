@@ -1,21 +1,15 @@
 const BFF_BASE = '/api/bff';
 
 export const api = {
-  async post(endpoint: string, data: any, token?: string) {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
+  async post(endpoint: string, data: any) {
     const response = await fetch(`${BFF_BASE}${endpoint}`, {
       method: 'POST',
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data),
       cache: 'no-store',
-      credentials: 'include',
+      credentials: 'include', // Automatically sends cookies
     });
 
     if (!response.ok) {
@@ -23,24 +17,17 @@ export const api = {
       try {
         const error = await response.json();
         message = error.message || message;
-      } catch {}
+      } catch { }
       throw new Error(message);
     }
 
     return response.json();
   },
 
-  async get(endpoint: string, token?: string) {
-    const headers: Record<string, string> = {};
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
+  async get(endpoint: string) {
     const response = await fetch(`${BFF_BASE}${endpoint}`, {
-      headers,
       cache: 'no-store',
-      credentials: 'include',
+      credentials: 'include', // Automatically sends cookies
     });
 
     if (!response.ok) {
@@ -48,28 +35,22 @@ export const api = {
       try {
         const error = await response.json();
         message = error.message || message;
-      } catch {}
+      } catch { }
       throw new Error(message);
     }
 
     return response.json();
   },
 
-  async put(endpoint: string, data: any, token?: string) {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
+  async put(endpoint: string, data: any) {
     const response = await fetch(`${BFF_BASE}${endpoint}`, {
       method: 'PUT',
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data),
       cache: 'no-store',
-      credentials: 'include',
+      credentials: 'include', // Automatically sends cookies
     });
 
     if (!response.ok) {
@@ -77,7 +58,7 @@ export const api = {
       try {
         const error = await response.json();
         message = error.message || message;
-      } catch {}
+      } catch { }
       throw new Error(message);
     }
 
