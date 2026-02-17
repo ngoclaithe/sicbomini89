@@ -42,7 +42,7 @@ export default function UserManagementPage() {
       setTotalPages(response.totalPages || 1);
       setCurrentPage(page);
     } catch (error) {
-      console.error('Error loading users:', error);
+
       toast.error('Lỗi khi tải danh sách người dùng');
     } finally {
       setLoading(false);
@@ -172,11 +172,10 @@ export default function UserManagementPage() {
                       </td>
                       <td className="py-3 px-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            user.status === 'active'
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === 'active'
                               ? 'bg-green-900/50 text-green-300'
                               : 'bg-red-900/50 text-red-300'
-                          }`}
+                            }`}
                         >
                           {user.status === 'active' ? 'Hoạt động' : 'Khóa'}
                         </span>

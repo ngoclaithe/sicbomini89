@@ -25,7 +25,7 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
       const data = await HistoryApi.getRecentHistory(10);
       setHistory(data);
     } catch (error) {
-      console.error('Error loading history:', error);
+
     }
   };
 
@@ -34,7 +34,7 @@ export const GameHistory: React.FC<GameHistoryProps> = ({ token }) => {
       const data = await HistoryApi.getStatistics();
       setStats(data);
     } catch (error) {
-      console.error('Error loading stats:', error);
+
     }
   };
 

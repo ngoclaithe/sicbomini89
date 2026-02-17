@@ -40,7 +40,7 @@ export default function GameConfigPage() {
       });
       toast.success('Cấu hình trò chơi đã được cập nhật thành công');
     } catch (error) {
-      console.error('Error updating config:', error);
+
       toast.error('Lỗi khi cập nhật cấu hình');
     } finally {
       setLoading(false);

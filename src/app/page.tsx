@@ -45,7 +45,7 @@ export default function Home() {
       const bal = await WalletApi.getBalance();
       setBalance(bal);
     } catch (error) {
-      console.error('Error loading balance:', error);
+
     }
   };
 

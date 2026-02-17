@@ -80,7 +80,7 @@ export default function PaymentManagementPage() {
       const infos = await PaymentApi.getPaymentInfos();
       setPaymentInfos(infos);
     } catch (error) {
-      console.error('Error loading payment infos:', error);
+
       toast.error('Lỗi khi tải thông tin tài khoản ngân hàng');
     } finally {
       setLoadingBankInfo(false);
@@ -101,7 +101,7 @@ export default function PaymentManagementPage() {
       setShowBankInfoModal(false);
       loadPaymentInfos();
     } catch (error) {
-      console.error('Error creating payment info:', error);
+
       toast.error('Lỗi khi thêm tài khoản ngân hàng');
     } finally {
       setCreatingBankInfo(false);
@@ -120,7 +120,7 @@ export default function PaymentManagementPage() {
       }
       loadPaymentInfos();
     } catch (error) {
-      console.error('Error toggling payment info:', error);
+
       toast.error('Lỗi khi thay đổi trạng thái tài khoản');
     } finally {
       setTogglingInfoId(null);
@@ -134,7 +134,7 @@ export default function PaymentManagementPage() {
       const data = await AdminApi.getDeposits();
       setDeposits(data);
     } catch (error) {
-      console.error('Error loading deposits:', error);
+
       toast.error('Lỗi khi tải danh sách nạp tiền');
     } finally {
       setLoadingDeposits(false);
@@ -153,7 +153,7 @@ export default function PaymentManagementPage() {
       });
       loadDeposits();
     } catch (error) {
-      console.error('Error approving deposit:', error);
+
       toast.error('Lỗi khi duyệt nạp tiền');
     } finally {
       setApprovingDeposit(null);
@@ -178,7 +178,7 @@ export default function PaymentManagementPage() {
       });
       loadDeposits();
     } catch (error) {
-      console.error('Error rejecting deposit:', error);
+
       toast.error('Lỗi khi từ chối nạp tiền');
     } finally {
       setRejectingDeposit(null);
@@ -192,7 +192,7 @@ export default function PaymentManagementPage() {
       const data = await AdminApi.getWithdrawals();
       setWithdrawals(data);
     } catch (error) {
-      console.error('Error loading withdrawals:', error);
+
       toast.error('Lỗi khi tải danh sách rút tiền');
     } finally {
       setLoadingWithdrawals(false);
@@ -211,7 +211,7 @@ export default function PaymentManagementPage() {
       });
       loadWithdrawals();
     } catch (error) {
-      console.error('Error approving withdrawal:', error);
+
       toast.error('Lỗi khi duyệt rút tiền');
     } finally {
       setApprovingWithdrawal(null);
@@ -236,7 +236,7 @@ export default function PaymentManagementPage() {
       });
       loadWithdrawals();
     } catch (error) {
-      console.error('Error rejecting withdrawal:', error);
+
       toast.error('Lỗi khi từ chối rút tiền');
     } finally {
       setRejectingWithdrawal(null);

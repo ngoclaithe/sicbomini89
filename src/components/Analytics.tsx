@@ -61,7 +61,7 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
         description: "Không thể tải thống kê",
         variant: "destructive",
       });
-      console.error('Error loading analytics:', error);
+
     } finally {
       setLoading(false);
     }
@@ -228,8 +228,8 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${visibleDice.dice1
-                            ? 'bg-yellow-500/20 border border-yellow-400'
-                            : 'bg-gray-800/50 border border-gray-600 opacity-50'
+                          ? 'bg-yellow-500/20 border border-yellow-400'
+                          : 'bg-gray-800/50 border border-gray-600 opacity-50'
                           }`}
                       >
                         <div className="w-4 h-1 bg-yellow-400 rounded"></div>
@@ -240,8 +240,8 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${visibleDice.dice2
-                            ? 'bg-red-500/20 border border-red-400'
-                            : 'bg-gray-800/50 border border-gray-600 opacity-50'
+                          ? 'bg-red-500/20 border border-red-400'
+                          : 'bg-gray-800/50 border border-gray-600 opacity-50'
                           }`}
                       >
                         <div className="w-4 h-1 bg-red-500 rounded"></div>
@@ -252,8 +252,8 @@ export const Analytics: React.FC<AnalyticsProps> = ({ isOpen, onClose, token }) 
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={`flex items-center gap-2 px-3 py-1 rounded transition-all ${visibleDice.dice3
-                            ? 'bg-blue-500/20 border border-blue-400'
-                            : 'bg-gray-800/50 border border-gray-600 opacity-50'
+                          ? 'bg-blue-500/20 border border-blue-400'
+                          : 'bg-gray-800/50 border border-gray-600 opacity-50'
                           }`}
                       >
                         <div className="w-4 h-1 bg-blue-500 rounded"></div>

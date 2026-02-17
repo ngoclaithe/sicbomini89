@@ -47,7 +47,7 @@ export const TopPlayers: React.FC<TopPlayersProps> = ({ isOpen, onClose, token }
         description: "Không thể tải danh sách người chơi dẫn đầu",
         variant: "destructive",
       });
-      console.error('Error loading top winners:', error);
+
     } finally {
       setLoading(false);
     }

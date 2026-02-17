@@ -48,7 +48,7 @@ export default function SetGameResultPage() {
       toast.success('Kết quả trò chơi đã được đặt thành công');
       setDiceResults(['', '', '']);
     } catch (error) {
-      console.error('Error setting game result:', error);
+
       toast.error('Lỗi khi đặt kết quả trò chơi');
     } finally {
       setLoading(false);

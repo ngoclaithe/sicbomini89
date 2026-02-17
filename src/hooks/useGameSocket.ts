@@ -37,7 +37,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     const socket = getSocket();
 
     const onSessionStart = (data: any) => {
-      console.log("🎲 [SESSION_START] New session:", data.sessionId, "Betting time:", data.bettingTime);
+
       setLastSessionId(data.sessionId);
       setSessionId(data.sessionId);
       setCountdown(data.bettingTime);
@@ -87,7 +87,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
     };
 
     const onBetPlaced = (data: any) => {
-      console.log("🎲 [BET_PLACED] Bet type:", data.bet, "Amount:", data.amount);
+
       onNotify({ title: "Đặt cược thành công!", description: `${String(data.bet).toUpperCase()} - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.amount)}` });
       onBalanceUpdate();
     };
@@ -116,7 +116,7 @@ export function useGameSocket({ onNotify, onBalanceUpdate }: UseGameSocketOption
   }, [onNotify, onBalanceUpdate]);
 
   const placeBet = (payload: { userId: string; bet: "tai" | "xiu" | "chan" | "le"; amount: number }) => {
-    console.log("🎲 [PLACE_BET] Sending to server:", payload);
+
     const socket = getSocket();
     socket.emit("placeBet", payload);
   };

@@ -61,7 +61,7 @@ export default function DashboardPage() {
       setStats(statsData);
       setRecentActivity(activityData);
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+
     } finally {
       setLoading(false);
     }
@@ -162,9 +162,8 @@ export default function DashboardPage() {
                     <tr key={activity.id} className="border-b border-gray-700 hover:bg-gray-700/50">
                       <td className="py-3 px-4 text-gray-200">{activity.username}</td>
                       <td className="py-3 px-4 text-gray-300 capitalize">
-                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                          activity.bet === 'tai' ? 'bg-red-900/50 text-red-300' : 'bg-blue-900/50 text-blue-300'
-                        }`}>
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${activity.bet === 'tai' ? 'bg-red-900/50 text-red-300' : 'bg-blue-900/50 text-blue-300'
+                          }`}>
                           {activity.bet === 'tai' ? 'Tài' : activity.bet === 'xiu' ? 'Xỉu' : 'Chẵn/Lẻ'}
                         </span>
                       </td>
@@ -172,16 +171,14 @@ export default function DashboardPage() {
                         {(parseFloat(activity.betAmount) / 1000).toFixed(0)}K
                       </td>
                       <td className="py-3 px-4 text-gray-300 capitalize">
-                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                          activity.result === 'tai' ? 'bg-red-900/50 text-red-300' : 'bg-blue-900/50 text-blue-300'
-                        }`}>
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${activity.result === 'tai' ? 'bg-red-900/50 text-red-300' : 'bg-blue-900/50 text-blue-300'
+                          }`}>
                           {activity.result === 'tai' ? 'Tài' : activity.result === 'xiu' ? 'Xỉu' : 'Chẵn/Lẻ'}
                         </span>
                       </td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                          activity.isWin ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'
-                        }`}>
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${activity.isWin ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'
+                          }`}>
                           {activity.isWin ? 'Thắng' : 'Thua'}
                         </span>
                       </td>
