@@ -12,7 +12,7 @@ export default function LoginPage() {
   const handleLogin = () => {
     const user = useUserStore.getState().user;
     if (user?.role === UserRole.ADMIN) {
-      router.push('/admin');
+      router.push('/admin-2026');
     } else {
       router.push('/');
     }

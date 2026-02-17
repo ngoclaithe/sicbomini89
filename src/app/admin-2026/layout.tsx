@@ -17,11 +17,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { useUserStore } from '@/store/useUserStore';
 
 const menuItems = [
-  { name: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
-  { name: 'Quản lý người dùng', icon: Users, href: '/admin/user' },
-  { name: 'Cấu hình game', icon: Settings, href: '/admin/config' },
-  { name: 'Điều chỉnh kết quả', icon: Dice5, href: '/admin/setgameresult' },
-  { name: 'Quản lý nạp/rút', icon: CreditCard, href: '/admin/payment' },
+  { name: 'Dashboard', icon: LayoutDashboard, href: '/admin-2026/dashboard' },
+  { name: 'Quản lý người dùng', icon: Users, href: '/admin-2026/user' },
+  { name: 'Cấu hình game', icon: Settings, href: '/admin-2026/config' },
+  { name: 'Điều chỉnh kết quả', icon: Dice5, href: '/admin-2026/setgameresult' },
+  { name: 'Quản lý nạp/rút', icon: CreditCard, href: '/admin-2026/payment' },
 ];
 
 export default function AdminLayout({
@@ -36,7 +36,7 @@ export default function AdminLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  const isLoginPage = pathname === '/admin/login';
+  const isLoginPage = pathname === '/admin-2026/login';
 
   useEffect(() => {
     if (isLoginPage) return;
@@ -48,7 +48,7 @@ export default function AdminLayout({
     if (isLoginPage) return;
 
     if (!isLoading && !isAuthenticated) {
-      router.push('/admin/login');
+      router.push('/admin-2026/login');
       return;
     }
 
@@ -59,7 +59,7 @@ export default function AdminLayout({
 
   const handleLogout = async () => {
     await logout();
-    router.push('/admin/login');
+    router.push('/admin-2026/login');
   };
 
   if (isLoginPage) {
@@ -78,9 +78,8 @@ export default function AdminLayout({
     <div className="flex h-screen bg-gray-900">
       {/* Sidebar */}
       <div
-        className={`${
-          sidebarOpen ? 'w-64' : 'w-20'
-        } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
+        className={`${sidebarOpen ? 'w-64' : 'w-20'
+          } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
       >
         {/* Header */}
         <div className="p-4 border-b border-gray-700 flex items-center justify-between">

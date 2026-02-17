@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
         description: "Đăng nhập admin thành công",
       });
 
-      router.push('/admin/dashboard');
+      router.push('/admin-2026/dashboard');
     } catch (error: any) {
       toast({
         title: "Lỗi đăng nhập",

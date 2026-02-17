@@ -32,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     if (isAuthenticated && user) {
       if (user.role === UserRole.ADMIN) {
-        router.push('/admin');
+        router.push('/admin-2026');
         return;
       }
       loadBalance();
@@ -73,6 +73,14 @@ export default function Home() {
 
   if (!isAuthenticated || !user) {
     return <LoginForm onLogin={handleLogin} />;
+  }
+
+  if (user.role === UserRole.ADMIN) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white">Đang chuyển hướng đến trang quản trị...</div>
+      </div>
+    );
   }
 
   return (
