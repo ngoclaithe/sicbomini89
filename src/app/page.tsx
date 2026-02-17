@@ -15,7 +15,7 @@ import { LogOut, User, Wallet, History, Home as HomeIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { useUserStore } from '@/store/useUserStore';
+import { useUserStore, UserRole } from '@/store/useUserStore';
 
 export default function Home() {
   const { isAuthenticated, isLoading, checkAuth, logout } = useAuth();
@@ -31,6 +31,10 @@ export default function Home() {
 
   useEffect(() => {
     if (isAuthenticated && user) {
+      if (user.role === UserRole.ADMIN) {
+        router.push('/admin');
+        return;
+      }
       loadBalance();
       connectSocket();
     }
